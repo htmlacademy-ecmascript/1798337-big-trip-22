@@ -1,7 +1,7 @@
 # Проект «Большое путешествие»
 
 * Студент: [Дмитрий Дробышев](https://up.htmlacademy.ru/ecmascript/22/user/1798337).
-* Наставник: `Неизвестно`.
+* Наставник: [Yulia Volkova](https://htmlacademy.ru/profile/id423707).
 
 ---
 
