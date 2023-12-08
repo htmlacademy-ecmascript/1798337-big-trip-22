@@ -28,3 +28,5 @@ npm i eslint@8.38.0 -DE
 - babel-loader@9.1.2
 - css-loader@6.7.3
 - style-loader@3.3.2
+
+ npm install --save-dev --save-exact html-webpack-plugin@5.5.3
