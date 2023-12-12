@@ -1,5 +1,5 @@
-import TripPresenter from './presenter/trip-presentor.js';
-import HeaderPresenter from './presenter/header-presentor.js';
+import TripPresenter from './presenter/trip-presenter.js';
+import HeaderPresenter from './presenter/header-presenter.js';
 
 const siteMainElement = document.querySelector('.trip-events');
 const siteFiltersElement = document.querySelector('.trip-controls__filters');
