@@ -1,4 +1,4 @@
-import { getRandomArrayElement } from '../utils';
+import { getRandomArrayElement, getRandomInt } from '../utils';
 
 const DESTINATIONS = ['Voronezh', 'Tambov', 'Sahalin', 'Karelia', 'Murmansk', 'Arhiz', 'Sochi', 'Rostov', 'Kazan',];
 const destinationsMock =
@@ -9,7 +9,7 @@ const destinationsMock =
     name: getRandomArrayElement(DESTINATIONS),
     pictures: [
       {
-        src: `https://loremflickr.com/248/152?random=${getRandomArrayElement(100)}`,
+        src: `https://loremflickr.com/248/152?random=${getRandomInt(100)}`,
         description: 'parliament building',
       }]
   },
@@ -20,7 +20,7 @@ const destinationsMock =
     name: getRandomArrayElement(DESTINATIONS),
     pictures: [
       {
-        src: `https://loremflickr.com/248/152?random=${getRandomArrayElement(100)}`,
+        src: `https://loremflickr.com/248/152?random=${getRandomInt(100)}`,
         description: 'parliament building',
       }]
   },
@@ -38,15 +38,15 @@ const destinationsMock =
     name: getRandomArrayElement(DESTINATIONS),
     pictures: [
       {
-        src: `https://loremflickr.com/248/152?random=${getRandomArrayElement(100)}`,
+        src: `https://loremflickr.com/248/152?random=${getRandomInt(100)}`,
         description: 'parliament building',
       },
       {
-        src: `https://loremflickr.com/248/152?random=${getRandomArrayElement(100)}`,
+        src: `https://loremflickr.com/248/152?random=${getRandomInt(70)}`,
         description: 'parliament building',
       },
       {
-        src: `https://loremflickr.com/248/152?random=${getRandomArrayElement(100)}`,
+        src: `https://loremflickr.com/248/152?random=${getRandomInt(98)}`,
         description: 'parliament building',
       }]
   },
@@ -56,11 +56,11 @@ const destinationsMock =
     name: getRandomArrayElement(DESTINATIONS),
     pictures: [
       {
-        src: `https://loremflickr.com/248/152?random=${getRandomArrayElement(100)}`,
+        src: `https://loremflickr.com/248/152?random=${getRandomInt(100)}`,
         description: 'parliament building',
       },
       {
-        src: `https://loremflickr.com/248/152?random=${getRandomArrayElement(100)}`,
+        src: `https://loremflickr.com/248/152?random=${getRandomInt(110)}`,
         description: 'parliament building',
       }]
   },

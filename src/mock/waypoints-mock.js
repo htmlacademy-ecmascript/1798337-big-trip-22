@@ -4,9 +4,9 @@ const waypointsMock = [
     basePrice: 1100,
     dateFrom: '2023-07-10T22:55:56.845Z',
     dateTo: '2023-07-11T11:22:13.375Z',
-    destination: [1,2],
-    isFavorite: false,
-    offers: [1,2],
+    destination: '1',
+    isFavorite: true,
+    offers: ['1','2'],
     type: 'taxi'
   },
   {
@@ -14,9 +14,9 @@ const waypointsMock = [
     basePrice: 1100,
     dateFrom: '2023-07-10T22:55:56.845Z',
     dateTo: '2023-07-11T11:22:13.375Z',
-    destination: [1,2],
-    isFavorite: false,
-    offers: [1,3],
+    destination: '2',
+    isFavorite: true,
+    offers: ['1','3'],
     type: 'bus'
   },
   {
@@ -24,9 +24,9 @@ const waypointsMock = [
     basePrice: 1100,
     dateFrom: '2023-07-10T22:55:56.845Z',
     dateTo: '2023-07-11T11:22:13.375Z',
-    destination: [1,2],
+    destination: '3',
     isFavorite: false,
-    offers: [2,4],
+    offers: ['2','4'],
     type: 'train'
   },
   {
@@ -34,9 +34,9 @@ const waypointsMock = [
     basePrice: 1100,
     dateFrom: '2023-07-09T22:55:56.845Z',
     dateTo: '2023-07-12T11:22:13.375Z',
-    destination: [1,2],
+    destination: '4',
     isFavorite: false,
-    offers: [1],
+    offers: ['1'],
     type: 'ship'
   },
   {
@@ -44,16 +44,11 @@ const waypointsMock = [
     basePrice: 1100,
     dateFrom: '2023-07-10T22:55:56.845Z',
     dateTo: '2023-07-11T11:22:13.375Z',
-    destination: [1,2],
+    destination: '5',
     isFavorite: false,
     offers: [],
     type: 'drive'
   },
 ];
-
-// function getRandomWaypoint() {
-//   return getRandomArrayElement(waypointsMock);
-// }
-
 
 export {waypointsMock};
