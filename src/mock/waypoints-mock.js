@@ -49,6 +49,16 @@ const waypointsMock = [
     offers: [],
     type: 'drive'
   },
+  {
+    id: '6',
+    basePrice: 123,
+    dateFrom: '2023-07-10T22:55:56.845Z',
+    dateTo: '2023-09-11T10:22:13.375Z',
+    destination: '4',
+    isFavorite: false,
+    offers: [],
+    type: 'restaurant'
+  },
 ];
 
 export {waypointsMock};

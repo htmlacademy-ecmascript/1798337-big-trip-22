@@ -5,7 +5,7 @@ const destinationsMock =
 [
   {
     id: '1',
-    description: 'Chamonix, is a beautiful city, a true asian pearl, with crowded streets.',
+    description: 'Cras aliquet varius magna, non porta ligula feugiat eget. Fusce tristique felis at fermentum pharetra. Aliquam id orci ut lectus varius viverra. Nullam nunc ex, convallis sed finibus eget, sollicitudin eget ante.',
     name: getRandomArrayElement(DESTINATIONS),
     pictures: [
       {
@@ -16,7 +16,7 @@ const destinationsMock =
 
   {
     id: '2',
-    description: 'Chamonix, is a beautiful city, a true asian pearl, with crowded streets.',
+    description: 'Aliquam id orci ut lectus varius viverra. Nullam nunc ex, convallis sed finibus eget, sollicitudin eget ante. Phasellus eros mauris, condimentum sed nibh vitae, sodales efficitur ipsum. Sed blandit, eros vel aliquam faucibus, purus ex euismod diam, eu luctus nunc ante ut dui. Sed sed nisi sed augue convallis suscipit in sed felis.',
     name: getRandomArrayElement(DESTINATIONS),
     pictures: [
       {
@@ -52,7 +52,7 @@ const destinationsMock =
   },
   {
     id: '5',
-    description: 'Chamonix, is a beautiful city, a true asian pearl, with crowded streets.',
+    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras aliquet varius magna, non porta ligula feugiat eget. Fusce tristique felis at fermentum pharetra.',
     name: getRandomArrayElement(DESTINATIONS),
     pictures: [
       {

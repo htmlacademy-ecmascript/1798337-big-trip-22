@@ -8,22 +8,8 @@ function createFormEdit (point, destinations, offers) {
   const pointDestination = destinations.find((d) => d.id === point.destination);
   const {name, description, pictures} = pointDestination;
 
-  // const typeOffers = offers.length ? (offers.find((offer) => offer.type === type)).offers : '';
-  // console.log(typeOffers);
-
-  // const checkedOffers =
-
-  // console.log(checkedOffers);
-
-  // addedOffers = checkedOffers.map((offer) => typeOffers.find((typeOfferElement) => typeOfferElement.id === offer));
-
-  // function addedOffers(checkedOffers) {
-  //   const typeOffers = offers.length ? (offers.find((offer) => offer.type === type)).offers : '';
-  //   checkedOffers.map((offer) => console.log(offer));
-
-  // }
-
-  // addedOffers(checkedOffers);
+  const typeOffers = offers.length ? (offers.find((offer) => offer.type === type)).offers : '';
+  // const checkedOffersArray = typeOffers.filter((offer) => checkedOffers.includes(offer.id));
 
   return (`<li class="trip-events__item">
     <form class="event event--edit" action="#" method="post">
@@ -53,7 +39,7 @@ function createFormEdit (point, destinations, offers) {
           <label class="event__label  event__type-output" for="event-destination-1">
             ${type}
           </label>
-          <input class="event__input  event__input--destination" id="event-destination-${id}" type="text" name="event-destination" value="${name}" list="destination-list-1">
+          <input class="event__input  event__input--destination" id="event-destination-${id}" type="text" name="event-destination" value="${name}" list="destination-list-${id}">
           <datalist id="destination-list-${id}">
             <option value="Amsterdam"></option>
             <option value="Geneva"></option>
@@ -63,10 +49,10 @@ function createFormEdit (point, destinations, offers) {
 
         <div class="event__field-group  event__field-group--time">
           <label class="visually-hidden" for="event-start-time-1">From</label>
-          <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${humanizeTaskDueDate(dateFrom, FULL_DATE_FORMAT)}">
+          <input class="event__input  event__input--time" id="event-start-time-${id}" type="text" name="event-start-time" value="${humanizeTaskDueDate(dateFrom, FULL_DATE_FORMAT)}">
           &mdash;
-          <label class="visually-hidden" for="event-end-time-1">To</label>
-          <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="1${humanizeTaskDueDate(dateTo, FULL_DATE_FORMAT)}">
+          <label class="visually-hidden" for="event-end-time-${id}">To</label>
+          <input class="event__input  event__input--time" id="event-end-time-${id}" type="text" name="event-end-time" value="1${humanizeTaskDueDate(dateTo, FULL_DATE_FORMAT)}">
         </div>
 
         <div class="event__field-group  event__field-group--price">
@@ -81,56 +67,24 @@ function createFormEdit (point, destinations, offers) {
         <button class="event__reset-btn" type="reset">Cancel</button>
       </header>
       <section class="event__details">
-        <section class="event__section  event__section--offers">
+      ${typeOffers.length ? (
+      `<section class="event__section  event__section--offers">
           <h3 class="event__section-title  event__section-title--offers">Offers</h3>
-
           <div class="event__available-offers">
-            <div class="event__offer-selector">
-              <input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-${id}" type="checkbox" name="event-offer-luggage" checked>
-              <label class="event__offer-label" for="event-offer-luggage-${id}">
-                <span class="event__offer-title">Add luggage</span>
-                &plus;&euro;&nbsp;
-                <span class="event__offer-price">30</span>
-              </label>
-            </div>
 
-            <div class="event__offer-selector">
-              <input class="event__offer-checkbox  visually-hidden" id="event-offer-comfort-1" type="checkbox" name="event-offer-comfort" checked>
-              <label class="event__offer-label" for="event-offer-comfort-1">
-                <span class="event__offer-title">Switch to comfort class</span>
+          ${typeOffers.map((offerEl) =>
+        `<div class="event__offer-selector">
+              <input class="event__offer-checkbox  visually-hidden" id="event-offer-${type}-${id}" type="checkbox" name="event-offer-${type}"
+              ${checkedOffers.map((checkedOffer) => checkedOffer).includes(offerEl.id) ? 'checked' : ''}>
+              <label class="event__offer-label" for="event-offer-${type}-${id}">
+                <span class="event__offer-title">${offerEl.title}</span>
                 &plus;&euro;&nbsp;
-                <span class="event__offer-price">100</span>
+                <span class="event__offer-price">${offerEl.price}</span>
               </label>
-            </div>
-
-            <div class="event__offer-selector">
-              <input class="event__offer-checkbox  visually-hidden" id="event-offer-meal-1" type="checkbox" name="event-offer-meal">
-              <label class="event__offer-label" for="event-offer-meal-1">
-                <span class="event__offer-title">Add meal</span>
-                &plus;&euro;&nbsp;
-                <span class="event__offer-price">15</span>
-              </label>
-            </div>
-
-            <div class="event__offer-selector">
-              <input class="event__offer-checkbox  visually-hidden" id="event-offer-seats-1" type="checkbox" name="event-offer-seats">
-              <label class="event__offer-label" for="event-offer-seats-1">
-                <span class="event__offer-title">Choose seats</span>
-                &plus;&euro;&nbsp;
-                <span class="event__offer-price">5</span>
-              </label>
-            </div>
-
-            <div class="event__offer-selector">
-              <input class="event__offer-checkbox  visually-hidden" id="event-offer-train-1" type="checkbox" name="event-offer-train">
-              <label class="event__offer-label" for="event-offer-train-1">
-                <span class="event__offer-title">Travel by train</span>
-                &plus;&euro;&nbsp;
-                <span class="event__offer-price">40</span>
-              </label>
-            </div>
+            </div>`)}
           </div>
-        </section>
+        </section>`) : ''}
+
         ${pointDestination ? (
       `<section class="event__section  event__section--destination">
           <h3 class="event__section-title  event__section-title--destination">Destination</h3>
