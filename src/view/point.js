@@ -6,7 +6,7 @@ function createPoint (point, destinations, offers) {
 
   const { basePrice, dateFrom, dateTo, isFavorite, type } = point;
 
-  const pointDestination = destinations.find((d) => d.id === point.destination);
+  const pointDestination = destinations.find((destination) => destination.id === point.destination);
   const {name} = pointDestination;
 
   const pointOffersType = offers.find((offer) => offer.type === point.type).offers;

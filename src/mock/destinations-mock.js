@@ -11,6 +11,10 @@ const destinationsMock =
       {
         src: `https://loremflickr.com/248/152?random=${getRandomInt(100)}`,
         description: 'parliament building',
+      },
+      {
+        src: `https://loremflickr.com/248/152?random=${getRandomInt(70)}`,
+        description: 'parliament building',
       }]
   },
 
@@ -46,6 +50,14 @@ const destinationsMock =
         description: 'parliament building',
       },
       {
+        src: `https://loremflickr.com/248/152?random=${getRandomInt(70)}`,
+        description: 'parliament building',
+      },
+      {
+        src: `https://loremflickr.com/248/152?random=${getRandomInt(70)}`,
+        description: 'parliament building',
+      },
+      {
         src: `https://loremflickr.com/248/152?random=${getRandomInt(98)}`,
         description: 'parliament building',
       }]
@@ -57,6 +69,18 @@ const destinationsMock =
     pictures: [
       {
         src: `https://loremflickr.com/248/152?random=${getRandomInt(100)}`,
+        description: 'parliament building',
+      },
+      {
+        src: `https://loremflickr.com/248/152?random=${getRandomInt(70)}`,
+        description: 'parliament building',
+      },
+      {
+        src: `https://loremflickr.com/248/152?random=${getRandomInt(70)}`,
+        description: 'parliament building',
+      },
+      {
+        src: `https://loremflickr.com/248/152?random=${getRandomInt(70)}`,
         description: 'parliament building',
       },
       {

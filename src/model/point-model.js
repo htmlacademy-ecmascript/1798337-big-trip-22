@@ -4,13 +4,11 @@ import { waypointsMock } from '../mock/waypoints-mock.js';
 
 export default class PointModel {
 
-  constructor() {
-    this.waypoints = [];
-    this.offers = [];
-    this.destinations = [];
-  }
+  waypoints = [];
+  offers = [];
+  destinations = [];
 
-  init() {
+  constructor() {
     this.waypoints = waypointsMock;
     this.offers = offersMock;
     this.destinations = destinationsMock;

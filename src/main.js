@@ -10,7 +10,6 @@ const siteMainElement = document.querySelector('.trip-events');
 const siteFiltersElement = document.querySelector('.trip-controls__filters');
 
 const pointModel = new PointModel();
-pointModel.init();
 
 const tripPresenter = new TripPresenter (
   siteMainElement,

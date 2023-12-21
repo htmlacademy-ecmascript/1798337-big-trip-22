@@ -1,7 +1,7 @@
 const waypointsMock = [
   {
     id: '1',
-    basePrice: 1100,
+    basePrice: 1101,
     dateFrom: '2023-07-10T22:55:56.845Z',
     dateTo: '2023-07-11T11:22:13.375Z',
     destination: '1',
@@ -11,7 +11,7 @@ const waypointsMock = [
   },
   {
     id: '2',
-    basePrice: 1100,
+    basePrice: 1102,
     dateFrom: '2023-07-10T22:55:56.845Z',
     dateTo: '2023-07-11T11:22:13.375Z',
     destination: '2',
@@ -21,7 +21,7 @@ const waypointsMock = [
   },
   {
     id: '3',
-    basePrice: 1100,
+    basePrice: 1103,
     dateFrom: '2023-07-10T22:55:56.845Z',
     dateTo: '2023-07-11T11:22:13.375Z',
     destination: '3',
@@ -31,7 +31,7 @@ const waypointsMock = [
   },
   {
     id: '4',
-    basePrice: 1100,
+    basePrice: 1104,
     dateFrom: '2023-07-09T22:55:56.845Z',
     dateTo: '2023-07-12T11:22:13.375Z',
     destination: '4',
@@ -41,7 +41,7 @@ const waypointsMock = [
   },
   {
     id: '5',
-    basePrice: 1100,
+    basePrice: 1105,
     dateFrom: '2023-07-10T22:55:56.845Z',
     dateTo: '2023-07-11T11:22:13.375Z',
     destination: '5',
@@ -51,7 +51,7 @@ const waypointsMock = [
   },
   {
     id: '6',
-    basePrice: 123,
+    basePrice: 1106,
     dateFrom: '2023-07-10T22:55:56.845Z',
     dateTo: '2023-09-11T10:22:13.375Z',
     destination: '4',
