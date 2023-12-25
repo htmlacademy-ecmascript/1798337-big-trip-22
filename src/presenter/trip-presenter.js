@@ -3,6 +3,7 @@ import FormEdit from '../view/form-edit.js';
 import Sorting from '../view/sorting.js';
 import Point from '../view/point.js';
 import TripEventsList from '../view/trip-events-list.js';
+import { isEscapeKey } from '../utils.js';
 
 
 export default class TripPresenter {
@@ -32,23 +33,27 @@ export default class TripPresenter {
 
   #renderPoint(point, destinations, offers) {
     const escKeyDownButton = (evt) => {
-      if (evt.key === 'Escape') {
+      if (isEscapeKey(evt)) {
         evt.preventDefault();
         replaceFormToPoint();
         document.removeEventListener('keydown', escKeyDownButton);
       }
     };
 
-    const pointEl = new Point(
-      point, destinations, offers,
-      () => {
+    const pointElement = new Point({
+      point,
+      destinations,
+      offers,
+      onEditButtonClick:() => {
         replacePointToForm();
         document.addEventListener('keydown', escKeyDownButton);
       }
-    );
+    });
 
     const formEdit = new FormEdit({
-      point, destinations, offers,
+      point,
+      destinations,
+      offers,
       onFormEditSubmit: () => {
         replaceFormToPoint();
         document.removeEventListener('keydown', escKeyDownButton);
@@ -56,13 +61,13 @@ export default class TripPresenter {
     });
 
     function replacePointToForm() {
-      replace(formEdit, pointEl);
+      replace(formEdit, pointElement);
     }
 
     function replaceFormToPoint() {
-      replace(pointEl, formEdit);
+      replace(pointElement, formEdit);
     }
 
-    render(pointEl, this.#tripEventsListComponent.element);
+    render(pointElement, this.#tripEventsListComponent.element);
   }
 }

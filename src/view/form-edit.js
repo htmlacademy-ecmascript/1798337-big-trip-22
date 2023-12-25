@@ -30,14 +30,14 @@ function createOffers(point, offers) {
           <h3 class="event__section-title  event__section-title--offers">Offers</h3>
           <div class="event__available-offers">
 
-            ${typeOffers.map((offerEl) =>
+            ${typeOffers.map((offerElement) =>
         `<div class="event__offer-selector">
-                <input class="event__offer-checkbox  visually-hidden" id="event-offer-${type}-${offerEl.id}" type="checkbox" name="event-offer-${type}"
-                ${checkedOffers.map((checkedOffer) => checkedOffer).includes(offerEl.id) ? 'checked' : ''}>
-                <label class="event__offer-label" for="event-offer-${type}-${offerEl.id}">
-                  <span class="event__offer-title">${offerEl.title}</span>
+                <input class="event__offer-checkbox  visually-hidden" id="event-offer-${type}-${offerElement.id}" type="checkbox" name="event-offer-${type}"
+                ${checkedOffers.map((checkedOffer) => checkedOffer).includes(offerElement.id) ? 'checked' : ''}>
+                <label class="event__offer-label" for="event-offer-${type}-${offerElement.id}">
+                  <span class="event__offer-title">${offerElement.title}</span>
                   &plus;&euro;&nbsp;
-                  <span class="event__offer-price">${offerEl.price}</span>
+                  <span class="event__offer-price">${offerElement.price}</span>
                 </label>
               </div>`)}
           </div>
@@ -72,8 +72,9 @@ function createTiming(point) {
     </div>`);
 }
 
-function createTypePoint (point) {
+function createTypePoint (point, pointDestination) {
   const {id, type} = point;
+  const {name} = pointDestination;
 
   return (
     `<div class="event__type-wrapper">
@@ -115,7 +116,7 @@ function createFormEdit (point, destinations, offers) {
       <form class="event event--edit" action="#" method="post">
         <header class="event__header">
 
-          ${createTypePoint (point)}
+          ${createTypePoint (point, pointDestination)}
           ${createTiming (point)}
           ${createPrice(point)}
 

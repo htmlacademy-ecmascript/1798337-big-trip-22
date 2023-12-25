@@ -81,8 +81,8 @@ function createPoint (point, destinations, offers) {
     ${createEventData(dateFrom)}
     ${createTypeIcon(type)}
     ${createTitle(type, name)}
-    ${createPrice(basePrice)}
     ${createSchedule(dateFrom, dateTo)}
+    ${createPrice(basePrice)}
     ${createOffers({offers, point})}
     ${createFavoriteButton(point)}
     <button class="event__rollup-btn" type="button">
@@ -99,8 +99,7 @@ export default class Point extends AbstractView {
   #offers = null;
   #onEditButtonClick;
 
-  constructor(point, destinations, offers, onEditButtonClick) {
-  // constructor(point, destinations, offers) {
+  constructor({point, destinations, offers, onEditButtonClick}) {
     super();
     this.#point = point;
     this.#destinations = destinations;

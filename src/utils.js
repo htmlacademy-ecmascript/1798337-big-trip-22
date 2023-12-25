@@ -16,6 +16,8 @@ function humanizeTaskDueDate(dueDate, format) {
   return dueDate ? dayjs(dueDate).format(format) : '';
 }
 
-const isEscapeKey = (evt) => evt.key === 'Escape';
+function isEscapeKey (evt) {
+  return evt.key === 'Escape';
+}
 
 export { getRandomArrayElement, humanizeTaskDueDate, DATE_FORMAT, TIME_FORMAT, FULL_DATE_FORMAT, getRandomInt, isEscapeKey };
