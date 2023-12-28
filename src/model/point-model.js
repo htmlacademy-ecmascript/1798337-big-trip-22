@@ -4,25 +4,25 @@ import { waypointsMock } from '../mock/waypoints-mock.js';
 
 export default class PointModel {
 
-  waypoints = [];
-  offers = [];
-  destinations = [];
+  #waypoints = [];
+  #offers = [];
+  #destinations = [];
 
   constructor() {
-    this.waypoints = waypointsMock;
-    this.offers = offersMock;
-    this.destinations = destinationsMock;
+    this.#waypoints = waypointsMock;
+    this.#offers = offersMock;
+    this.#destinations = destinationsMock;
   }
 
-  getWaypoints() {
-    return this.waypoints;
+  get waypoints() {
+    return this.#waypoints;
   }
 
-  getDestinations() {
-    return this.destinations;
+  get destinations() {
+    return this.#destinations;
   }
 
-  getOffers() {
-    return this.offers;
+  get offers() {
+    return this.#offers;
   }
 }
