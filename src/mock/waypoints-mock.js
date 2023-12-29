@@ -2,8 +2,8 @@ const waypointsMock = [
   {
     id: '1',
     basePrice: 1101,
-    dateFrom: '2023-07-10T22:55:56.845Z',
-    dateTo: '2023-07-11T11:22:13.375Z',
+    dateFrom: '2023-12-15T06:57:04.116Z',
+    dateTo: '2023-12-15T17:50:04.116Z',
     destination: '1',
     isFavorite: true,
     offers: ['1','2'],
