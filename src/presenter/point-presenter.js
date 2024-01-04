@@ -1,4 +1,4 @@
-import {render, replace} from '../framework/render.js';
+import {render, replace, remove} from '../framework/render.js';
 import FormEdit from '../view/form-edit.js';
 import Point from '../view/point.js';
 import { isEscapeKey } from '../utils.js';
@@ -11,21 +11,27 @@ export default class PointPresenter {
   #point = null;
   #destinations = null;
   #offers = null;
+  #id = null;
 
   constructor({tripEventsListComponent}) {
     this.#tripEventsListComponent = tripEventsListComponent;
   }
 
-  init(point, destinations, offers) {
+  init(point, destinations, offers, id) {
     this.#point = point;
     this.#destinations = destinations;
     this.#offers = offers;
+    this.#id = id;
+
+    const prevPointComponent = this.#pointComponent;
+    const prevFormEditComponent = this.#formEditComponent;
 
     this.#pointComponent = new Point({
       point: this.#point,
       destinations: this.#destinations,
       offers: this.#offers,
       onEditButtonClick: this.#onEditButtonClick,
+
     });
 
     this.#formEditComponent = new FormEdit({
@@ -35,7 +41,30 @@ export default class PointPresenter {
       onFormEditSubmit: this.#onFormEditSubmit,
     });
 
-    render(this.#pointComponent, this.#tripEventsListComponent.element);
+    if (prevPointComponent === null || prevFormEditComponent === null) {
+      render(this.#pointComponent, this.#tripEventsListComponent.element);
+      return;
+    }
+
+    // Проверка на наличие в DOM необходима,
+    // чтобы не пытаться заменить то, что не было отрисовано
+    if (this.#tripEventsListComponent.contains(prevPointComponent.element)) {
+      replace(this.#pointComponent, prevPointComponent);
+    }
+
+    if (this.#tripEventsListComponent.contains(prevFormEditComponent.element)) {
+      replace(this.#formEditComponent, prevFormEditComponent);
+    }
+
+    remove(prevPointComponent);
+    remove(prevFormEditComponent);
+  }
+
+  destroy() {
+    remove(this.#pointComponent);
+    remove(this.#formEditComponent);
+
+    // render(this.#pointComponent, this.#tripEventsListComponent.element);
   }
 
   #onEditButtonClick() {

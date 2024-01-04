@@ -99,12 +99,16 @@ export default class Point extends AbstractView {
   #offers = null;
   #onEditButtonClick;
 
-  constructor({point, destinations, offers, onEditButtonClick}) {
+  // point: this.#point,
+  //     destinations: this.#destinations,
+  //     offers: this.#offers,
+  //     onEditButtonClick: this.#onEditButtonClick,
+
+  constructor({point: point, destinations: destinations, offers: offers, onEditButtonClick: onEditButtonClick}) {
     super();
     this.#point = point;
     this.#destinations = destinations;
     this.#offers = offers;
-
     this.#onEditButtonClick = onEditButtonClick;
     this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#editButton);
   }

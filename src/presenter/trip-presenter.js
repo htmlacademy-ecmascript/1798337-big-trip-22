@@ -1,3 +1,4 @@
+import { nanoid } from 'nanoid';
 import {render} from '../framework/render.js';
 // import FormEdit from '../view/form-edit.js';
 import Sorting from '../view/sorting.js';
@@ -11,6 +12,7 @@ export default class TripPresenter {
   #mainContainer = null;
   #pointModel = null;
   #tripEventsListComponent = null;
+  #pointPresentersId = new Map();
 
   constructor(mainContainer, pointModel) {
     this.#mainContainer = mainContainer;
@@ -27,15 +29,21 @@ export default class TripPresenter {
     render(this.#tripEventsListComponent, this.#mainContainer);
 
     for (const point of waypoints) {
-      this.#renderPoint(point, destinations, offers);
+      this.#renderPoint({point, destinations, offers, id: nanoid()});
     }
   }
 
-  #renderPoint(point, destinations, offers) {
+  #renderPoint({point, destinations, offers, id}) {
     const pointPresenter = new PointPresenter({
       tripEventsListComponent: this.#tripEventsListComponent,
     });
 
     pointPresenter.init(point, destinations, offers);
+    this.#pointPresentersId.set(id, pointPresenter);
+  }
+
+  #clearTaskList() {
+    this.#pointPresentersId.forEach((presenter) => presenter.destroy());
+    this.#pointPresentersId.clear();
   }
 }
