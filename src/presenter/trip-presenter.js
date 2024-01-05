@@ -39,7 +39,7 @@ export default class TripPresenter {
     });
 
     pointPresenter.init(point, destinations, offers);
-    this.#pointPresentersId.set(id, pointPresenter);
+    this.#pointPresentersId.set(point.id, pointPresenter);
   }
 
   #clearTaskList() {
