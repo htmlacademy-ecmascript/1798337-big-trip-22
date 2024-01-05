@@ -46,4 +46,9 @@ export default class TripPresenter {
     this.#pointPresentersId.forEach((presenter) => presenter.destroy());
     this.#pointPresentersId.clear();
   }
+
+  // #handleTaskChange = (updatedTask) => {
+  //   this.#boardTasks = updateItem(this.#boardTasks, updatedTask);
+  //   this.#taskPresenters.get(updatedTask.id).init(updatedTask);
+  // };
 }

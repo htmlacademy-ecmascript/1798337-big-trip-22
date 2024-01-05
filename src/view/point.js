@@ -97,7 +97,7 @@ export default class Point extends AbstractView {
   #point = null;
   #destinations = null;
   #offers = null;
-  #onEditButtonClick;
+  #onEditButtonClick = null;
 
   // point: this.#point,
   //     destinations: this.#destinations,
