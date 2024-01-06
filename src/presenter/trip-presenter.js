@@ -1,8 +1,6 @@
-import { nanoid } from 'nanoid';
 import {render} from '../framework/render.js';
-// import FormEdit from '../view/form-edit.js';
+import { updateItem } from '../utils.js';
 import Sorting from '../view/sorting.js';
-// import Point from '../view/point.js';
 import TripEventsList from '../view/trip-events-list.js';
 import PointPresenter from './point-presenter.js';
 
@@ -12,6 +10,7 @@ export default class TripPresenter {
   #mainContainer = null;
   #pointModel = null;
   #tripEventsListComponent = null;
+  #points = [];
   #pointPresentersId = new Map();
 
   constructor(mainContainer, pointModel) {
@@ -21,34 +20,40 @@ export default class TripPresenter {
   }
 
   init() {
-    const waypoints = this.#pointModel.waypoints;
+    this.#points = [...this.#pointModel.waypoints];
     const destinations = this.#pointModel.destinations;
     const offers = this.#pointModel.offers;
 
     render(new Sorting(), this.#mainContainer);
     render(this.#tripEventsListComponent, this.#mainContainer);
 
-    for (const point of waypoints) {
-      this.#renderPoint({point, destinations, offers, id: nanoid()});
+    for (const point of this.#points) {
+      this.#renderPoint({point, destinations, offers});
     }
   }
 
-  #renderPoint({point, destinations, offers, id}) {
+  #renderPoint({point, destinations, offers}) {
     const pointPresenter = new PointPresenter({
       tripEventsListComponent: this.#tripEventsListComponent,
+      onPointChange: this.#onPointChange,
+      handleModeChange: this.#handleModeChange
     });
 
     pointPresenter.init(point, destinations, offers);
     this.#pointPresentersId.set(point.id, pointPresenter);
   }
 
-  #clearTaskList() {
+  #clearPointsList() {
     this.#pointPresentersId.forEach((presenter) => presenter.destroy());
     this.#pointPresentersId.clear();
   }
 
-  // #handleTaskChange = (updatedTask) => {
-  //   this.#boardTasks = updateItem(this.#boardTasks, updatedTask);
-  //   this.#taskPresenters.get(updatedTask.id).init(updatedTask);
-  // };
+  #handleModeChange = () => {
+    this.#pointPresentersId.forEach((presenter) => presenter.resetView());
+  };
+
+  #onPointChange = (changedPoint) => {
+    this.#points = updateItem(this.#points, changedPoint);
+    this.#pointPresentersId.get(changedPoint.id).init(changedPoint, this.#pointModel.destinations, this.#pointModel.offers);
+  };
 }

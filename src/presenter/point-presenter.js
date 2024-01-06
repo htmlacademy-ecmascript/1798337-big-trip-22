@@ -3,6 +3,10 @@ import FormEdit from '../view/form-edit.js';
 import Point from '../view/point.js';
 import { isEscapeKey } from '../utils.js';
 
+const Mode = {
+  DEFAULT: 'DEFAULT',
+  EDITING: 'EDITING',
+};
 
 export default class PointPresenter {
   #tripEventsListComponent = null;
@@ -11,17 +15,20 @@ export default class PointPresenter {
   #point = null;
   #destinations = null;
   #offers = null;
-  #id = null;
+  #onPointChange = null;
+  #onModeChange = null;
+  #mode = Mode.DEFAULT;
 
-  constructor({tripEventsListComponent}) {
+  constructor({tripEventsListComponent, onPointChange, handleModeChange}) {
     this.#tripEventsListComponent = tripEventsListComponent;
+    this.#onPointChange = onPointChange;
+    this.#onModeChange = handleModeChange;
   }
 
-  init(point, destinations, offers, id) {
+  init(point, destinations, offers) {
     this.#point = point;
     this.#destinations = destinations;
     this.#offers = offers;
-    this.#id = id;
 
     const prevPointComponent = this.#pointComponent;
     const prevFormEditComponent = this.#formEditComponent;
@@ -31,6 +38,7 @@ export default class PointPresenter {
       destinations: this.#destinations,
       offers: this.#offers,
       onEditButtonClick: this.#onEditButtonClick,
+      onFavoriteButtonClick: this.#onFavoriteButtonClick,
 
     });
 
@@ -46,13 +54,11 @@ export default class PointPresenter {
       return;
     }
 
-    // Проверка на наличие в DOM необходима,
-    // чтобы не пытаться заменить то, что не было отрисовано
-    if (this.#tripEventsListComponent.contains(prevPointComponent.element)) {
+    if (this.#mode === Mode.DEFAULT) {
       replace(this.#pointComponent, prevPointComponent);
     }
 
-    if (this.#tripEventsListComponent.contains(prevFormEditComponent.element)) {
+    if (this.#mode === Mode.EDITING) {
       replace(this.#formEditComponent, prevFormEditComponent);
     }
 
@@ -60,29 +66,36 @@ export default class PointPresenter {
     remove(prevFormEditComponent);
   }
 
+  resetView() {
+    if (this.#mode !== Mode.DEFAULT) {
+      this.#replaceFormToPoint();
+    }
+  }
+
   destroy() {
     remove(this.#pointComponent);
     remove(this.#formEditComponent);
-
-    // render(this.#pointComponent, this.#tripEventsListComponent.element);
   }
 
-  #onEditButtonClick() {
+  #onEditButtonClick = () => {
     this.#replacePointToForm();
     document.addEventListener('keydown', this.#escKeyDownButton);
-  }
+  };
 
-  #onFormEditSubmit() {
+  #onFormEditSubmit = () => {
     this.#replaceFormToPoint();
     document.removeEventListener('keydown', this.#escKeyDownButton);
-  }
+  };
 
   #replacePointToForm() {
     replace(this.#formEditComponent, this.#pointComponent);
+    this.#onModeChange();
+    this.#mode = Mode.EDITING;
   }
 
   #replaceFormToPoint() {
     replace(this.#pointComponent, this.#formEditComponent);
+    this.#mode = Mode.DEFAULT;
   }
 
   #escKeyDownButton = (evt) => {
@@ -91,5 +104,10 @@ export default class PointPresenter {
       this.#replaceFormToPoint();
       document.removeEventListener('keydown', this.#escKeyDownButton);
     }
+  };
+
+  #onFavoriteButtonClick = () => {
+    this.#point.isFavorite = !this.#point.isFavorite;
+    this.#onPointChange(this.#point);
   };
 }
