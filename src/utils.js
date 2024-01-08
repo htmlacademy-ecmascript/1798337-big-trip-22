@@ -1,4 +1,5 @@
 import dayjs from 'dayjs';
+import { FilterType } from './const';
 
 const DATE_FORMAT = 'D MMM';
 const FULL_DATE_FORMAT = 'DD/MM/YY H:mm';
@@ -24,4 +25,28 @@ function updateItem(items, update) {
   return items.map((item) => item.id === update.id ? update : item);
 }
 
-export { getRandomArrayElement, humanizeTaskDueDate, DATE_FORMAT, TIME_FORMAT, FULL_DATE_FORMAT, getRandomInt, isEscapeKey, updateItem };
+const filter = {
+  [FilterType.EVERYTHING]: (points) => points,
+  [FilterType.PAST]: (points) => points.filter((point) => isPointExpired(point.dateTo)),
+  [FilterType.PRESENT]: (points) => points.filter((point) =>isPointPresent(point.dateFrom, point.dateTo)),
+  [FilterType.FUTURE]: (points) => points.filter((point) => isPointFuture(point.dateFrom)),
+};
+
+// Everything — полный список точек маршрута;
+// Future — список запланированных точек маршрута, т. е. точек, у которых дата начала события больше текущей даты;
+// Present — список текущих точек маршрута, т. е. точек, у которых дата начала события меньше (или равна) текущей даты, а дата окончания больше (или равна) текущей даты;
+// Past — список пройденных точек маршрута, т. е. точек у которых дата окончания маршрута меньше, чем текущая.
+
+function isPointExpired(dateTo) {
+  return dateTo && dayjs().isAfter(dateTo, 'D');
+}
+
+function isPointFuture(dateFrom) {
+  return dateFrom && dayjs().isBefore(dateFrom, 'D');
+}
+
+function isPointPresent(dataFrom, dataTo) {
+  return dataFrom && dataTo && (dayjs().isAfter(dataFrom, 'D') || dayjs().isSame(dataFrom, 'D')) && (dayjs().isBefore(dataTo, 'D') || dayjs().isSame(dataTo, 'D'));
+}
+
+export { getRandomArrayElement, humanizeTaskDueDate, DATE_FORMAT, TIME_FORMAT, FULL_DATE_FORMAT, getRandomInt, isEscapeKey, updateItem, filter };
