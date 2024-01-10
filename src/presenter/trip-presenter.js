@@ -5,6 +5,8 @@ import TripEventsList from '../view/trip-events-list.js';
 import PointPresenter from './point-presenter.js';
 import Filter from '../view/filter.js';
 import { generateFilter } from '../mock/filter.js';
+import { NoEventsMessege } from '../const';
+import NoEvents from '../view/no-events.js';
 
 
 export default class TripPresenter {
@@ -24,6 +26,7 @@ export default class TripPresenter {
   }
 
   init() {
+
     this.#points = [...this.#pointModel.waypoints];
     const destinations = this.#pointModel.destinations;
     const offers = this.#pointModel.offers;
@@ -31,6 +34,12 @@ export default class TripPresenter {
     const filters = generateFilter(this.#points);
 
     render(new Filter(filters), this.#headerContainer);
+
+    if (this.#points.length === 0) {
+      render(new NoEvents(NoEventsMessege.EVERYTHING), this.#mainContainer);
+      return;
+    }
+
     render(new Sorting(), this.#mainContainer);
     render(this.#tripEventsListComponent, this.#mainContainer);
 
