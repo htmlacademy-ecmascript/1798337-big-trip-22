@@ -5,7 +5,7 @@ import TripEventsList from '../view/trip-events-list.js';
 import PointPresenter from './point-presenter.js';
 import Filter from '../view/filter.js';
 import { generateFilter } from '../mock/filter.js';
-import { NoEventsMessege } from '../const';
+import { NoEventsMessage } from '../const';
 import NoEvents from '../view/no-events.js';
 
 
@@ -36,7 +36,7 @@ export default class TripPresenter {
     render(new Filter(filters), this.#headerContainer);
 
     if (this.#points.length === 0) {
-      render(new NoEvents(NoEventsMessege.EVERYTHING), this.#mainContainer);
+      render(new NoEvents(NoEventsMessage.EVERYTHING), this.#mainContainer);
       return;
     }
 

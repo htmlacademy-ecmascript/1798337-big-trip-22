@@ -91,7 +91,6 @@ function createPoint (point, destinations, offers) {
   </div>`;
 }
 
-
 export default class Point extends AbstractView {
 
   #point = null;
@@ -100,13 +99,11 @@ export default class Point extends AbstractView {
   #onEditButtonClick = null;
   #onFavoriteButtonClick = null;
 
-
   constructor({
     point: point,
     destinations: destinations,
     offers: offers,
     onEditButtonClick: onEditButtonClick,
-    onIsFavoriteButtonClick: onIsFavoriteButtonClick,
     onFavoriteButtonClick: onFavoriteButtonClick,
   }) {
     super();
@@ -114,7 +111,6 @@ export default class Point extends AbstractView {
     this.#destinations = destinations;
     this.#offers = offers;
     this.#onEditButtonClick = onEditButtonClick;
-    this.#onFavoriteButtonClick = onIsFavoriteButtonClick;
     this.#onFavoriteButtonClick = onFavoriteButtonClick;
     this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#editButton);
     this.element.querySelector('.event__favorite-btn').addEventListener('click', this.#isFavoriteButton);
