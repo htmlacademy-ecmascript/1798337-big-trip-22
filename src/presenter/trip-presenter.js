@@ -52,7 +52,7 @@ export default class TripPresenter {
     const pointPresenter = new PointPresenter({
       tripEventsListComponent: this.#tripEventsListComponent,
       onPointChange: this.#onPointChange,
-      handleModeChange: this.#handleModeChange
+      onModeChange: this.#onModeChange
     });
 
     pointPresenter.init(point, destinations, offers);
@@ -64,7 +64,7 @@ export default class TripPresenter {
     this.#pointPresentersId.clear();
   }
 
-  #handleModeChange = () => {
+  #onModeChange = () => {
     this.#pointPresentersId.forEach((presenter) => presenter.resetView());
   };
 

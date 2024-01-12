@@ -19,10 +19,10 @@ export default class PointPresenter {
   #onModeChange = null;
   #mode = Mode.DEFAULT;
 
-  constructor({tripEventsListComponent, onPointChange, handleModeChange}) {
+  constructor({tripEventsListComponent, onPointChange, onModeChange}) {
     this.#tripEventsListComponent = tripEventsListComponent;
     this.#onPointChange = onPointChange;
-    this.#onModeChange = handleModeChange;
+    this.#onModeChange = onModeChange;
   }
 
   init(point, destinations, offers) {
@@ -96,6 +96,7 @@ export default class PointPresenter {
   #replaceFormToPoint() {
     replace(this.#pointComponent, this.#formEditComponent);
     this.#mode = Mode.DEFAULT;
+    document.removeEventListener('keydown', this.#escKeyDownButton);
   }
 
   #escKeyDownButton = (evt) => {

@@ -141,7 +141,7 @@ export default class FormEdit extends AbstractView {
   #point = null;
   #destinations = null;
   #offers = null;
-  #onEditButtonClick;
+  #handleEditButtonClick;
 
   constructor({point, destinations, offers, onFormEditSubmit}) {
     super();
@@ -149,14 +149,14 @@ export default class FormEdit extends AbstractView {
     this.#destinations = destinations;
     this.#offers = offers;
 
-    this.#onEditButtonClick = onFormEditSubmit;
+    this.#handleEditButtonClick = onFormEditSubmit;
     this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#editButton);
     this.element.querySelector('.event__save-btn').addEventListener('click', this.#editButton);
   }
 
   #editButton = (evt) => {
     evt.preventDefault();
-    this.#onEditButtonClick();
+    this.#handleEditButtonClick();
   };
 
   get template() {
