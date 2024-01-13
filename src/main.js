@@ -1,5 +1,4 @@
 import TripPresenter from './presenter/trip-presenter.js';
-import HeaderPresenter from './presenter/header-presenter.js';
 import PointModel from './model/point-model.js';
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
@@ -13,11 +12,8 @@ const pointModel = new PointModel();
 
 const tripPresenter = new TripPresenter (
   siteMainElement,
+  siteFiltersElement,
   pointModel
 );
 
 tripPresenter.init();
-
-
-const headerPresenter = new HeaderPresenter (siteFiltersElement);
-headerPresenter.init();

@@ -12,8 +12,8 @@ const waypointsMock = [
   {
     id: '2',
     basePrice: 1102,
-    dateFrom: '2023-07-10T22:55:56.845Z',
-    dateTo: '2023-07-11T11:22:13.375Z',
+    dateFrom: '2024-07-10T22:55:56.845Z',
+    dateTo: '2024-07-11T11:22:13.375Z',
     destination: '2',
     isFavorite: true,
     offers: ['1','3'],
@@ -22,8 +22,8 @@ const waypointsMock = [
   {
     id: '3',
     basePrice: 1103,
-    dateFrom: '2023-07-10T22:55:56.845Z',
-    dateTo: '2023-07-11T11:22:13.375Z',
+    dateFrom: '2024-01-07T22:55:56.845Z',
+    dateTo: '2024-02-20T11:22:13.375Z',
     destination: '3',
     isFavorite: false,
     offers: ['2','4'],
