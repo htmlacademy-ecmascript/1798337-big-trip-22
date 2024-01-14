@@ -1,12 +1,13 @@
-import { getRandomArrayElement, getRandomInt } from '../utils';
+import { getRandomInt } from '../utils';
 
-const DESTINATIONS = ['Voronezh', 'Tambov', 'Sahalin', 'Karelia', 'Murmansk', 'Arhiz', 'Sochi', 'Rostov', 'Kazan',];
+// const DESTINATIONS = ['Voronezh', 'Tambov', 'Sahalin', 'Karelia', 'Murmansk', 'Arhiz', 'Sochi', 'Rostov', 'Kazan',];
+
 const destinationsMock =
 [
   {
     id: '1',
     description: 'Cras aliquet varius magna, non porta ligula feugiat eget. Fusce tristique felis at fermentum pharetra. Aliquam id orci ut lectus varius viverra. Nullam nunc ex, convallis sed finibus eget, sollicitudin eget ante.',
-    name: getRandomArrayElement(DESTINATIONS),
+    name: 'Voronezh',
     pictures: [
       {
         src: `https://loremflickr.com/248/152?random=${getRandomInt(100)}`,
@@ -21,7 +22,7 @@ const destinationsMock =
   {
     id: '2',
     description: 'Aliquam id orci ut lectus varius viverra. Nullam nunc ex, convallis sed finibus eget, sollicitudin eget ante. Phasellus eros mauris, condimentum sed nibh vitae, sodales efficitur ipsum. Sed blandit, eros vel aliquam faucibus, purus ex euismod diam, eu luctus nunc ante ut dui. Sed sed nisi sed augue convallis suscipit in sed felis.',
-    name: getRandomArrayElement(DESTINATIONS),
+    name: 'Tambov',
     pictures: [
       {
         src: `https://loremflickr.com/248/152?random=${getRandomInt(100)}`,
@@ -32,14 +33,14 @@ const destinationsMock =
   {
     id: '3',
     description: 'Chamonix, is a beautiful city, a true asian pearl, with crowded streets.',
-    name: getRandomArrayElement(DESTINATIONS),
+    name: 'Sahalin',
     pictures: []
   },
 
   {
     id: '4',
     description: 'Chamonix, is a beautiful city, a true asian pearl, with crowded streets.',
-    name: getRandomArrayElement(DESTINATIONS),
+    name: 'Karelia',
     pictures: [
       {
         src: `https://loremflickr.com/248/152?random=${getRandomInt(100)}`,
@@ -65,7 +66,7 @@ const destinationsMock =
   {
     id: '5',
     description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras aliquet varius magna, non porta ligula feugiat eget. Fusce tristique felis at fermentum pharetra.',
-    name: getRandomArrayElement(DESTINATIONS),
+    name: 'Murmansk',
     pictures: [
       {
         src: `https://loremflickr.com/248/152?random=${getRandomInt(100)}`,
@@ -88,7 +89,24 @@ const destinationsMock =
         description: 'parliament building',
       }]
   },
+  {
+    id: '6',
+    description: 'Chamonix, is a beautiful city, a true asian pearl, with crowded streets.',
+    name: 'Arhiz',
+    pictures: []
+  },
+  {
+    id: '7',
+    description: 'Chamonix, is a beautiful city, a true asian pearl, with crowded streets.',
+    name: 'Rostov',
+    pictures: []
+  },
+  {
+    id: '8',
+    description: 'Chamonix, is a beautiful city, a true asian pearl, with crowded streets.',
+    name: 'Kazan',
+    pictures: []
+  },
 ];
-
 
 export { destinationsMock };

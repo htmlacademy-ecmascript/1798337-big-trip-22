@@ -1,6 +1,6 @@
 import { ITINERARY, WAYPOINTS} from '../const.js';
 import { humanizeTaskDueDate, FULL_DATE_FORMAT} from '../utils';
-import AbstractView from '../framework/view/abstract-view.js';
+import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
 
 function createDestination(pointDestination) {
   const {description, pictures,} = pointDestination;
@@ -33,7 +33,7 @@ function createOffers(point, offers) {
             ${typeOffers.map((offerElement) =>
         `<div class="event__offer-selector">
                 <input class="event__offer-checkbox  visually-hidden" id="event-offer-${type}-${offerElement.id}" type="checkbox" name="event-offer-${type}"
-                ${checkedOffers.map((checkedOffer) => checkedOffer).includes(offerElement.id) ? 'checked' : ''}>
+                ${checkedOffers.map((checkedOffer) => checkedOffer).includes(offerElement.id) ? 'checked' : ''}  data-offer-id="${offerElement.id}">
                 <label class="event__offer-label" for="event-offer-${type}-${offerElement.id}">
                   <span class="event__offer-title">${offerElement.title}</span>
                   &plus;&euro;&nbsp;
@@ -136,30 +136,88 @@ function createFormEdit (point, destinations, offers) {
     </li>`);
 }
 
-export default class FormEdit extends AbstractView {
+export default class FormEdit extends AbstractStatefulView {
 
-  #point = null;
+  // #point = null;
   #destinations = null;
   #offers = null;
   #handleEditButtonClick;
+  #onSubmitButtonClick;
 
   constructor({point, destinations, offers, onFormEditSubmit}) {
     super();
-    this.#point = point;
+    // this.#point = point;
+    this._setState(point);
+    this._setState(FormEdit.parsePointToState(point));
     this.#destinations = destinations;
     this.#offers = offers;
+    this._restoreHandlers();
 
     this.#handleEditButtonClick = onFormEditSubmit;
-    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#editButton);
-    this.element.querySelector('.event__save-btn').addEventListener('click', this.#editButton);
+    // this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#editButtonHandler);
+    // this.element.querySelector('.event__save-btn').addEventListener('click', this.#editButtonHandler);
   }
 
-  #editButton = (evt) => {
+  _restoreHandlers = () => {
+    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#editButtonHandler);
+    this.element.querySelector('.event__save-btn').addEventListener('click', this.#editButtonHandler);
+    this.element.querySelector('.event__type-group').addEventListener('change', this.#typeChangeHandler);
+    this.element.querySelector('.event__input--destination').addEventListener('change', this.#destinationChangeHandler);
+    this.element.querySelector('.event__available-offers').addEventListener('change', this.#offersChangeHandler);
+  };
+
+  #editButtonHandler = (evt) => {
     evt.preventDefault();
     this.#handleEditButtonClick();
   };
 
+  #submitButtonHandler = (evt) => {
+    evt.preventDefault();
+    this.#onSubmitButtonClick(FormEdit.parsePointToState(this._state));
+  };
+
   get template() {
-    return createFormEdit(this.#point, this.#destinations, this.#offers);
+    return createFormEdit(this._state, this.#destinations, this.#offers);
+  }
+
+  #dateFromUpdate = (updateDate) => {
+    this._setState({...this._state.point, dateFrom: updateDate});
+  };
+
+  #dateToUpdate = (updateDate) => {
+    this._setState({...this._state.point, dateTo: updateDate});
+  };
+
+  #offersChangeHandler = () => {
+
+    const checkedOffers = Array.from(this.element.querySelectorAll('.event__offer-checkbox:checked'));
+    // console.log(checkedOffers);
+    this._setState({...this._state.point, offers: checkedOffers.map((offer) => offer.dataset.offerId)});
+    // console.log(this._state.offers);
+  };
+
+  #typeChangeHandler = (evt) => {
+    evt.preventDefault();
+    this.updateElement({...this._state.point, type: evt.target.value, offers: []});
+  };
+
+  #destinationChangeHandler = (evt) => {
+    evt.preventDefault();
+    const updateDestination = this.#destinations.find((destination) => destination.name === evt.target.value);
+    this.updateElement({...this._state.point, destination: updateDestination.id});
+  };
+
+  reset(point) {
+    this.updateElement(
+      FormEdit.parsePointToState(point),
+    );
+  }
+
+  static parsePointToState({point}) {
+    return {...point};
+  }
+
+  static parseStateToPoint(state) {
+    return {...state.point};
   }
 }

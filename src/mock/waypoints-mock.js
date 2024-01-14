@@ -54,7 +54,7 @@ const waypointsMock = [
     basePrice: 1106,
     dateFrom: '2023-07-10T22:55:56.845Z',
     dateTo: '2023-09-11T10:22:13.375Z',
-    destination: '4',
+    destination: '6',
     isFavorite: false,
     offers: [],
     type: 'restaurant'

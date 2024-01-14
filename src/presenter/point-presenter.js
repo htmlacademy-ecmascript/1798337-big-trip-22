@@ -68,6 +68,7 @@ export default class PointPresenter {
 
   resetView() {
     if (this.#mode !== Mode.DEFAULT) {
+      this.#formEditComponent.reset({point: this.#point, offers: this.#offers, destinations: this.#destinations});
       this.#replaceFormToPoint();
     }
   }
@@ -102,6 +103,7 @@ export default class PointPresenter {
   #escKeyDownButton = (evt) => {
     if (isEscapeKey(evt)) {
       evt.preventDefault();
+      this.#formEditComponent.reset({point: this.#point, offers: this.#offers, destinations: this.#destinations});
       this.#replaceFormToPoint();
       document.removeEventListener('keydown', this.#escKeyDownButton);
     }
