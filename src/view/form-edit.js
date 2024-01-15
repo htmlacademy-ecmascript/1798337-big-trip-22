@@ -191,9 +191,7 @@ export default class FormEdit extends AbstractStatefulView {
   #offersChangeHandler = () => {
 
     const checkedOffers = Array.from(this.element.querySelectorAll('.event__offer-checkbox:checked'));
-    // console.log(checkedOffers);
     this._setState({...this._state.point, offers: checkedOffers.map((offer) => offer.dataset.offerId)});
-    // console.log(this._state.offers);
   };
 
   #typeChangeHandler = (evt) => {

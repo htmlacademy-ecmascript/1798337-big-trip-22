@@ -84,6 +84,7 @@ export default class PointPresenter {
   };
 
   #onFormEditSubmit = () => {
+    this.#formEditComponent.reset({point: this.#point, offers: this.#offers, destinations: this.#destinations});
     this.#replaceFormToPoint();
     document.removeEventListener('keydown', this.#escKeyDownButton);
   };
