@@ -1,6 +1,9 @@
 import { ITINERARY, WAYPOINTS} from '../const.js';
 import { humanizeTaskDueDate, FULL_DATE_FORMAT} from '../utils';
 import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
+import flatpickr from 'flatpickr';
+
+import 'flatpickr/dist/flatpickr.min.css';
 
 function createDestination(pointDestination) {
   const {description, pictures,} = pointDestination;
@@ -138,7 +141,8 @@ function createFormEdit (point, destinations, offers) {
 
 export default class FormEdit extends AbstractStatefulView {
 
-  // #point = null;
+  #datepickerStart;
+  #datepickerEnd;
   #destinations = null;
   #offers = null;
   #handleEditButtonClick;
@@ -146,7 +150,6 @@ export default class FormEdit extends AbstractStatefulView {
 
   constructor({point, destinations, offers, onFormEditSubmit}) {
     super();
-    // this.#point = point;
     this._setState(point);
     this._setState(FormEdit.parsePointToState(point));
     this.#destinations = destinations;
@@ -154,16 +157,42 @@ export default class FormEdit extends AbstractStatefulView {
     this._restoreHandlers();
 
     this.#handleEditButtonClick = onFormEditSubmit;
-    // this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#editButtonHandler);
-    // this.element.querySelector('.event__save-btn').addEventListener('click', this.#editButtonHandler);
+  }
+
+  removeElement() {
+    super.removeElement();
+
+    if (this.#datepickerStart) {
+      this.#datepickerStart.destroy();
+      this.#datepickerStart = null;
+    }
+    if (this.#datepickerEnd) {
+      this.#datepickerEnd.destroy();
+      this.#datepickerEnd = null;
+    }
   }
 
   _restoreHandlers = () => {
+    this.#setDatepickerStart();
+    this.#setDatepickerEnd();
+
     this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#editButtonHandler);
     this.element.querySelector('.event__save-btn').addEventListener('click', this.#editButtonHandler);
     this.element.querySelector('.event__type-group').addEventListener('change', this.#typeChangeHandler);
+    this.element.querySelector('.event__input--price')?.addEventListener('input', this.#priceInputHandler);
     this.element.querySelector('.event__input--destination').addEventListener('change', this.#destinationChangeHandler);
-    this.element.querySelector('.event__available-offers').addEventListener('change', this.#offersChangeHandler);
+    if (this.element.querySelector('.event__available-offers')) {
+      this.element.querySelector('.event__available-offers').addEventListener('change', this.#offersChangeHandler);
+    }
+  };
+
+  #priceInputHandler = (evt) => {
+    evt.preventDefault();
+    this._setState({basePrice: evt.target.value});
+  };
+
+  #dateFromChangeHandler = ([userDate]) => {
+    this.updateElement({...this._state.point, dateFrom: userDate});
   };
 
   #editButtonHandler = (evt) => {
@@ -180,16 +209,7 @@ export default class FormEdit extends AbstractStatefulView {
     return createFormEdit(this._state, this.#destinations, this.#offers);
   }
 
-  #dateFromUpdate = (updateDate) => {
-    this._setState({...this._state.point, dateFrom: updateDate});
-  };
-
-  #dateToUpdate = (updateDate) => {
-    this._setState({...this._state.point, dateTo: updateDate});
-  };
-
   #offersChangeHandler = () => {
-
     const checkedOffers = Array.from(this.element.querySelectorAll('.event__offer-checkbox:checked'));
     this._setState({...this._state.point, offers: checkedOffers.map((offer) => offer.dataset.offerId)});
   };
@@ -211,11 +231,38 @@ export default class FormEdit extends AbstractStatefulView {
     );
   }
 
+  #dateToChangeHandler = ([userDate]) => {
+    this.updateElement({ ...this._state.point, dateTo: userDate});
+  };
+
+  #setDatepickerStart() {
+    this.#datepickerStart = flatpickr(
+      this.element.querySelector('[name="event-start-time"]'),
+      {
+        dateFormat: 'd/m/y h:i',
+        defaultDate: this._state.dateFrom,
+        onChange: this.#dateFromChangeHandler,
+      },
+    );
+  }
+
+  #setDatepickerEnd() {
+    this.#datepickerStart = flatpickr(
+      this.element.querySelector('[name="event-end-time"]'),
+      {
+        dateFormat: 'd/m/y h:i',
+        defaultDate: this._state.dateTo,
+        onChange: this.#dateToChangeHandler,
+        minDate: this._state.dateFrom,
+      },
+    );
+  }
+
   static parsePointToState({point}) {
     return {...point};
   }
 
   static parseStateToPoint(state) {
-    return {...state.point};
+    return {...state};
   }
 }

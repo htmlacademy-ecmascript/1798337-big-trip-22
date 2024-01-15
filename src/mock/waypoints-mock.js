@@ -46,7 +46,7 @@ const waypointsMock = [
     dateTo: '2023-07-11T11:22:13.375Z',
     destination: '5',
     isFavorite: false,
-    offers: [],
+    offers: ['1'],
     type: 'drive'
   },
   {

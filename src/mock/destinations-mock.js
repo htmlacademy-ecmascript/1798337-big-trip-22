@@ -1,7 +1,5 @@
 import { getRandomInt } from '../utils';
 
-// const DESTINATIONS = ['Voronezh', 'Tambov', 'Sahalin', 'Karelia', 'Murmansk', 'Arhiz', 'Sochi', 'Rostov', 'Kazan',];
-
 const destinationsMock =
 [
   {
@@ -105,6 +103,12 @@ const destinationsMock =
     id: '8',
     description: 'Chamonix, is a beautiful city, a true asian pearl, with crowded streets.',
     name: 'Kazan',
+    pictures: []
+  },
+  {
+    id: '9',
+    description: 'Sochi is the largest resort city in Russia. The city is situated on the Sochi River, along the Black Sea in Southern Russia, with a population of 466,078 residents',
+    name: 'Sochi',
     pictures: []
   },
 ];
