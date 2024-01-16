@@ -44,4 +44,47 @@ function isPointPresent(dataFrom, dataTo) {
   return dataFrom && dataTo && (dayjs().isAfter(dataFrom, 'D') || dayjs().isSame(dataFrom, 'D')) && (dayjs().isBefore(dataTo, 'D') || dayjs().isSame(dataTo, 'D'));
 }
 
-export { getRandomArrayElement, humanizeTaskDueDate, DATE_FORMAT, TIME_FORMAT, FULL_DATE_FORMAT, getRandomInt, isEscapeKey, updateItem, filter };
+// Функция помещает задачи без даты в конце списка,
+// возвращая нужный вес для колбэка sort
+function getWeightForNullDate(dateA, dateB) {
+  if (dateA === null && dateB === null) {
+    return 0;
+  }
+
+  if (dateA === null) {
+    return 1;
+  }
+
+  if (dateB === null) {
+    return -1;
+  }
+
+  return null;
+}
+
+function sortPointsByTime(taskA, taskB) {
+  const weight = getWeightForNullDate(taskA.dueDate, taskB.dueDate);
+  return weight ?? dayjs(taskB.dueDate).diff(dayjs(taskA.dueDate));
+}
+
+function sortPointByDate(pointA, pointB) {
+  if (pointA.dateFrom < pointB.dateFrom) {
+    return 1;
+  }
+  if (pointA.dateFrom > pointB.dateFrom) {
+    return -1;
+  }
+  return 0;
+}
+
+function sortPointByPrice(pointA, pointB) {
+  if (Number(pointA.basePrice) < Number(pointB.basePrice)) {
+    return 1;
+  }
+  if (Number(pointA.basePrice) > Number(pointB.basePrice)) {
+    return -1;
+  }
+  return 0;
+}
+
+export { getRandomArrayElement, humanizeTaskDueDate, DATE_FORMAT, TIME_FORMAT, FULL_DATE_FORMAT, getRandomInt, isEscapeKey, updateItem, filter, sortPointsByTime, sortPointByDate, sortPointByPrice };
