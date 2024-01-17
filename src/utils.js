@@ -44,34 +44,25 @@ function isPointPresent(dataFrom, dataTo) {
   return dataFrom && dataTo && (dayjs().isAfter(dataFrom, 'D') || dayjs().isSame(dataFrom, 'D')) && (dayjs().isBefore(dataTo, 'D') || dayjs().isSame(dataTo, 'D'));
 }
 
-// Функция помещает задачи без даты в конце списка,
-// возвращая нужный вес для колбэка sort
-function getWeightForNullDate(dateA, dateB) {
-  if (dateA === null && dateB === null) {
-    return 0;
-  }
+function sortPointsByTime(pointA, pointB) {
 
-  if (dateA === null) {
+  const getPointTimeBySort = (startTime, endTime) => dayjs.duration(dayjs(endTime).diff(dayjs(startTime)));
+
+  if (getPointTimeBySort(pointA.dateFrom, pointA.dateTo) > getPointTimeBySort(pointB.dateFrom, pointB.dateTo)) {
     return 1;
   }
 
-  if (dateB === null) {
+  if (getPointTimeBySort(pointA.dateFrom, pointA.dateTo) < getPointTimeBySort(pointB.dateFrom, pointB.dateTo)) {
     return -1;
   }
-
-  return null;
-}
-
-function sortPointsByTime(taskA, taskB) {
-  const weight = getWeightForNullDate(taskA.dueDate, taskB.dueDate);
-  return weight ?? dayjs(taskB.dueDate).diff(dayjs(taskA.dueDate));
+  return 0;
 }
 
 function sortPointByDate(pointA, pointB) {
-  if (pointA.dateFrom < pointB.dateFrom) {
+  if (pointA.dateFrom > pointB.dateFrom) {
     return 1;
   }
-  if (pointA.dateFrom > pointB.dateFrom) {
+  if (pointA.dateFrom < pointB.dateFrom) {
     return -1;
   }
   return 0;

@@ -48,7 +48,7 @@ export default class Sorting extends AbstractView {
       return;
     }
 
-    evt.preventDefault();
+    // evt.preventDefault();
     this.#onSortTypeChange(evt.target.dataset.sortType);
   };
 }

@@ -32,17 +32,14 @@ export default class TripPresenter {
 
   init() {
 
-    this.#points = [...this.#pointModel.waypoints];
+    this.#points = [...this.#pointModel.waypoints].sort(sortPointByDate);
     this.#soursedPints = [...this.#pointModel.waypoints];
-
     this.#destinations = this.#pointModel.destinations;
-
     this.#offers = this.#pointModel.offers;
 
     const filters = generateFilter(this.#points);
 
     render(new Filter(filters), this.#headerContainer);
-
     if (this.#points.length === 0) {
       render(new NoEvents(NoEventsMessage.EVERYTHING), this.#mainContainer);
       return;
@@ -74,9 +71,6 @@ export default class TripPresenter {
   }
 
   #onSortTypeChange = (sortType) => {
-
-    // console.log(sortType);
-
     if (this.#currentSortType === sortType) {
       return;
     }
@@ -86,9 +80,6 @@ export default class TripPresenter {
   };
 
   #sortPoints = (sortType) => {
-
-    // console.log(sortType);
-
     switch (sortType) {
       case SortType.DAY:
         this.#points.sort(sortPointByDate);
