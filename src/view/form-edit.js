@@ -1,6 +1,9 @@
 import { ITINERARY, WAYPOINTS} from '../const.js';
 import { humanizeTaskDueDate, FULL_DATE_FORMAT} from '../utils';
-import AbstractView from '../framework/view/abstract-view.js';
+import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
+import flatpickr from 'flatpickr';
+
+import 'flatpickr/dist/flatpickr.min.css';
 
 function createDestination(pointDestination) {
   const {description, pictures,} = pointDestination;
@@ -33,7 +36,7 @@ function createOffers(point, offers) {
             ${typeOffers.map((offerElement) =>
         `<div class="event__offer-selector">
                 <input class="event__offer-checkbox  visually-hidden" id="event-offer-${type}-${offerElement.id}" type="checkbox" name="event-offer-${type}"
-                ${checkedOffers.map((checkedOffer) => checkedOffer).includes(offerElement.id) ? 'checked' : ''}>
+                ${checkedOffers.map((checkedOffer) => checkedOffer).includes(offerElement.id) ? 'checked' : ''}  data-offer-id="${offerElement.id}">
                 <label class="event__offer-label" for="event-offer-${type}-${offerElement.id}">
                   <span class="event__offer-title">${offerElement.title}</span>
                   &plus;&euro;&nbsp;
@@ -121,7 +124,7 @@ function createFormEdit (point, destinations, offers) {
           ${createPrice(point)}
 
           <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
-          <button class="event__reset-btn" type="reset">Cancel</button>
+          <button class="event__reset-btn" type="reset">Delete</button>
           <button class="event__rollup-btn" type="button">
             <span class="visually-hidden">Open event</span>
           </button>
@@ -136,30 +139,133 @@ function createFormEdit (point, destinations, offers) {
     </li>`);
 }
 
-export default class FormEdit extends AbstractView {
+export default class FormEdit extends AbstractStatefulView {
 
-  #point = null;
+  #datepickerStart;
+  #datepickerEnd;
   #destinations = null;
   #offers = null;
   #handleEditButtonClick;
+  #handleSubmitButtonClick;
 
   constructor({point, destinations, offers, onFormEditSubmit}) {
     super();
-    this.#point = point;
+    this._setState(FormEdit.parsePointToState({point}));
     this.#destinations = destinations;
     this.#offers = offers;
+    this._restoreHandlers();
 
     this.#handleEditButtonClick = onFormEditSubmit;
-    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#editButton);
-    this.element.querySelector('.event__save-btn').addEventListener('click', this.#editButton);
   }
 
-  #editButton = (evt) => {
+  get template() {
+    return createFormEdit(this._state, this.#destinations, this.#offers);
+  }
+
+  reset(point) {
+    this.updateElement(
+      FormEdit.parsePointToState(point),
+    );
+  }
+
+  removeElement() {
+    super.removeElement();
+
+    if (this.#datepickerStart) {
+      this.#datepickerStart.destroy();
+      this.#datepickerStart = null;
+    }
+    if (this.#datepickerEnd) {
+      this.#datepickerEnd.destroy();
+      this.#datepickerEnd = null;
+    }
+  }
+
+  _restoreHandlers = () => {
+    this.#setDatepickerStart();
+    this.#setDatepickerEnd();
+
+    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#editButtonHandler);
+    this.element.querySelector('.event__save-btn').addEventListener('click', this.#editButtonHandler);
+    this.element.querySelector('.event__type-group').addEventListener('change', this.#typeChangeHandler);
+    this.element.querySelector('.event__input--price')?.addEventListener('input', this.#priceInputHandler);
+    this.element.querySelector('.event__input--destination').addEventListener('change', this.#destinationChangeHandler);
+    if (this.element.querySelector('.event__available-offers')) {
+      this.element.querySelector('.event__available-offers').addEventListener('change', this.#offersChangeHandler);
+    }
+  };
+
+  #setDatepickerStart() {
+    this.#datepickerStart = flatpickr(
+      this.element.querySelector('[name="event-start-time"]'),
+      {
+        dateFormat: 'd/m/y H:i',
+        enableTime: true,
+        defaultDate: this._state.dateFrom,
+        onChange: this.#dateFromChangeHandler,
+        ['time_24hr']: true,
+      },
+    );
+  }
+
+  #setDatepickerEnd() {
+    this.#datepickerStart = flatpickr(
+      this.element.querySelector('[name="event-end-time"]'),
+      {
+        dateFormat: 'd/m/y h:i',
+        enableTime: true,
+        defaultDate: this._state.dateTo,
+        onChange: this.#dateToChangeHandler,
+        ['time_24hr']: true,
+        minDate: this._state.dateFrom,
+      },
+    );
+  }
+
+  #dateToChangeHandler = ([userDate]) => {
+    this.updateElement({ dateTo: userDate});
+  };
+
+  #priceInputHandler = (evt) => {
+    evt.preventDefault();
+    this._setState({basePrice: evt.target.value});
+  };
+
+  #dateFromChangeHandler = ([userDate]) => {
+    this.updateElement({dateFrom: userDate});
+  };
+
+  #editButtonHandler = (evt) => {
     evt.preventDefault();
     this.#handleEditButtonClick();
   };
 
-  get template() {
-    return createFormEdit(this.#point, this.#destinations, this.#offers);
+  #submitButtonHandler = (evt) => {
+    evt.preventDefault();
+    this.#handleSubmitButtonClick(FormEdit.parsePointToState(this._state));
+  };
+
+  #offersChangeHandler = () => {
+    const checkedOffers = Array.from(this.element.querySelectorAll('.event__offer-checkbox:checked'));
+    this._setState({offers: checkedOffers.map((offer) => offer.dataset.offerId)});
+  };
+
+  #typeChangeHandler = (evt) => {
+    evt.preventDefault();
+    this.updateElement({type: evt.target.value, offers: []});
+  };
+
+  #destinationChangeHandler = (evt) => {
+    evt.preventDefault();
+    const updateDestination = this.#destinations.find((destination) => destination.name === evt.target.value);
+    this.updateElement({destination: updateDestination.id});
+  };
+
+  static parsePointToState({point}) {
+    return {...point};
+  }
+
+  static parseStateToPoint(state) {
+    return {...state};
   }
 }
