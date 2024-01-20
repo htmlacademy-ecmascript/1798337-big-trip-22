@@ -124,7 +124,7 @@ function createFormEdit (point, destinations, offers) {
           ${createPrice(point)}
 
           <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
-          <button class="event__reset-btn" type="reset">Cancel</button>
+          <button class="event__reset-btn" type="reset">Delete</button>
           <button class="event__rollup-btn" type="button">
             <span class="visually-hidden">Open event</span>
           </button>
@@ -146,17 +146,26 @@ export default class FormEdit extends AbstractStatefulView {
   #destinations = null;
   #offers = null;
   #handleEditButtonClick;
-  #onSubmitButtonClick;
+  #handleSubmitButtonClick;
 
   constructor({point, destinations, offers, onFormEditSubmit}) {
     super();
-    this._setState(point);
-    this._setState(FormEdit.parsePointToState(point));
+    this._setState(FormEdit.parsePointToState({point}));
     this.#destinations = destinations;
     this.#offers = offers;
     this._restoreHandlers();
 
     this.#handleEditButtonClick = onFormEditSubmit;
+  }
+
+  get template() {
+    return createFormEdit(this._state, this.#destinations, this.#offers);
+  }
+
+  reset(point) {
+    this.updateElement(
+      FormEdit.parsePointToState(point),
+    );
   }
 
   removeElement() {
@@ -186,62 +195,15 @@ export default class FormEdit extends AbstractStatefulView {
     }
   };
 
-  #priceInputHandler = (evt) => {
-    evt.preventDefault();
-    this._setState({basePrice: evt.target.value});
-  };
-
-  #dateFromChangeHandler = ([userDate]) => {
-    this.updateElement({...this._state.point, dateFrom: userDate});
-  };
-
-  #editButtonHandler = (evt) => {
-    evt.preventDefault();
-    this.#handleEditButtonClick();
-  };
-
-  #submitButtonHandler = (evt) => {
-    evt.preventDefault();
-    this.#onSubmitButtonClick(FormEdit.parsePointToState(this._state));
-  };
-
-  get template() {
-    return createFormEdit(this._state, this.#destinations, this.#offers);
-  }
-
-  #offersChangeHandler = () => {
-    const checkedOffers = Array.from(this.element.querySelectorAll('.event__offer-checkbox:checked'));
-    this._setState({...this._state.point, offers: checkedOffers.map((offer) => offer.dataset.offerId)});
-  };
-
-  #typeChangeHandler = (evt) => {
-    evt.preventDefault();
-    this.updateElement({...this._state.point, type: evt.target.value, offers: []});
-  };
-
-  #destinationChangeHandler = (evt) => {
-    evt.preventDefault();
-    const updateDestination = this.#destinations.find((destination) => destination.name === evt.target.value);
-    this.updateElement({...this._state.point, destination: updateDestination.id});
-  };
-
-  reset(point) {
-    this.updateElement(
-      FormEdit.parsePointToState(point),
-    );
-  }
-
-  #dateToChangeHandler = ([userDate]) => {
-    this.updateElement({ ...this._state.point, dateTo: userDate});
-  };
-
   #setDatepickerStart() {
     this.#datepickerStart = flatpickr(
       this.element.querySelector('[name="event-start-time"]'),
       {
-        dateFormat: 'd/m/y h:i',
+        dateFormat: 'd/m/y H:i',
+        enableTime: true,
         defaultDate: this._state.dateFrom,
         onChange: this.#dateFromChangeHandler,
+        ['time_24hr']: true,
       },
     );
   }
@@ -251,12 +213,53 @@ export default class FormEdit extends AbstractStatefulView {
       this.element.querySelector('[name="event-end-time"]'),
       {
         dateFormat: 'd/m/y h:i',
+        enableTime: true,
         defaultDate: this._state.dateTo,
         onChange: this.#dateToChangeHandler,
+        ['time_24hr']: true,
         minDate: this._state.dateFrom,
       },
     );
   }
+
+  #dateToChangeHandler = ([userDate]) => {
+    this.updateElement({ dateTo: userDate});
+  };
+
+  #priceInputHandler = (evt) => {
+    evt.preventDefault();
+    this._setState({basePrice: evt.target.value});
+  };
+
+  #dateFromChangeHandler = ([userDate]) => {
+    this.updateElement({dateFrom: userDate});
+  };
+
+  #editButtonHandler = (evt) => {
+    evt.preventDefault();
+    this.#handleEditButtonClick();
+  };
+
+  #submitButtonHandler = (evt) => {
+    evt.preventDefault();
+    this.#handleSubmitButtonClick(FormEdit.parsePointToState(this._state));
+  };
+
+  #offersChangeHandler = () => {
+    const checkedOffers = Array.from(this.element.querySelectorAll('.event__offer-checkbox:checked'));
+    this._setState({offers: checkedOffers.map((offer) => offer.dataset.offerId)});
+  };
+
+  #typeChangeHandler = (evt) => {
+    evt.preventDefault();
+    this.updateElement({type: evt.target.value, offers: []});
+  };
+
+  #destinationChangeHandler = (evt) => {
+    evt.preventDefault();
+    const updateDestination = this.#destinations.find((destination) => destination.name === evt.target.value);
+    this.updateElement({destination: updateDestination.id});
+  };
 
   static parsePointToState({point}) {
     return {...point};

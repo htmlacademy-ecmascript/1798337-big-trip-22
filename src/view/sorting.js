@@ -31,11 +31,11 @@ function createSorting () {
 }
 
 export default class Sorting extends AbstractView {
-  #onSortTypeChange = null;
+  #handleSortTypeChange = null;
 
   constructor({onSortTypeChange}) {
     super();
-    this.#onSortTypeChange = onSortTypeChange;
+    this.#handleSortTypeChange = onSortTypeChange;
     this.element.addEventListener('click', this.#sortTypeChangeHandler);
   }
 
@@ -48,7 +48,6 @@ export default class Sorting extends AbstractView {
       return;
     }
 
-    // evt.preventDefault();
-    this.#onSortTypeChange(evt.target.dataset.sortType);
+    this.#handleSortTypeChange(evt.target.dataset.sortType);
   };
 }

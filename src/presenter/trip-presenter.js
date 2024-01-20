@@ -21,7 +21,7 @@ export default class TripPresenter {
   #pointPresentersId = new Map();
   #sortComponent = null;
   #currentSortType = SortType.DAY;
-  #soursedPints = [];
+  #soursedPoints = [];
 
   constructor(mainContainer, headerContainer, pointModel) {
     this.#mainContainer = mainContainer;
@@ -33,7 +33,7 @@ export default class TripPresenter {
   init() {
 
     this.#points = [...this.#pointModel.waypoints].sort(sortPointByDate);
-    this.#soursedPints = [...this.#pointModel.waypoints];
+    this.#soursedPoints = [...this.#pointModel.waypoints];
     this.#destinations = this.#pointModel.destinations;
     this.#offers = this.#pointModel.offers;
 
@@ -118,7 +118,7 @@ export default class TripPresenter {
 
   #onPointChange = (changedPoint) => {
     this.#points = updateItem(this.#points, changedPoint);
-    this.#soursedPints = updateItem(this.#soursedPints);
+    this.#soursedPoints = updateItem(this.#points, this.#soursedPoints);
     this.#pointPresentersId.get(changedPoint.id).init(changedPoint, this.#pointModel.destinations, this.#pointModel.offers);
   };
 }

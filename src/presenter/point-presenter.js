@@ -15,14 +15,14 @@ export default class PointPresenter {
   #point = null;
   #destinations = null;
   #offers = null;
-  #onPointChange = null;
-  #onModeChange = null;
+  #handlerPointChange = null;
+  #handlerModeChange = null;
   #mode = Mode.DEFAULT;
 
   constructor({tripEventsListComponent, onPointChange, onModeChange}) {
     this.#tripEventsListComponent = tripEventsListComponent;
-    this.#onPointChange = onPointChange;
-    this.#onModeChange = onModeChange;
+    this.#handlerPointChange = onPointChange;
+    this.#handlerModeChange = onModeChange;
   }
 
   init(point, destinations, offers) {
@@ -37,8 +37,8 @@ export default class PointPresenter {
       point: this.#point,
       destinations: this.#destinations,
       offers: this.#offers,
-      onEditButtonClick: this.#onEditButtonClick,
-      onFavoriteButtonClick: this.#onFavoriteButtonClick,
+      onEditButtonClick: this.#EditButtonClickHandler,
+      onFavoriteButtonClick: this.#FavoriteButtonClickHandler,
 
     });
 
@@ -46,7 +46,7 @@ export default class PointPresenter {
       point,
       destinations,
       offers,
-      onFormEditSubmit: this.#onFormEditSubmit,
+      onFormEditSubmit: this.#FormEditSubmitHandler,
     });
 
     if (prevPointComponent === null || prevFormEditComponent === null) {
@@ -78,20 +78,9 @@ export default class PointPresenter {
     remove(this.#formEditComponent);
   }
 
-  #onEditButtonClick = () => {
-    this.#replacePointToForm();
-    document.addEventListener('keydown', this.#escKeyDownButton);
-  };
-
-  #onFormEditSubmit = () => {
-    this.#formEditComponent.reset({point: this.#point, offers: this.#offers, destinations: this.#destinations});
-    this.#replaceFormToPoint();
-    document.removeEventListener('keydown', this.#escKeyDownButton);
-  };
-
   #replacePointToForm() {
     replace(this.#formEditComponent, this.#pointComponent);
-    this.#onModeChange();
+    this.#handlerModeChange();
     this.#mode = Mode.EDITING;
   }
 
@@ -100,6 +89,17 @@ export default class PointPresenter {
     this.#mode = Mode.DEFAULT;
     document.removeEventListener('keydown', this.#escKeyDownButton);
   }
+
+  #EditButtonClickHandler = () => {
+    this.#replacePointToForm();
+    document.addEventListener('keydown', this.#escKeyDownButton);
+  };
+
+  #FormEditSubmitHandler = () => {
+    this.#formEditComponent.reset({point: this.#point, offers: this.#offers, destinations: this.#destinations});
+    this.#replaceFormToPoint();
+    document.removeEventListener('keydown', this.#escKeyDownButton);
+  };
 
   #escKeyDownButton = (evt) => {
     if (isEscapeKey(evt)) {
@@ -110,8 +110,8 @@ export default class PointPresenter {
     }
   };
 
-  #onFavoriteButtonClick = () => {
+  #FavoriteButtonClickHandler = () => {
     this.#point.isFavorite = !this.#point.isFavorite;
-    this.#onPointChange(this.#point);
+    this.#handlerPointChange(this.#point);
   };
 }
