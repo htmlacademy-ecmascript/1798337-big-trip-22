@@ -1,6 +1,12 @@
 const ITINERARY = ['taxi', 'bus', 'train', 'ship', 'drive', 'flight', 'check-in', 'sightseeing', 'restaurant'];
 const WAYPOINTS = ['Voronezh', 'Tambov', 'Sahalin', 'Karelia', 'Murmansk', 'Arhiz', 'Sochi', 'Rostov', 'Kazan',];
 
+const SortType = {
+  DAY: 'day',
+  TIME: 'time',
+  PRICE: 'price',
+};
+
 const FilterType = {
   EVERYTHING: 'everything',
   PAST: 'past',
@@ -15,4 +21,4 @@ const NoEventsMessage = {
   FUTURE: 'There are no future events now',
 };
 
-export { ITINERARY, WAYPOINTS, FilterType, NoEventsMessage };
+export { ITINERARY, WAYPOINTS, FilterType, NoEventsMessage, SortType };
