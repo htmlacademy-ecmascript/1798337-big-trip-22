@@ -21,9 +21,9 @@ function isEscapeKey (evt) {
   return evt.key === 'Escape';
 }
 
-function updateItem(items, update) {
-  return items.map((item) => item.id === update.id ? update : item);
-}
+// function updateItem(items, update) {
+//   return items.map((item) => item.id === update.id ? update : item);
+// }
 
 const filter = {
   [FilterType.EVERYTHING]: (points) => points,
@@ -78,4 +78,6 @@ function sortPointByPrice(pointA, pointB) {
   return 0;
 }
 
-export { getRandomArrayElement, humanizeTaskDueDate, DATE_FORMAT, TIME_FORMAT, FULL_DATE_FORMAT, getRandomInt, isEscapeKey, updateItem, filter, sortPointsByTime, sortPointByDate, sortPointByPrice };
+export { getRandomArrayElement, humanizeTaskDueDate, DATE_FORMAT, TIME_FORMAT, FULL_DATE_FORMAT, getRandomInt, isEscapeKey,
+  // updateItem,
+  filter, sortPointsByTime, sortPointByDate, sortPointByPrice };

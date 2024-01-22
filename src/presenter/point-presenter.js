@@ -2,6 +2,7 @@ import {render, replace, remove} from '../framework/render.js';
 import FormEdit from '../view/form-edit.js';
 import Point from '../view/point.js';
 import { isEscapeKey } from '../utils.js';
+import {UserAction, UpdateType} from '../const.js';
 
 const Mode = {
   DEFAULT: 'DEFAULT',
@@ -47,6 +48,7 @@ export default class PointPresenter {
       destinations,
       offers,
       onFormEditSubmit: this.#FormEditSubmitHandler,
+      onDeleteClick: this.#handleDeleteClick,
     });
 
     if (prevPointComponent === null || prevFormEditComponent === null) {
@@ -95,10 +97,23 @@ export default class PointPresenter {
     document.addEventListener('keydown', this.#escKeyDownButton);
   };
 
-  #FormEditSubmitHandler = () => {
-    this.#formEditComponent.reset({point: this.#point, offers: this.#offers, destinations: this.#destinations});
+  #FormEditSubmitHandler = (update) => {
+    this.#handlerPointChange(
+      UserAction.UPDATE_TASK,
+      UpdateType.MINOR,
+      update,
+    );
+    this.#formEditComponent.reset({point: this.#point, offers: this.#offers, destinations: this.#destinations}); // нужно или нет
     this.#replaceFormToPoint();
     document.removeEventListener('keydown', this.#escKeyDownButton);
+  };
+
+  #handleDeleteClick = (task) => {
+    this.#handlerPointChange(
+      UserAction.DELETE_TASK,
+      UpdateType.MINOR,
+      task,
+    );
   };
 
   #escKeyDownButton = (evt) => {
@@ -111,7 +126,13 @@ export default class PointPresenter {
   };
 
   #FavoriteButtonClickHandler = () => {
-    this.#point.isFavorite = !this.#point.isFavorite;
-    this.#handlerPointChange(this.#point);
+    // this.#point.isFavorite = !this.#point.isFavorite;
+    // this.#handlerPointChange(this.#point);
+
+    this.#handlerPointChange(
+      UserAction.UPDATE_TASK,
+      UpdateType.MINOR,
+      {...this.#point, isFavorite: !this.#point.isFavorite},
+    );
   };
 }

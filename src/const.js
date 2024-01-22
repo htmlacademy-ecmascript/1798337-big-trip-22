@@ -21,4 +21,16 @@ const NoEventsMessage = {
   FUTURE: 'There are no future events now',
 };
 
-export { ITINERARY, WAYPOINTS, FilterType, NoEventsMessage, SortType };
+const UserAction = {
+  UPDATE_TASK: 'update_point',
+  ADD_TASK: 'add_point',
+  DELETE_TASK: 'delete_point',
+};
+
+const UpdateType = {
+  PATCH: 'patch',
+  MINOR: 'minor',
+  MAJOR: 'major',
+};
+
+export { ITINERARY, WAYPOINTS, FilterType, NoEventsMessage, SortType, UserAction, UpdateType };

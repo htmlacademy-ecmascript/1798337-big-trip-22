@@ -31,16 +31,18 @@ function createSorting () {
 }
 
 export default class Sorting extends AbstractView {
+  #currentSortType = null;
   #handleSortTypeChange = null;
 
-  constructor({onSortTypeChange}) {
+  constructor({currentSortType, onSortTypeChange}) {
     super();
+    this.#currentSortType = currentSortType;
     this.#handleSortTypeChange = onSortTypeChange;
     this.element.addEventListener('click', this.#sortTypeChangeHandler);
   }
 
   get template() {
-    return createSorting();
+    return createSorting(this.#currentSortType);
   }
 
   #sortTypeChangeHandler = (evt) => {
