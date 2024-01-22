@@ -1,21 +1,23 @@
+import Observable from '../framework/observable.js';
 import { offersMock} from '../mock/offers-mock.js';
 import { destinationsMock } from '../mock/destinations-mock.js';
 import { waypointsMock } from '../mock/waypoints-mock.js';
 
-export default class PointModel {
+export default class PointModel extends Observable {
 
-  #waypoints = [];
+  #points = [];
   #offers = [];
   #destinations = [];
 
   constructor() {
-    this.#waypoints = waypointsMock;
+    super();
+    this.#points = waypointsMock;
     this.#offers = offersMock;
     this.#destinations = destinationsMock;
   }
 
-  get waypoints() {
-    return this.#waypoints;
+  get points() {
+    return this.#points;
   }
 
   get destinations() {
