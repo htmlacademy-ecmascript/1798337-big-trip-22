@@ -1,38 +1,23 @@
 import Observable from '../framework/observable.js';
-import { offersMock} from '../mock/offers-mock.js';
-import { destinationsMock } from '../mock/destinations-mock.js';
 import { waypointsMock } from '../mock/waypoints-mock.js';
 
 export default class PointModel extends Observable {
 
   #points = [];
-  #offers = [];
-  #destinations = [];
 
   constructor() {
     super();
     this.#points = waypointsMock;
-    this.#offers = offersMock;
-    this.#destinations = destinationsMock;
   }
 
   get points() {
-    return this.#points;
+    return structuredClone(this.#points);
   }
 
-  get destinations() {
-    return this.#destinations;
-  }
-
-  get offers() {
-    return this.#offers;
-  }
-
-  updateTask(updateType, update) {
+  updatePoint(updateType, update) {
 
     console.log(updateType, update);
     const index = this.#points.findIndex((point) => point.id === update.id);
-
 
     if (index === -1) {
       throw new Error('Can\'t update unexisting task');
@@ -57,7 +42,7 @@ export default class PointModel extends Observable {
   }
 
   deletePoint(updateType, update) {
-    const index = this.#points.findIndex((task) => task.id === update.id);
+    const index = this.#points.findIndex((point) => point.id === update.id);
 
     if (index === -1) {
       throw new Error('Can\'t delete unexisting task');

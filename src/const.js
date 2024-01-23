@@ -22,9 +22,9 @@ const NoEventsMessage = {
 };
 
 const UserAction = {
-  UPDATE_TASK: 'update_point',
-  ADD_TASK: 'add_point',
-  DELETE_TASK: 'delete_point',
+  UPDATE_POINT: 'update_point',
+  ADD_POINT: 'add_point',
+  DELETE_POINT: 'delete_point',
 };
 
 const UpdateType = {

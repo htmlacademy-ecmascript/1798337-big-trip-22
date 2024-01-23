@@ -49,7 +49,7 @@ export default class Sorting extends AbstractView {
     if (evt.target.tagName !== 'INPUT') {
       return;
     }
-
+    evt.preventDefault();
     this.#handleSortTypeChange(evt.target.dataset.sortType);
   };
 }

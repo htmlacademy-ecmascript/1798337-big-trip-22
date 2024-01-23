@@ -1,5 +1,5 @@
 import {render, remove} from '../framework/render.js';
-import { sortPointByPrice, sortPointsByTime, sortPointByDate, updateItem } from '../utils.js';
+import { sortPointByPrice, sortPointsByTime, sortPointByDate } from '../utils.js';
 import Sorting from '../view/sorting.js';
 import TripEventsList from '../view/trip-events-list.js';
 import PointPresenter from './point-presenter.js';
@@ -10,24 +10,24 @@ import NoEvents from '../view/no-events.js';
 
 
 export default class TripPresenter {
+
   #mainContainer = null;
   #headerContainer = null;
   #pointModel = null;
+  #offersModel;
+  #destinationModel;
   #tripEventsListComponent = null;
-  // #points = [];
-  #destinations = [];
-  #offers = [];
   #pointPresentersId = new Map();
   #sortComponent = null;
   #currentSortType = SortType.DAY;
-  // #soursedPoints = [];
-  #noEventsComponent = new NoEvents();
-  // #renderB
+  #noEventComponent;
 
-  constructor(mainContainer, headerContainer, pointModel) {
+  constructor(mainContainer, headerContainer, pointModel, offersModel, destinationModel) {
     this.#mainContainer = mainContainer;
     this.#headerContainer = headerContainer;
     this.#pointModel = pointModel;
+    this.#offersModel = offersModel;
+    this.#destinationModel = destinationModel;
     this.#tripEventsListComponent = new TripEventsList();
 
     this.#pointModel.addObserver(this.#handleModelEvent);
@@ -40,63 +40,69 @@ export default class TripPresenter {
 
       case SortType.PRICE:
         return [...this.#pointModel.points].sort(sortPointByPrice);
-        // this.#points.sort(sortPointByPrice);
-        // break;
 
       case SortType.TIME:
         return [...this.#pointModel.points].sort(sortPointsByTime);
-        // this.#points.sort(sortPointsByTime);
-        // break;
-
-      // default :
-      //   return [...this.#pointModel.points].sort(sortPointByDate);
     }
 
-    return this.#pointModel.points;
+    return [...this.#pointModel.points].sort(sortPointByDate);
+  }
+
+  get offers() {
+    return this.#offersModel.offers;
+  }
+
+  get destinations() {
+    return this.#destinationModel.destinations;
   }
 
   init() {
-
-    // this.#points = [...this.#pointModel.waypoints].sort(sortPointByDate);
-    // this.#soursedPoints = [...this.#pointModel.waypoints];
-    this.#destinations = this.#pointModel.destinations;
-    this.#offers = this.#pointModel.offers;
-
-    const filters = generateFilter(this.points);
-
-    render(new Filter(filters), this.#headerContainer);
-
-    if (this.points.length === 0) {
-      render(new NoEvents(NoEventsMessage.EVERYTHING), this.#mainContainer);
-      return;
-    }
-
-    this.#renderSort();
-
     render(this.#tripEventsListComponent, this.#mainContainer);
 
-    this.#renderPointsList({points: this.points, destinations: this.#destinations, offers: this.#offers});
+    this.#renderApp();
+
+    // this.#renderPointsList({points: this.points, destinations: this.#destinations, offers: this.#offers});
 
   }
+
+  #renderApp() {
+    this.#renderFilters();
+    // this.#renderButtonNewEvent();
+    // this.#renderTripInfo();
+    if (this.points.length === 0) {
+      this.#renderNoEvents();
+      return;
+    }
+    // this.#renderSort();
+    this.#renderPointsList();
+  }
+
+  #renderFilters() {
+    const filters = generateFilter(this.points);
+    render(new Filter(filters), this.#headerContainer);
+  }
+
+  #renderNoEvents() {
+    this.#noEventComponent = new NoEvents(NoEventsMessage.EVERYTHING);
+    // this.#noEventComponent = new NoEvents({ filterType: this.#filterType });
+    render(this.#noEventComponent, this.#mainContainer);
+  }
+
 
   #handleViewAction = (actionType, updateType, update) => {
     console.log(actionType, updateType, update);
 
     switch (actionType) {
-      case UserAction.UPDATE_TASK:
-        this.#pointModel.updateTask(updateType, update);
+      case UserAction.UPDATE_POINT:
+        this.#pointModel.updatePoint(updateType, update);
         break;
-      case UserAction.ADD_TASK:
-        this.#pointModel.addTask(updateType, update);
+      case UserAction.ADD_POINT:
+        this.#pointModel.addPoint(updateType, update);
         break;
-      case UserAction.DELETE_TASK:
-        this.#pointModel.deleteTask(updateType, update);
+      case UserAction.DELETE_POINT:
+        this.#pointModel.deletePoint(updateType, update);
         break;
     }
-    // Здесь будем вызывать обновление модели.
-    // actionType - действие пользователя, нужно чтобы понять, какой метод модели вызвать
-    // updateType - тип изменений, нужно чтобы понять, что после нужно обновить
-    // update - обновленные данные
   };
 
   #handleModelEvent = (updateType, data) => {
@@ -109,35 +115,36 @@ export default class TripPresenter {
         break;
 
       case UpdateType.MINOR:
-        this.#clearBoard();
-        this.#renderBoard();
+        this.#clearPointList({ resetSortType: true });
+        this.#renderPointList();
         // - обновить список (например, когда задача ушла в архив)
         break;
       case UpdateType.MAJOR:
-        this.#clearBoard({resetSortType: true});
-        this.#renderBoard();
+        this.#clearPointList({resetSortType: true});
+        this.#renderPointList();
         // - обновить всю доску (например, при переключении фильтра)
         break;
     }
   };
 
 
-  #renderPointsList({points, destinations, offers}) {
-    for (const point of points) {
-      this.#renderPoint({point, destinations, offers});
+  #renderPointsList() {
+    for (const point of this.points) {
+      this.#renderPoint(point);
     }
   }
 
-  #renderPoint({point, destinations, offers}) {
+  #renderPoint(point) {
     const pointPresenter = new PointPresenter({
       tripEventsListComponent: this.#tripEventsListComponent,
+      waypointModel: this.#pointModel,
+      offersModel: this.#offersModel,
+      destinationModel: this.#destinationModel,
       onPointChange: this.#handleViewAction,
-      // onModeChange: this.#onPointChange,
-      onModeChange: this.#onModeChange,
-      // onDataChange: this.#handleViewAction,
+      onModeChange: this.#handleModeChange,
     });
 
-    pointPresenter.init(point, destinations, offers);
+    pointPresenter.init(point);
     this.#pointPresentersId.set(point.id, pointPresenter);
   }
 
@@ -145,33 +152,13 @@ export default class TripPresenter {
     if (this.#currentSortType === sortType) {
       return;
     }
-    // this.#sortPoints(sortType);
+
     this.#currentSortType = sortType;
-    this.#clearBoard();
-    this.#renderBoard();
+    this.#clearPointList();
+    this.#renderPointList();
 
     // this.#renderPointsList({points: this.points, destinations: this.#destinations, offers: this.#offers});
   };
-
-  // #sortPoints = (sortType) => {
-  //   switch (sortType) {
-  //     case SortType.DAY:
-  //       this.#points.sort(sortPointByDate);
-  //       break;
-
-  //     case SortType.PRICE:
-  //       this.#points.sort(sortPointByPrice);
-  //       break;
-
-  //     case SortType.TIME:
-  //       this.#points.sort(sortPointsByTime);
-  //       break;
-  //     default :
-  //       this.#points.sort(sortPointByDate);
-  //   }
-
-  //   this.#currentSortType = sortType;
-  // };
 
   #renderSort() {
     this.#sortComponent = new Sorting({
@@ -182,85 +169,39 @@ export default class TripPresenter {
     render(this.#sortComponent, this.#mainContainer);
   }
 
-  #clearBoard({resetSortType = false} = {}) {
-    const pointCount = this.points.length;
-
+  #clearPointList(resetSortType = false) {
+    // this.#newEventPresenter.destroy();
     this.#pointPresentersId.forEach((presenter) => presenter.destroy());
     this.#pointPresentersId.clear();
 
     remove(this.#sortComponent);
-    // remove(this.#NoEvents);
 
-
-    // if (resetRenderedTaskCount) {
-    //   this.#renderedTaskCount = TASK_COUNT_PER_STEP;
-    // } else {
-      // На случай, если перерисовка доски вызвана
-      // уменьшением количества задач (например, удаление или перенос в архив)
-      // нужно скорректировать число показанных задач
-      // this.#renderedTaskCount = Math.min(taskCount, this.#renderedTaskCount);
+    // if (this.#noEventComponent) {
+    //   remove(this.#noEventComponent);
     // }
 
     if (resetSortType) {
-      this.#currentSortType = SortType.DEFAULT;
+      this.#currentSortType = SortType.DAY;
     }
   }
 
-  #renderBoard() {
-    // const pointCount = this.points.length;
-    // const points = this.points.slice(0, pointCount);
-    // if (pointCount === 0) {
-      // this.#renderNoEvent();
-    //   render(new NoEvents(NoEventsMessage.EVERYTHING), this.#mainContainer);
-    //   return;
-    // }
-    // this.#renderSort();
-
-    // for (let i = 0; i < pointCount; i++) {
-    //   this.#renderPoint(points[i]);
-    // }
-
-    const waypointCount = this.points.length;
-    const waypoints = this.points.slice(0, waypointCount);
-    // if (waypointCount === 0) {
-    //   this.#renderNoEvent();
-    //   return;
-    // }
+  #renderPointList() {
+    // for (let i = 0; i < this.points.length; i++) {
+    //   this.#renderPoint(this.points[i]);
+    const pointCount = this.points.length;
+    const points = this.points.slice(0, pointCount);
+    if (pointCount === 0) {
+      this.#renderNoEvents();
+      console.log('pointCount');
+      return;
+    }
     this.#renderSort();
-    for (let i = 0; i < waypointCount; i++) {
-      this.#renderPoint(waypoints[i]);
+    for (let i = 0; i < pointCount; i++) {
+      this.#renderPoint(points[i]);
     }
   }
-    // render(this.#boardComponent, this.#boardContainer);
 
-    // const points = this.points;
-    // const taskCount = points.length;
-
-    // if (taskCount === 0) {
-    //   this.#renderNoTasks();
-    //   return;
-    // }
-
-    // this.#renderSort();
-    // render(this.#tripEventsListComponent, this.this.#mainContainer);
-
-    // Теперь, когда #renderBoard рендерит доску не только на старте,
-    // но и по ходу работы приложения, нужно заменить
-    // константу TASK_COUNT_PER_STEP на свойство #renderedTaskCount,
-    // чтобы в случае перерисовки сохранить N-показанных карточек
-    // this.#renderTasks(tasks.slice(0, Math.min(taskCount, this.#renderedTaskCount)));
-
-    // if (taskCount > this.#renderedTaskCount) {
-    //   this.#renderLoadMoreButton();
-    // }
-
-
-    // #clearPointsList() {
-    //   this.#pointPresentersId.forEach((presenter) => presenter.destroy());
-    //   this.#pointPresentersId.clear();
-    // }
-
-  #onModeChange = () => {
+  #handleModeChange = () => {
     this.#pointPresentersId.forEach((presenter) => presenter.resetView());
   };
 

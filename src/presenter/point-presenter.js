@@ -14,39 +14,56 @@ export default class PointPresenter {
   #pointComponent = null;
   #formEditComponent = null;
   #point = null;
+  // #pointModel = null;
+  #offersModel = null;
+  #destinationModel = null;
+  #destination = null;
   #destinations = null;
   #offers = null;
+  #offersType = null;
   #handlerPointChange = null;
   #handlerModeChange = null;
   #mode = Mode.DEFAULT;
 
-  constructor({tripEventsListComponent, onPointChange, onModeChange}) {
+  constructor({tripEventsListComponent, offersModel, destinationModel, onPointChange, onModeChange}) {
     this.#tripEventsListComponent = tripEventsListComponent;
+    // this.#pointModel = pointModel;
+    this.#offersModel = offersModel;
+    this.#destinationModel = destinationModel;
     this.#handlerPointChange = onPointChange;
     this.#handlerModeChange = onModeChange;
   }
 
-  init(point, destinations, offers) {
+  init(point) {
     this.#point = point;
-    this.#destinations = destinations;
-    this.#offers = offers;
+    this.#destinations = this.#destinationModel.destinations;
+    this.#offers = [...this.#offersModel.offers];
+    this.#offersType = this.#offersModel.getOffersByType(point.type);
+    // this.#destination = this.#destinationModel.getDestinationsById(point.destination);
 
     const prevPointComponent = this.#pointComponent;
     const prevFormEditComponent = this.#formEditComponent;
 
     this.#pointComponent = new Point({
       point: this.#point,
+      // destination: this.#destination,
       destinations: this.#destinations,
-      offers: this.#offers,
+      // offers: [...this.#offersModel.getOffersById(point.type, point.offersId)],
+      offers: [...this.#offers],
       onEditButtonClick: this.#EditButtonClickHandler,
       onFavoriteButtonClick: this.#FavoriteButtonClickHandler,
 
     });
 
     this.#formEditComponent = new FormEdit({
-      point,
-      destinations,
-      offers,
+      point: this.#point,
+
+      destinations: this.#destinationModel.destinations,
+      offers: [...this.#offersModel.offers],
+      // offersType: this.#offersType,
+      // destination: this.#destination,
+      // destinationAll: this.#destinationModel.destinations,
+      // offersAll: [...this.#offersModel.offers],
       onFormEditSubmit: this.#FormEditSubmitHandler,
       onDeleteClick: this.#handleDeleteClick,
     });
@@ -70,7 +87,7 @@ export default class PointPresenter {
 
   resetView() {
     if (this.#mode !== Mode.DEFAULT) {
-      this.#formEditComponent.reset({point: this.#point, offers: this.#offers, destinations: this.#destinations});
+      this.#formEditComponent.reset({point: this.#point, offers: this.#offersType, destinations: this.#destination});
       this.#replaceFormToPoint();
     }
   }
@@ -99,12 +116,11 @@ export default class PointPresenter {
 
   #FormEditSubmitHandler = (point) => {
     this.#handlerPointChange(
-      UserAction.UPDATE_TASK,
+      UserAction.UPDATE_POINT,
       UpdateType.MINOR,
-      {...point, id:'1'},
-      // point,
+      point,
     );
-    this.#formEditComponent.reset({point: this.#point, offers: this.#offers, destinations: this.#destinations}); // нужно или нет
+    // this.#formEditComponent.reset({point: this.#point, offers: this.#offers, destinations: this.#destinations}); // нужно или нет
     this.#replaceFormToPoint();
     document.removeEventListener('keydown', this.#escKeyDownButton);
   };
@@ -120,18 +136,15 @@ export default class PointPresenter {
   #escKeyDownButton = (evt) => {
     if (isEscapeKey(evt)) {
       evt.preventDefault();
-      this.#formEditComponent.reset({point: this.#point, offers: this.#offers, destinations: this.#destinations});
+      this.#formEditComponent.reset({point: this.#point, offers: this.#offersType, destination: this.#destination});
       this.#replaceFormToPoint();
       document.removeEventListener('keydown', this.#escKeyDownButton);
     }
   };
 
   #FavoriteButtonClickHandler = () => {
-    // this.#point.isFavorite = !this.#point.isFavorite;
-    // this.#handlerPointChange(this.#point);
-
     this.#handlerPointChange(
-      UserAction.UPDATE_TASK,
+      UserAction.UPDATE_POINT,
       UpdateType.MINOR,
       {...this.#point, isFavorite: !this.#point.isFavorite},
     );
