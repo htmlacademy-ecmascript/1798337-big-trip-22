@@ -1,4 +1,4 @@
-import {render} from '../framework/render.js';
+import {render, remove} from '../framework/render.js';
 import { sortPointByPrice, sortPointsByTime, sortPointByDate, updateItem } from '../utils.js';
 import Sorting from '../view/sorting.js';
 import TripEventsList from '../view/trip-events-list.js';
@@ -10,7 +10,6 @@ import NoEvents from '../view/no-events.js';
 
 
 export default class TripPresenter {
-
   #mainContainer = null;
   #headerContainer = null;
   #pointModel = null;
@@ -23,7 +22,7 @@ export default class TripPresenter {
   #currentSortType = SortType.DAY;
   // #soursedPoints = [];
   #noEventsComponent = new NoEvents();
-  #renderB
+  // #renderB
 
   constructor(mainContainer, headerContainer, pointModel) {
     this.#mainContainer = mainContainer;
@@ -133,7 +132,8 @@ export default class TripPresenter {
     const pointPresenter = new PointPresenter({
       tripEventsListComponent: this.#tripEventsListComponent,
       onPointChange: this.#handleViewAction,
-      onModeChange: this.#onModeChange
+      // onModeChange: this.#onPointChange,
+      onModeChange: this.#onModeChange,
       // onDataChange: this.#handleViewAction,
     });
 
@@ -183,7 +183,7 @@ export default class TripPresenter {
   }
 
   #clearBoard({resetSortType = false} = {}) {
-    const taskCount = this.tasks.length;
+    const pointCount = this.points.length;
 
     this.#pointPresentersId.forEach((presenter) => presenter.destroy());
     this.#pointPresentersId.clear();
@@ -199,7 +199,7 @@ export default class TripPresenter {
       // уменьшением количества задач (например, удаление или перенос в архив)
       // нужно скорректировать число показанных задач
       // this.#renderedTaskCount = Math.min(taskCount, this.#renderedTaskCount);
-    }
+    // }
 
     if (resetSortType) {
       this.#currentSortType = SortType.DEFAULT;
@@ -207,16 +207,30 @@ export default class TripPresenter {
   }
 
   #renderBoard() {
-    const waypointCount = this.waypoints.length;
-    const waypoints = this.waypoints.slice(0, waypointCount);
-    if (waypointCount === 0) {
-      this.#renderNoEvent();
-      return;
-    }
+    // const pointCount = this.points.length;
+    // const points = this.points.slice(0, pointCount);
+    // if (pointCount === 0) {
+      // this.#renderNoEvent();
+    //   render(new NoEvents(NoEventsMessage.EVERYTHING), this.#mainContainer);
+    //   return;
+    // }
+    // this.#renderSort();
+
+    // for (let i = 0; i < pointCount; i++) {
+    //   this.#renderPoint(points[i]);
+    // }
+
+    const waypointCount = this.points.length;
+    const waypoints = this.points.slice(0, waypointCount);
+    // if (waypointCount === 0) {
+    //   this.#renderNoEvent();
+    //   return;
+    // }
     this.#renderSort();
     for (let i = 0; i < waypointCount; i++) {
       this.#renderPoint(waypoints[i]);
     }
+  }
     // render(this.#boardComponent, this.#boardContainer);
 
     // const points = this.points;
@@ -229,7 +243,7 @@ export default class TripPresenter {
 
     // this.#renderSort();
     // render(this.#tripEventsListComponent, this.this.#mainContainer);
-  };
+
     // Теперь, когда #renderBoard рендерит доску не только на старте,
     // но и по ходу работы приложения, нужно заменить
     // константу TASK_COUNT_PER_STEP на свойство #renderedTaskCount,

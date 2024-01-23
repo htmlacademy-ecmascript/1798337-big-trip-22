@@ -97,22 +97,23 @@ export default class PointPresenter {
     document.addEventListener('keydown', this.#escKeyDownButton);
   };
 
-  #FormEditSubmitHandler = (update) => {
+  #FormEditSubmitHandler = (point) => {
     this.#handlerPointChange(
       UserAction.UPDATE_TASK,
       UpdateType.MINOR,
-      update,
+      {...point, id:'1'},
+      // point,
     );
     this.#formEditComponent.reset({point: this.#point, offers: this.#offers, destinations: this.#destinations}); // нужно или нет
     this.#replaceFormToPoint();
     document.removeEventListener('keydown', this.#escKeyDownButton);
   };
 
-  #handleDeleteClick = (task) => {
+  #handleDeleteClick = (point) => {
     this.#handlerPointChange(
-      UserAction.DELETE_TASK,
+      UserAction.DELETE_POINT,
       UpdateType.MINOR,
-      task,
+      point,
     );
   };
 
