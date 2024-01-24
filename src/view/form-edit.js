@@ -112,7 +112,6 @@ function createTypePoint (point, pointDestination) {
 }
 
 function createFormEdit (point, destinations, offers) {
-  console.log(destinations);
   const pointDestination = destinations.find((destination) => destination.id === point.destination);
 
   return (
@@ -249,7 +248,7 @@ export default class FormEdit extends AbstractStatefulView {
 
   #editButtonHandler = (evt) => {
     evt.preventDefault();
-    this.#handleEditButtonClick();
+    this.#handleEditButtonClick(this._state);
   };
 
   #submitButtonHandler = (evt) => {

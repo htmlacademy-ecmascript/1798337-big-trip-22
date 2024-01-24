@@ -57,6 +57,7 @@ export default class TripPresenter {
   }
 
   init() {
+
     render(this.#tripEventsListComponent, this.#mainContainer);
 
     this.#renderApp();
@@ -67,13 +68,15 @@ export default class TripPresenter {
 
   #renderApp() {
     this.#renderFilters();
+    this.#renderSort();
     // this.#renderButtonNewEvent();
     // this.#renderTripInfo();
+
     if (this.points.length === 0) {
       this.#renderNoEvents();
       return;
     }
-    // this.#renderSort();
+
     this.#renderPointsList();
   }
 
@@ -157,7 +160,7 @@ export default class TripPresenter {
     this.#clearPointList();
     this.#renderPointList();
 
-    // this.#renderPointsList({points: this.points, destinations: this.#destinations, offers: this.#offers});
+    // this.#renderPointsList(this.points);
   };
 
   #renderSort() {
