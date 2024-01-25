@@ -248,6 +248,7 @@ export default class FormEdit extends AbstractStatefulView {
 
   #editButtonHandler = (evt) => {
     evt.preventDefault();
+    console.log(this._state);
     this.#handleEditButtonClick(this._state);
   };
 

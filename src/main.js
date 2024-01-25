@@ -6,7 +6,7 @@ import DestinationModel from './model/destination-model.js';
 
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
-// import FilterModel from './model/filter-model.js';
+import FilterModel from './model/filter-model.js';
 
 dayjs.extend(duration);
 
@@ -16,9 +16,8 @@ const siteFiltersElement = document.querySelector('.trip-controls__filters');
 const pointModel = new PointModel();
 const offersModel = new OffersModel();
 const destinationModel = new DestinationModel();
+const filterModel = new FilterModel();
 
-
-// const filterModel = new FilterModel();
 
 const tripPresenter = new TripPresenter (
   siteMainElement,
@@ -26,6 +25,7 @@ const tripPresenter = new TripPresenter (
   pointModel,
   offersModel,
   destinationModel,
+  filterModel,
 );
 
 tripPresenter.init();

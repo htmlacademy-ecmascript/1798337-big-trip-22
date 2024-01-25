@@ -1,13 +1,11 @@
-import {render, remove} from '../framework/render.js';
+import {render, remove, RenderPosition} from '../framework/render.js';
 import { sortPointByPrice, sortPointsByTime, sortPointByDate } from '../utils.js';
 import Sorting from '../view/sorting.js';
 import TripEventsList from '../view/trip-events-list.js';
 import PointPresenter from './point-presenter.js';
-import Filter from '../view/filter.js';
-import { generateFilter } from '../mock/filter.js';
 import { NoEventsMessage, SortType, UpdateType, UserAction } from '../const';
 import NoEvents from '../view/no-events.js';
-
+import FilterPresenter from './filter-presenter.js';
 
 export default class TripPresenter {
 
@@ -21,13 +19,17 @@ export default class TripPresenter {
   #sortComponent = null;
   #currentSortType = SortType.DAY;
   #noEventComponent;
+  #sorting = null;
+  #filterModel;
+  // #sortingState = generateSorting(this.#currentSortType);
 
-  constructor(mainContainer, headerContainer, pointModel, offersModel, destinationModel) {
+  constructor(mainContainer, headerContainer, pointModel, offersModel, destinationModel, filterModel) {
     this.#mainContainer = mainContainer;
     this.#headerContainer = headerContainer;
     this.#pointModel = pointModel;
     this.#offersModel = offersModel;
     this.#destinationModel = destinationModel;
+    this.filterModel = filterModel;
     this.#tripEventsListComponent = new TripEventsList();
 
     this.#pointModel.addObserver(this.#handleModelEvent);
@@ -62,7 +64,7 @@ export default class TripPresenter {
 
     this.#renderApp();
 
-    // this.#renderPointsList({points: this.points, destinations: this.#destinations, offers: this.#offers});
+    // this.#renderPointsList({points: this.points});
 
   }
 
@@ -81,8 +83,12 @@ export default class TripPresenter {
   }
 
   #renderFilters() {
-    const filters = generateFilter(this.points);
-    render(new Filter(filters), this.#headerContainer);
+    const filterPresenter = new FilterPresenter({
+      filterContainer: this.#headerContainer,
+      filterModel: this.#filterModel,
+      waypointModel: this.#pointModel,
+    });
+    filterPresenter.init();
   }
 
   #renderNoEvents() {
@@ -164,12 +170,14 @@ export default class TripPresenter {
   };
 
   #renderSort() {
+    // this.#sortingState = generateSorting(this.#currentSortType);
     this.#sortComponent = new Sorting({
       currentSortType: this.#currentSortType,
-      onSortTypeChange: this.#handleSortTypeChange
+      onSortTypeChange: this.#handleSortTypeChange,
+      // sorting: this.#sortingState,
     });
 
-    render(this.#sortComponent, this.#mainContainer);
+    render(this.#sortComponent, this.#mainContainer, RenderPosition.AFTERBEGIN);
   }
 
   #clearPointList(resetSortType = false) {

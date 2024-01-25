@@ -120,7 +120,7 @@ export default class PointPresenter {
       UpdateType.MINOR,
       point,
     );
-    // this.#formEditComponent.reset({point: this.#point, offers: this.#offers, destinations: this.#destinations}); // нужно или нет
+    this.#formEditComponent.reset({point: this.#point, offers: this.#offers, destinations: this.#destinations}); // нужно или нет
     this.#replaceFormToPoint();
     document.removeEventListener('keydown', this.#escKeyDownButton);
   };
@@ -136,7 +136,7 @@ export default class PointPresenter {
   #escKeyDownButton = (evt) => {
     if (isEscapeKey(evt)) {
       evt.preventDefault();
-      this.#formEditComponent.reset({point: this.#point, offers: this.#offersType, destination: this.#destination});
+      this.#formEditComponent.reset({point: this.#point, offers: this.#offersType, destinations: this.#destination});
       this.#replaceFormToPoint();
       document.removeEventListener('keydown', this.#escKeyDownButton);
     }
