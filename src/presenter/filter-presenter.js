@@ -31,13 +31,12 @@ export default class FilterPresenter {
   init() {
     const filters = this.filters;
     // console.log(filters);
-    console.log(this.#filterModel.filter);
-    console.log(this.#filterModel);
+    // console.log(this.#filterModel.filter);
+    // console.log(this.#filterModel);
     const prevFilterComponent = this.#filterComponent;
     this.#filterComponent = new Filter({
       filters,
       currentFilterType: this.#filterModel.filter,
-      // currentFilterType: FilterType.EVERYTHING,
       onFilterTypeChange: this.#handleFilterTypeChange,
     });
 

@@ -6,8 +6,9 @@ import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
 
 function createDestination(pointDestination) {
-  const {description, pictures,} = pointDestination;
+  // const {description, pictures,} = pointDestination;
   if (pointDestination) {
+    const {description, pictures,} = pointDestination;
     return (
       `<section class="event__section  event__section--destination">
         <h3 class="event__section-title  event__section-title--destination">Destination</h3>
@@ -77,7 +78,11 @@ function createTiming(point) {
 
 function createTypePoint (point, pointDestination) {
   const {id, type} = point;
-  const {name} = pointDestination;
+  console.log(pointDestination);
+  const name = pointDestination ? pointDestination.name : '';
+
+  // const {name} = pointDestination;
+
 
   return (
     `<div class="event__type-wrapper">
@@ -151,7 +156,7 @@ export default class FormEdit extends AbstractStatefulView {
   #handleSubmitButtonClick;
   #handleDeleteClick = null;
 
-  constructor({point, destinations, offers,onFormEditSubmit, onDeleteClick}) {
+  constructor({point, destinations, offers, onFormEditSubmit, onDeleteClick}) {
     super();
     this._setState(FormEdit.parsePointToState({point}));
     this.#destinations = destinations;
@@ -282,8 +287,8 @@ export default class FormEdit extends AbstractStatefulView {
         destination: this.#destinations.find((item) => item.name === name),
       });
       this.updateElement({
-        waypoint: {
-          ...this._state.waypoint,
+        point: {
+          ...this._state.point,
           destination: this._state.destination.id,
         },
       });

@@ -1,12 +1,12 @@
 import {render, remove, RenderPosition} from '../framework/render.js';
-import { sortPointByPrice, sortPointsByTime, sortPointByDate, filter, generateSorting } from '../utils.js';
+import { sortPointByPrice, sortPointsByTime, sortPointByDate, filter} from '../utils.js';
 import Sorting from '../view/sorting.js';
 import TripEventsList from '../view/trip-events-list.js';
 import PointPresenter from './point-presenter.js';
 import { SortType, UpdateType, UserAction, FilterType } from '../const';
 import NoEvents from '../view/no-events.js';
 import FilterPresenter from './filter-presenter.js';
-// import NewEventPresenter from './new-event-presenter.js';
+import NewEventPresenter from './new-event-presenter.js';
 
 export default class TripPresenter {
 
@@ -37,16 +37,16 @@ export default class TripPresenter {
 
     this.#pointModel.addObserver(this.#handleModelEvent);
     this.#filterModel.addObserver(this.#handleModelEvent);
-    // const points = this.#pointModel.points;
+    const points = this.#pointModel.points;
 
-    // this.#newEventPresenter = new NewEventPresenter({
-    //   point: points[1],
-    //   destinations: this.#destinationModel.destinations,
-    //   offers: this.#offersModel.offers,
-    //   eventsListComponent: this.#tripEventsListComponent,
-    //   onDataChange: this.#handleViewAction,
-    //   onDestroy: onNewEventDestroy,
-    // });
+    this.#newEventPresenter = new NewEventPresenter({
+      point: points[1],
+      destinations: this.#destinationModel.destinations,
+      offers: this.#offersModel.offers,
+      eventsListComponent: this.#tripEventsListComponent,
+      onDataChange: this.#handleViewAction,
+      onDestroy: onNewEventDestroy,
+    });
   }
 
   get points() {
