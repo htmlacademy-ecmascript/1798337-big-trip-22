@@ -6,7 +6,11 @@ import DestinationModel from './model/destination-model.js';
 
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
+
 import FilterModel from './model/filter-model.js';
+
+import NewEventButton from './view/new-event-button.js';
+import { render, RenderPosition } from './framework/render.js';
 
 dayjs.extend(duration);
 
@@ -26,6 +30,22 @@ const tripPresenter = new TripPresenter (
   offersModel,
   destinationModel,
   filterModel,
+  handleNewEventFormClose,
 );
+
+const newEventButtonComponent = new NewEventButton({
+  onClick: handleNewEventButtonClick
+});
+
+function handleNewEventFormClose() {
+  newEventButtonComponent.element.disabled = false;
+}
+
+function handleNewEventButtonClick() {
+  tripPresenter.createNewPoint();
+  newEventButtonComponent.element.disabled = true;
+}
+
+render(newEventButtonComponent, siteFiltersElement, RenderPosition.AFTEREND);
 
 tripPresenter.init();

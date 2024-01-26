@@ -33,4 +33,6 @@ const UpdateType = {
   MAJOR: 'major',
 };
 
-export { ITINERARY, WAYPOINTS, FilterType, NoEventsMessage, SortType, UserAction, UpdateType };
+const DefaultType = 'flight';
+
+export { ITINERARY, WAYPOINTS, FilterType, NoEventsMessage, SortType, UserAction, UpdateType, DefaultType };

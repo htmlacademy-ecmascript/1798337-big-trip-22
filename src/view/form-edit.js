@@ -143,29 +143,25 @@ export default class FormEdit extends AbstractStatefulView {
 
   #datepickerStart;
   #datepickerEnd;
-  #destinationAll = null;
+  // #destinationAll = null;
   #offers = null;
   #destinations = null;
-  #offersAll = null;
+  // #offersAll = null;
   #handleEditButtonClick;
   #handleSubmitButtonClick;
   #handleDeleteClick = null;
 
-  constructor({point, destinations, offers,
-    // offersType, destinationAll, offersAll,
-    onFormEditSubmit, onDeleteClick}) {
-
+  constructor({point, destinations, offers,onFormEditSubmit, onDeleteClick}) {
     super();
     this._setState(FormEdit.parsePointToState({point}));
-    // this.#destinationAll = destinationAll;
     this.#destinations = destinations;
     this.#offers = offers;
-    // this.#offersAll = offersAll;
-    this.#offers = offers;
-    this._restoreHandlers();
 
-    this.#handleEditButtonClick = onFormEditSubmit;
+    this._restoreHandlers();
+    // this.#handleEditButtonClick = onFormEditSubmit;
+    this.#handleSubmitButtonClick = onFormEditSubmit;
     this.#handleDeleteClick = onDeleteClick;
+
   }
 
   get template() {
@@ -195,8 +191,9 @@ export default class FormEdit extends AbstractStatefulView {
     this.#setDatepickerStart();
     this.#setDatepickerEnd();
 
-    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#editButtonHandler);
-    this.element.querySelector('.event__save-btn').addEventListener('click', this.#editButtonHandler);
+    // this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#editButtonHandler);
+    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#exitsWithoutSaving);
+    this.element.querySelector('.event__save-btn').addEventListener('click', this.#submitButtonHandler);
     this.element.querySelector('.event__type-group').addEventListener('change', this.#typeChangeHandler);
     this.element.querySelector('.event__input--price')?.addEventListener('input', this.#priceInputHandler);
     this.element.querySelector('.event__input--destination').addEventListener('change', this.#destinationChangeHandler);
@@ -248,13 +245,13 @@ export default class FormEdit extends AbstractStatefulView {
 
   #editButtonHandler = (evt) => {
     evt.preventDefault();
-    console.log(this._state);
+    // console.log(this._state);
     this.#handleEditButtonClick(this._state);
   };
 
   #submitButtonHandler = (evt) => {
     evt.preventDefault();
-    this.#handleSubmitButtonClick(FormEdit.parsePointToState(this._state));
+    this.#handleSubmitButtonClick(FormEdit.parseStateToPoint(this._state));
   };
 
   #offersChangeHandler = () => {
@@ -269,8 +266,28 @@ export default class FormEdit extends AbstractStatefulView {
 
   #destinationChangeHandler = (evt) => {
     evt.preventDefault();
-    const updateDestination = this.#destinations.find((destination) => destination.name === evt.target.value);
-    this.updateElement({destination: updateDestination.id});
+    // const updateDestination = this.#destinations.find((destination) => destination.name === evt.target.value);
+    // this.updateElement({destination: updateDestination.id});
+    const name = evt.target.value;
+    const destinationNames = [];
+    this.#destinations.forEach((element) => {
+      destinationNames.push(element.name);
+    });
+    if (!destinationNames.includes(name)) {
+      evt.target.value = '';
+      return '';
+    }
+    if (name) {
+      this.updateElement({
+        destination: this.#destinations.find((item) => item.name === name),
+      });
+      this.updateElement({
+        waypoint: {
+          ...this._state.waypoint,
+          destination: this._state.destination.id,
+        },
+      });
+    }
   };
 
   #pointDeleteClickHandler = (evt) => {
@@ -279,10 +296,25 @@ export default class FormEdit extends AbstractStatefulView {
   };
 
   static parsePointToState({point}) {
-    return {...point};
+    return {
+      ...point
+      // point: {...point},
+      // offers: { ...offers },
+      // destinations: { ...destinations },
+    };
   }
+
 
   static parseStateToPoint(state) {
     return {...state};
   }
+
+  #exitsWithoutSaving = (evt) => {
+    evt.preventDefault();
+    if (evt.isTrusted) {
+      document.dispatchEvent(new KeyboardEvent('keydown', {
+        key: 'Escape',
+      }));
+    }
+  };
 }

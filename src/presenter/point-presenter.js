@@ -120,7 +120,7 @@ export default class PointPresenter {
       UpdateType.MINOR,
       point,
     );
-    this.#formEditComponent.reset({point: this.#point, offers: this.#offers, destinations: this.#destinations}); // нужно или нет
+    // this.#formEditComponent.reset({point: this.#point, offers: this.#offers, destinations: this.#destinations}); // нужно или нет
     this.#replaceFormToPoint();
     document.removeEventListener('keydown', this.#escKeyDownButton);
   };
@@ -145,7 +145,7 @@ export default class PointPresenter {
   #FavoriteButtonClickHandler = () => {
     this.#handlerPointChange(
       UserAction.UPDATE_POINT,
-      UpdateType.MINOR,
+      UpdateType.PATCH,
       {...this.#point, isFavorite: !this.#point.isFavorite},
     );
   };

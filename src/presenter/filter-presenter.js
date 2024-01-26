@@ -3,6 +3,7 @@ import Filter from '../view/filter.js';
 import { filter } from '../utils.js';
 import { FilterType, UpdateType } from '../const.js';
 
+
 export default class FilterPresenter {
   #filterContainer;
   #filterModel;
@@ -19,20 +20,24 @@ export default class FilterPresenter {
   }
 
   get filters() {
-    const waypoints = [...this.#pointModel.points];
+    const points = [...this.#pointModel.points];
 
     return Object.values(FilterType).map((type) => ({
       type,
-      count: filter[type](waypoints).length
+      count: filter[type](points).length
     }));
   }
 
   init() {
     const filters = this.filters;
+    // console.log(filters);
+    console.log(this.#filterModel.filter);
+    console.log(this.#filterModel);
     const prevFilterComponent = this.#filterComponent;
     this.#filterComponent = new Filter({
       filters,
       currentFilterType: this.#filterModel.filter,
+      // currentFilterType: FilterType.EVERYTHING,
       onFilterTypeChange: this.#handleFilterTypeChange,
     });
 

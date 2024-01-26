@@ -1,11 +1,12 @@
 import {render, remove, RenderPosition} from '../framework/render.js';
-import { sortPointByPrice, sortPointsByTime, sortPointByDate } from '../utils.js';
+import { sortPointByPrice, sortPointsByTime, sortPointByDate, filter, generateSorting } from '../utils.js';
 import Sorting from '../view/sorting.js';
 import TripEventsList from '../view/trip-events-list.js';
 import PointPresenter from './point-presenter.js';
-import { NoEventsMessage, SortType, UpdateType, UserAction } from '../const';
+import { SortType, UpdateType, UserAction, FilterType } from '../const';
 import NoEvents from '../view/no-events.js';
 import FilterPresenter from './filter-presenter.js';
+// import NewEventPresenter from './new-event-presenter.js';
 
 export default class TripPresenter {
 
@@ -21,33 +22,51 @@ export default class TripPresenter {
   #noEventComponent;
   #sorting = null;
   #filterModel;
+  #filterType = FilterType.EVERYTHING;
+  #newEventPresenter;
   // #sortingState = generateSorting(this.#currentSortType);
 
-  constructor(mainContainer, headerContainer, pointModel, offersModel, destinationModel, filterModel) {
+  constructor(mainContainer, headerContainer, pointModel, offersModel, destinationModel, filterModel, onNewEventDestroy) {
     this.#mainContainer = mainContainer;
     this.#headerContainer = headerContainer;
     this.#pointModel = pointModel;
     this.#offersModel = offersModel;
     this.#destinationModel = destinationModel;
-    this.filterModel = filterModel;
+    this.#filterModel = filterModel;
     this.#tripEventsListComponent = new TripEventsList();
 
     this.#pointModel.addObserver(this.#handleModelEvent);
+    this.#filterModel.addObserver(this.#handleModelEvent);
+    // const points = this.#pointModel.points;
+
+    // this.#newEventPresenter = new NewEventPresenter({
+    //   point: points[1],
+    //   destinations: this.#destinationModel.destinations,
+    //   offers: this.#offersModel.offers,
+    //   eventsListComponent: this.#tripEventsListComponent,
+    //   onDataChange: this.#handleViewAction,
+    //   onDestroy: onNewEventDestroy,
+    // });
   }
 
   get points() {
+
+    const filterType = this.#filterModel.filter;
+    const points = this.#pointModel.points;
+    const filteredPoints = filter[filterType](points);
+
     switch (this.#currentSortType) {
       case SortType.DAY:
-        return [...this.#pointModel.points].sort(sortPointByDate);
+        return filteredPoints.sort(sortPointByDate);
 
       case SortType.PRICE:
-        return [...this.#pointModel.points].sort(sortPointByPrice);
+        return filteredPoints.sort(sortPointByPrice);
 
       case SortType.TIME:
-        return [...this.#pointModel.points].sort(sortPointsByTime);
+        return filteredPoints.sort(sortPointsByTime);
     }
 
-    return [...this.#pointModel.points].sort(sortPointByDate);
+    return filteredPoints.sort(sortPointByDate);
   }
 
   get offers() {
@@ -63,16 +82,18 @@ export default class TripPresenter {
     render(this.#tripEventsListComponent, this.#mainContainer);
 
     this.#renderApp();
-
-    // this.#renderPointsList({points: this.points});
-
   }
 
+  createNewPoint() {
+    this.#currentSortType = SortType.DAY;
+    this.#filterType = FilterType.EVERYTHING;
+    this.#newEventPresenter.init();
+  }
+
+
   #renderApp() {
-    this.#renderFilters();
+    this.#renderFilter();
     this.#renderSort();
-    // this.#renderButtonNewEvent();
-    // this.#renderTripInfo();
 
     if (this.points.length === 0) {
       this.#renderNoEvents();
@@ -82,24 +103,25 @@ export default class TripPresenter {
     this.#renderPointsList();
   }
 
-  #renderFilters() {
+  #renderFilter() {
     const filterPresenter = new FilterPresenter({
       filterContainer: this.#headerContainer,
       filterModel: this.#filterModel,
-      waypointModel: this.#pointModel,
+      pointModel: this.#pointModel,
     });
     filterPresenter.init();
   }
 
   #renderNoEvents() {
-    this.#noEventComponent = new NoEvents(NoEventsMessage.EVERYTHING);
-    // this.#noEventComponent = new NoEvents({ filterType: this.#filterType });
+    // this.#noEventComponent = new NoEvents(NoEventsMessage.EVERYTHING);
+    // console.log(this.#filterType, '123');
+    this.#noEventComponent = new NoEvents(this.#filterType);
     render(this.#noEventComponent, this.#mainContainer);
   }
 
 
   #handleViewAction = (actionType, updateType, update) => {
-    console.log(actionType, updateType, update);
+    // console.log(actionType, updateType, update);
 
     switch (actionType) {
       case UserAction.UPDATE_POINT:
@@ -115,8 +137,7 @@ export default class TripPresenter {
   };
 
   #handleModelEvent = (updateType, data) => {
-    console.log(updateType, data);
-    // В зависимости от типа изменений решаем, что делать:
+    // console.log(updateType, data);
     switch (updateType) {
       case UpdateType.PATCH:
         // - обновить часть списка (например, когда поменялось описание)
@@ -187,9 +208,9 @@ export default class TripPresenter {
 
     remove(this.#sortComponent);
 
-    // if (this.#noEventComponent) {
-    //   remove(this.#noEventComponent);
-    // }
+    if (this.#noEventComponent) {
+      remove(this.#noEventComponent);
+    }
 
     if (resetSortType) {
       this.#currentSortType = SortType.DAY;
@@ -203,7 +224,7 @@ export default class TripPresenter {
     const points = this.points.slice(0, pointCount);
     if (pointCount === 0) {
       this.#renderNoEvents();
-      console.log('pointCount');
+      // console.log('pointCount');
       return;
     }
     this.#renderSort();
@@ -213,13 +234,7 @@ export default class TripPresenter {
   }
 
   #handleModeChange = () => {
+    // this.#newEventPresenter.destroy();
     this.#pointPresentersId.forEach((presenter) => presenter.resetView());
-  };
-
-  #onPointChange = (changedPoint) => {
-    // this.#points = updateItem(this.#points, changedPoint);
-    // this.#soursedPoints = updateItem(this.#points, this.#soursedPoints);
-    // Здесь будем вызывать обновление модели
-    this.#pointPresentersId.get(changedPoint.id).init(changedPoint, this.#pointModel.destinations, this.#pointModel.offers);
   };
 }

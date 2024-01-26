@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import { FilterType, SortType } from './const';
+import { FilterType, SortType} from './const';
 
 const DATE_FORMAT = 'D MMM';
 const FULL_DATE_FORMAT = 'DD/MM/YY H:mm';
@@ -88,4 +88,6 @@ function sortPointByPrice(pointA, pointB) {
 
 export { getRandomArrayElement, humanizeTaskDueDate, DATE_FORMAT, TIME_FORMAT, FULL_DATE_FORMAT, getRandomInt, isEscapeKey,
   // updateItem,
-  filter, sortPointsByTime, sortPointByDate, sortPointByPrice };
+  filter, sortPointsByTime, sortPointByDate, sortPointByPrice,
+  //  generateSorting
+};
