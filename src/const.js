@@ -7,6 +7,8 @@ const SortType = {
   PRICE: 'price',
 };
 
+const SortColumns = ['day', 'event', 'time', 'price', 'offers'];
+
 const FilterType = {
   EVERYTHING: 'everything',
   PAST: 'past',
@@ -35,4 +37,10 @@ const UpdateType = {
 
 const DefaultType = 'flight';
 
-export { ITINERARY, WAYPOINTS, FilterType, NoEventsMessage, SortType, UserAction, UpdateType, DefaultType };
+const Mode = {
+  DEFAULT: 'DEFAULT',
+  EDITING: 'EDITING',
+  CREATE_NEW: 'CREATE_NEW',
+};
+
+export { ITINERARY, WAYPOINTS, FilterType, NoEventsMessage, SortType, UserAction, UpdateType, DefaultType, Mode, SortColumns };

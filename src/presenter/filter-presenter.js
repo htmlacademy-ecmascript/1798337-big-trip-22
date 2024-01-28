@@ -30,9 +30,6 @@ export default class FilterPresenter {
 
   init() {
     const filters = this.filters;
-    // console.log(filters);
-    // console.log(this.#filterModel.filter);
-    // console.log(this.#filterModel);
     const prevFilterComponent = this.#filterComponent;
     this.#filterComponent = new Filter({
       filters,
@@ -55,6 +52,7 @@ export default class FilterPresenter {
 
   #handleFilterTypeChange = (filterType) => {
     if (this.#filterModel.filter === filterType) {
+
       return;
     }
 

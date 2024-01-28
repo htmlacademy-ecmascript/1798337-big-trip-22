@@ -1,5 +1,4 @@
 import AbstractView from '../framework/view/abstract-view';
-// import { FilterType } from '../const.js';
 
 function createFilterItem(filter, currentFilterType) {
   const {type, count} = filter;
@@ -15,10 +14,7 @@ function createFilterItem(filter, currentFilterType) {
 }
 
 function createFilter(filterItems, currentFilterType) {
-  // console.log(filterItems ,'1');
-  // console.log(currentFilterType);
   const filterItemsTemplate = filterItems.map((filter) => createFilterItem(filter, currentFilterType)).join('');
-  // ${filterItemsTemplate}
 
   return (
     `<div class="trip-main__trip-controls  trip-controls">
@@ -49,14 +45,11 @@ export default class Filter extends AbstractView {
   }
 
   get template() {
-    // console.log(this.#filters, this.#currentFilterType);
     return createFilter(this.#filters, this.#currentFilterType);
   }
 
   #filterTypeChangeHandler = (evt) => {
     // evt.preventDefault();
-    // console.log(evt.target.value);
-    // console.log(this, '1');
     this.#handleFilterTypeChange(evt.target.value);
   };
 }

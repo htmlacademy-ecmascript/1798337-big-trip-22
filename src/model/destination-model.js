@@ -8,9 +8,4 @@ export default class DestinationModel extends Observable {
   get destinations() {
     return this.#destination;
   }
-
-  // getDestinationsById(id) {
-  //   const allDestination = this.destinations;
-  //   return allDestination.find((item) => item.id === id);
-  // }
 }

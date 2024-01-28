@@ -2,19 +2,14 @@ import {render, replace, remove} from '../framework/render.js';
 import FormEdit from '../view/form-edit.js';
 import Point from '../view/point.js';
 import { isEscapeKey } from '../utils.js';
-import {UserAction, UpdateType} from '../const.js';
+import {UserAction, UpdateType, Mode} from '../const.js';
 
-const Mode = {
-  DEFAULT: 'DEFAULT',
-  EDITING: 'EDITING',
-};
 
 export default class PointPresenter {
   #tripEventsListComponent = null;
   #pointComponent = null;
   #formEditComponent = null;
   #point = null;
-  // #pointModel = null;
   #offersModel = null;
   #destinationModel = null;
   #destination = null;
@@ -27,7 +22,6 @@ export default class PointPresenter {
 
   constructor({tripEventsListComponent, offersModel, destinationModel, onPointChange, onModeChange}) {
     this.#tripEventsListComponent = tripEventsListComponent;
-    // this.#pointModel = pointModel;
     this.#offersModel = offersModel;
     this.#destinationModel = destinationModel;
     this.#handlerPointChange = onPointChange;
@@ -39,31 +33,22 @@ export default class PointPresenter {
     this.#destinations = this.#destinationModel.destinations;
     this.#offers = [...this.#offersModel.offers];
     this.#offersType = this.#offersModel.getOffersByType(point.type);
-    // this.#destination = this.#destinationModel.getDestinationsById(point.destination);
 
     const prevPointComponent = this.#pointComponent;
     const prevFormEditComponent = this.#formEditComponent;
 
     this.#pointComponent = new Point({
       point: this.#point,
-      // destination: this.#destination,
       destinations: this.#destinations,
-      // offers: [...this.#offersModel.getOffersById(point.type, point.offersId)],
       offers: [...this.#offers],
       onEditButtonClick: this.#EditButtonClickHandler,
       onFavoriteButtonClick: this.#FavoriteButtonClickHandler,
-
     });
 
     this.#formEditComponent = new FormEdit({
       point: this.#point,
-
       destinations: this.#destinationModel.destinations,
       offers: [...this.#offersModel.offers],
-      // offersType: this.#offersType,
-      // destination: this.#destination,
-      // destinationAll: this.#destinationModel.destinations,
-      // offersAll: [...this.#offersModel.offers],
       onFormEditSubmit: this.#FormEditSubmitHandler,
       onDeleteClick: this.#handleDeleteClick,
     });
@@ -120,7 +105,7 @@ export default class PointPresenter {
       UpdateType.MINOR,
       point,
     );
-    // this.#formEditComponent.reset({point: this.#point, offers: this.#offers, destinations: this.#destinations}); // нужно или нет
+
     this.#replaceFormToPoint();
     document.removeEventListener('keydown', this.#escKeyDownButton);
   };

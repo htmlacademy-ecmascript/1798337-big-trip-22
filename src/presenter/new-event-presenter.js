@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from 'uuid';
 import { remove, render, RenderPosition } from '../framework/render.js';
-import { UserAction, UpdateType, DefaultType } from '../const.js';
+import { UserAction, UpdateType, DefaultType} from '../const.js';
 import FormEdit from '../view/form-edit.js';
 
 export default class NewEventPresenter {
@@ -8,10 +8,8 @@ export default class NewEventPresenter {
   #pointListContainer;
   #handleDataChange;
   #handleDestroy;
-  #point;
   #destinations;
   #offers;
-
   #formComponent = null;
 
   constructor({ eventsListComponent, onDataChange, onDestroy, destinations, offers }) {
@@ -26,8 +24,6 @@ export default class NewEventPresenter {
     if (this.#formComponent !== null) {
       return;
     }
-
-    // ({point, destinations, offers, onFormEditSubmit, onDeleteClick})
 
     const DefaultPointMock =
       {
@@ -45,7 +41,7 @@ export default class NewEventPresenter {
       point: DefaultPointMock,
       destinations: this.#destinations,
       offers: this.#offers,
-      onFormSubmit: this.#handleFormSubmit,
+      onFormEditSubmit: this.#handleFormSubmit,
       onDeleteClick: this.#handleDeleteClick,
     });
 
@@ -69,7 +65,7 @@ export default class NewEventPresenter {
 
   #handleFormSubmit = (point) => {
     this.#handleDataChange(
-      UserAction.ADD_YPOINT,
+      UserAction.ADD_POINT,
       UpdateType.MINOR,
       { ...point, id: uuidv4() },
     );
