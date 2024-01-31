@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import { FilterType } from './const';
+import { FilterType, SortColumns} from './const';
 
 const DATE_FORMAT = 'D MMM';
 const FULL_DATE_FORMAT = 'DD/MM/YY H:mm';
@@ -19,10 +19,6 @@ function humanizeTaskDueDate(dueDate, format) {
 
 function isEscapeKey (evt) {
   return evt.key === 'Escape';
-}
-
-function updateItem(items, update) {
-  return items.map((item) => item.id === update.id ? update : item);
 }
 
 const filter = {
@@ -78,4 +74,13 @@ function sortPointByPrice(pointA, pointB) {
   return 0;
 }
 
-export { getRandomArrayElement, humanizeTaskDueDate, DATE_FORMAT, TIME_FORMAT, FULL_DATE_FORMAT, getRandomInt, isEscapeKey, updateItem, filter, sortPointsByTime, sortPointByDate, sortPointByPrice };
+
+function generateSorting(sortType) {
+  return SortColumns.map((value) => ({
+    value,
+    isSelected: value === sortType,
+    isDisabled: value === 'event' || value === 'offers',
+  }));
+}
+
+export { getRandomArrayElement, humanizeTaskDueDate, DATE_FORMAT, TIME_FORMAT, FULL_DATE_FORMAT, getRandomInt, isEscapeKey, filter, sortPointsByTime, sortPointByDate, sortPointByPrice, generateSorting};

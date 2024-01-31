@@ -1,46 +1,31 @@
-import { SortType } from '../const';
 import AbstractView from '../framework/view/abstract-view';
+import { SortType } from '../const';
 
-function createSorting () {
-  return (` <form class="trip-events__trip-sort  trip-sort" action="#" method="get">
-    <div class="trip-sort__item  trip-sort__item--day">
-      <input id="sort-day" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort" value="sort-day" data-sort-type="${SortType.DAY}" checked>
-      <label class="trip-sort__btn" for="sort-day">Day</label>
-    </div>
-
-    <div class="trip-sort__item  trip-sort__item--event">
-      <input id="sort-event" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort" value="sort-event" disabled>
-      <label class="trip-sort__btn" for="sort-event">Event</label>
-    </div>
-
-    <div class="trip-sort__item  trip-sort__item--time">
-      <input id="sort-time" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort" value="sort-time" data-sort-type="${SortType.TIME}">
-      <label class="trip-sort__btn" for="sort-time">Time</label>
-    </div>
-
-    <div class="trip-sort__item  trip-sort__item--price">
-      <input id="sort-price" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort" value="sort-price" data-sort-type="${SortType.PRICE}">
-      <label class="trip-sort__btn" for="sort-price">Price</label>
-    </div>
-
-    <div class="trip-sort__item  trip-sort__item--offer">
-      <input id="sort-offer" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort" value="sort-offer" disabled>
-      <label class="trip-sort__btn" for="sort-offer">Offers</label>
-    </div>
-  </form>`);
+function createSorting (sorting) {
+  const sortable = Object.values(SortType);
+  return (
+    `<form class="trip-events__trip-sort  trip-sort" action="#" method="get">
+      ${sorting.map((item) => `<div div class="trip-sort__item  trip-sort__item--${item.value}" >
+      <input id="sort-${item.value}" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort" value="sort-${item.value}" ${sortable.includes(item.value) ? `data-sort-type="${item.value}"` : ''} ${item.isSelected ? 'checked' : ''} ${item.isDisabled ? 'disabled' : ''}>
+        <label class="trip-sort__btn" for="sort-${item.value}">${item.value}</label>
+      </div>`).join('')}
+    </form>`);
 }
 
 export default class Sorting extends AbstractView {
+  #sortingElements = null;
   #handleSortTypeChange = null;
 
-  constructor({onSortTypeChange}) {
+  constructor({ onSortTypeChange, sortingElements }) {
     super();
     this.#handleSortTypeChange = onSortTypeChange;
+    this.#sortingElements = sortingElements;
+
     this.element.addEventListener('click', this.#sortTypeChangeHandler);
   }
 
   get template() {
-    return createSorting();
+    return createSorting(this.#sortingElements);
   }
 
   #sortTypeChangeHandler = (evt) => {
@@ -48,6 +33,7 @@ export default class Sorting extends AbstractView {
       return;
     }
 
+    evt.preventDefault();
     this.#handleSortTypeChange(evt.target.dataset.sortType);
   };
 }
