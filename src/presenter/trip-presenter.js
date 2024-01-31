@@ -8,6 +8,7 @@ import NoEvents from '../view/no-events.js';
 import FilterPresenter from './filter-presenter.js';
 import NewEventPresenter from './new-event-presenter.js';
 import TripInfo from '../view/trip-info.js';
+import Loading from '../view/loading.js';
 
 export default class TripPresenter {
 
@@ -26,6 +27,8 @@ export default class TripPresenter {
   #filterType = FilterType.EVERYTHING;
   #newEventPresenter;
   #sortingState = generateSorting(this.#currentSortType);
+  #loadingComponent = new Loading();
+  #isLoading = true;
 
   constructor(mainContainer, headerContainer, pointModel, offersModel, destinationModel, filterModel, onNewEventDestroy) {
     this.#mainContainer = mainContainer;
@@ -98,6 +101,12 @@ export default class TripPresenter {
     this.#renderFilter();
     this.#renderTripInfo();
 
+    if (this.#isLoading) {
+      this.#renderLoading();
+      console.log('loading');
+      return;
+    }
+
     if (this.points.length === 0) {
       this.#renderNoEvents();
       return;
@@ -156,8 +165,17 @@ export default class TripPresenter {
         this.#renderPointList();
         // - обновить всю доску (например, при переключении фильтра)
         break;
+      case UpdateType.INIT:
+        this.#isLoading = false;
+        remove(this.#loadingComponent);
+        this.#renderPointList();
+        break;
     }
   };
+
+  #renderLoading() {
+    render(this.#loadingComponent, this.#mainContainer, RenderPosition.AFTERBEGIN);
+  }
 
 
   #renderPointsList() {

@@ -1,5 +1,6 @@
 import Observable from '../framework/observable.js';
 // import { waypointsMock } from '../mock/waypoints-mock.js';
+import { UpdateType } from '../const.js';
 
 export default class PointModel extends Observable {
 
@@ -29,6 +30,8 @@ export default class PointModel extends Observable {
     } catch(err) {
       this.#points = [];
     }
+
+    this._notify(UpdateType.INIT);
   }
 
   updatePoint(updateType, update) {
