@@ -12,12 +12,21 @@ import FilterModel from './model/filter-model.js';
 import NewEventButton from './view/new-event-button.js';
 import { render, RenderPosition } from './framework/render.js';
 
+import PointsApiService from './points-api-service.js';
+
+const AUTHORIZATION = 'Basic mityamityamitya';
+const END_POINT = 'https://21.objects.pages.academy/big-trip';
+
 dayjs.extend(duration);
 
 const siteMainElement = document.querySelector('.trip-events');
 const siteFiltersElement = document.querySelector('.trip-controls__filters');
 
-const pointModel = new PointModel();
+const pointModel = new PointModel({
+  pointsApiService: new PointsApiService(END_POINT, AUTHORIZATION)
+});
+
+
 const offersModel = new OffersModel();
 const destinationModel = new DestinationModel();
 const filterModel = new FilterModel();

@@ -3,12 +3,20 @@ import { waypointsMock } from '../mock/waypoints-mock.js';
 
 export default class PointModel extends Observable {
 
+  #pointsApiService = null;
   #points = [];
 
-  constructor() {
+  constructor({ pointsApiService }) {
     super();
-    this.#points = waypointsMock;
+    // this.#points = waypointsMock;
+    this.#pointsApiService = pointsApiService;
+    // console.log(pointsApiService);
+
+    this.#pointsApiService.points.then((points) => {
+      console.log(points);
+    });
   }
+
 
   get points() {
     return structuredClone(this.#points);
