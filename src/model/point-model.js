@@ -1,5 +1,5 @@
 import Observable from '../framework/observable.js';
-import { waypointsMock } from '../mock/waypoints-mock.js';
+// import { waypointsMock } from '../mock/waypoints-mock.js';
 
 export default class PointModel extends Observable {
 
@@ -20,6 +20,15 @@ export default class PointModel extends Observable {
 
   get points() {
     return structuredClone(this.#points);
+  }
+
+  async init() {
+    try {
+      const points = await this.#pointsApiService.tasks;
+      this.#points = points.map(this.#adaptToClient);
+    } catch(err) {
+      this.#points = [];
+    }
   }
 
   updatePoint(updateType, update) {
