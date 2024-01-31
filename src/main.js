@@ -46,6 +46,11 @@ const newEventButtonComponent = new NewEventButton({
   onClick: handleNewEventButtonClick
 });
 
+pointModel.init()
+  .finally(() => {
+    render(newEventButtonComponent, siteFiltersElement, RenderPosition.AFTEREND);
+  });
+
 function handleNewEventFormClose() {
   newEventButtonComponent.element.disabled = false;
 }
@@ -55,6 +60,5 @@ function handleNewEventButtonClick() {
   newEventButtonComponent.element.disabled = true;
 }
 
-render(newEventButtonComponent, siteFiltersElement, RenderPosition.AFTEREND);
 
 tripPresenter.init();
