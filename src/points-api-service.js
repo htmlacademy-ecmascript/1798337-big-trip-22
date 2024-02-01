@@ -41,14 +41,14 @@ export default class PointsApiService extends ApiService {
       'date_from': point.dateFrom,
       'date_to': point.dateTo,
       'is_favorite': point.isFavorite,
-      offers: point.offersId,
+      // offers: point.offers,
     };
 
     delete adaptedWaypoint.basePrice;
     delete adaptedWaypoint.dateFrom;
     delete adaptedWaypoint.dateTo;
     delete adaptedWaypoint.isFavorite;
-    delete adaptedWaypoint.offersId;
+    // delete adaptedWaypoint.offers;
 
     return adaptedWaypoint;
   }

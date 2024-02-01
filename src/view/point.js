@@ -40,7 +40,11 @@ function createSchedule(dateFrom, dateTo) {
 }
 
 function createOffers({offers, point}) {
+  console.log(offers);
   const pointOffersType = offers.find((offer) => offer.type === point.type).offers;
+  console.log(pointOffersType);
+  console.log(point.offers, 'point.offers');
+
   const pointOffersChoose = pointOffersType.length ? (pointOffersType.filter((offer) => point.offers.includes(offer.id))) : '';
   if (pointOffersChoose.length !== 0) {
     return (`<h4 class="visually-hidden">Offers:</h4>
@@ -74,7 +78,12 @@ function createFavoriteButton(point) {
 function createPoint (point, destinations, offers) {
 
   const { basePrice, dateFrom, dateTo, type } = point;
+  // console.log(basePrice,dateFrom,dateTo, type);
+  // console.log('destinations', destinations);
   const pointDestination = destinations.find((destination) => destination.id === point.destination);
+  // console.log(point.destination);
+  // console.log('pointDest', pointDestination);
+
   const {name} = pointDestination;
 
   return `<div class="event">
@@ -108,6 +117,7 @@ export default class Point extends AbstractView {
   }) {
     super();
     this.#point = point;
+    console.log(point);
     this.#destinations = destinations;
     this.#offers = offers;
     this.#handleEditButtonClick = onEditButtonClick;

@@ -27,8 +27,14 @@ const pointModel = new PointModel({
 });
 
 
-const offersModel = new OffersModel();
-const destinationModel = new DestinationModel();
+const offersModel = new OffersModel({
+  pointsApiService: new PointsApiService(END_POINT, AUTHORIZATION)
+});
+
+const destinationModel = new DestinationModel({
+  pointsApiService: new PointsApiService(END_POINT, AUTHORIZATION)
+});
+
 const filterModel = new FilterModel();
 
 
@@ -46,10 +52,9 @@ const newEventButtonComponent = new NewEventButton({
   onClick: handleNewEventButtonClick
 });
 
-pointModel.init()
-  .finally(() => {
-    render(newEventButtonComponent, siteFiltersElement, RenderPosition.AFTEREND);
-  });
+destinationModel.init().then(() => offersModel.init()).then(() => pointModel.init()).finally(() => {
+  render(newEventButtonComponent, siteFiltersElement, RenderPosition.AFTEREND);
+});
 
 function handleNewEventFormClose() {
   newEventButtonComponent.element.disabled = false;
