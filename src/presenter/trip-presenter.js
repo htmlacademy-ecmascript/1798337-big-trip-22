@@ -103,7 +103,6 @@ export default class TripPresenter {
 
     if (this.#isLoading) {
       this.#renderLoading();
-      console.log('loading');
       return;
     }
 

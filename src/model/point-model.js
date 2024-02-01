@@ -1,5 +1,4 @@
 import Observable from '../framework/observable.js';
-// import { waypointsMock } from '../mock/waypoints-mock.js';
 import { UpdateType } from '../const.js';
 
 export default class PointModel extends Observable {
@@ -9,20 +8,7 @@ export default class PointModel extends Observable {
 
   constructor({ pointsApiService }) {
     super();
-    // this.#points = waypointsMock;
     this.#pointsApiService = pointsApiService;
-
-    this.#pointsApiService.points.then((points) => {
-      console.log(points);
-    });
-
-    // this.#pointsApiService.destinations.then((destinations)=>{
-    //   console.log(destinations);
-    // });
-
-    // this.#pointsApiService.offers.then((offers)=>{
-    //   console.log(offers);
-    // });
   }
 
 
@@ -41,7 +27,6 @@ export default class PointModel extends Observable {
     this._notify(UpdateType.INIT);
   }
 
-  // updatePoint(updateType, update) {
   async updatePoint(updateType, update) {
 
     const index = this.#points.findIndex((point) => point.id === update.id);
@@ -49,15 +34,6 @@ export default class PointModel extends Observable {
     if (index === -1) {
       throw new Error('Can\'t update unexisting task');
     }
-
-  //   this.#points = [
-  //     ...this.#points.slice(0, index),
-  //     update,
-  //     ...this.#points.slice(index + 1),
-  //   ];
-
-  //   this._notify(updateType, update);
-  // }
 
     try {
       const response = await this.#pointsApiService.updatePoint(update);
@@ -106,14 +82,12 @@ export default class PointModel extends Observable {
       dateFrom: point['date_from'],
       dateTo: point['date_to'],
       isFavorite: point['is_favorite'],
-      // offers: point.offers,
     };
 
     delete adaptedWaypoint['base_price'];
     delete adaptedWaypoint['date_from'];
     delete adaptedWaypoint['date_to'];
     delete adaptedWaypoint['is_favorite'];
-    // delete adaptedWaypoint['offers'];
 
     return adaptedWaypoint;
   }
