@@ -34,14 +34,14 @@ export default class PointsApiService extends ApiService {
     return parsedResponse;
   }
 
-  #adaptToServer(waypoint) {
+  #adaptToServer(point) {
     const adaptedWaypoint = {
-      ...waypoint,
-      'base_price': waypoint.basePrice,
-      'date_from': waypoint.dateFrom,
-      'date_to': waypoint.dateTo,
-      'is_favorite': waypoint.isFavorite,
-      offers: waypoint.offersId,
+      ...point,
+      'base_price': point.basePrice,
+      'date_from': point.dateFrom,
+      'date_to': point.dateTo,
+      'is_favorite': point.isFavorite,
+      offers: point.offersId,
     };
 
     delete adaptedWaypoint.basePrice;

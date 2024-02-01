@@ -11,11 +11,18 @@ export default class PointModel extends Observable {
     super();
     // this.#points = waypointsMock;
     this.#pointsApiService = pointsApiService;
-    // console.log(pointsApiService);
 
     this.#pointsApiService.points.then((points) => {
       console.log(points.map(this.#adaptToClient));
     });
+
+    // this.#pointsApiService.destinations.then((destinations)=>{
+    //   console.log(destinations);
+    // });
+
+    // this.#pointsApiService.offers.then((offers)=>{
+    //   console.log(offers);
+    // });
   }
 
 
@@ -25,7 +32,7 @@ export default class PointModel extends Observable {
 
   async init() {
     try {
-      const points = await this.#pointsApiService.tasks;
+      const points = await this.#pointsApiService.points;
       this.#points = points.map(this.#adaptToClient);
     } catch(err) {
       this.#points = [];
@@ -34,7 +41,8 @@ export default class PointModel extends Observable {
     this._notify(UpdateType.INIT);
   }
 
-  updatePoint(updateType, update) {
+  // updatePoint(updateType, update) {
+  async updatePoint(updateType, update) {
 
     const index = this.#points.findIndex((point) => point.id === update.id);
 
@@ -42,14 +50,29 @@ export default class PointModel extends Observable {
       throw new Error('Can\'t update unexisting task');
     }
 
-    this.#points = [
-      ...this.#points.slice(0, index),
-      update,
-      ...this.#points.slice(index + 1),
-    ];
+  //   this.#points = [
+  //     ...this.#points.slice(0, index),
+  //     update,
+  //     ...this.#points.slice(index + 1),
+  //   ];
 
-    this._notify(updateType, update);
+  //   this._notify(updateType, update);
+  // }
+
+    try {
+      const response = await this.#pointsApiService.updatePoint(update);
+      const updatedPoint = this.#adaptToClient(response);
+      this.#points = [
+        ...this.#points.slice(0, index),
+        updatedPoint,
+        ...this.#points.slice(index + 1),
+      ];
+      this._notify(updateType, updatedPoint);
+    } catch(err) {
+      throw new Error('Can\'t update point');
+    }
   }
+
 
   addPoint(updateType, update) {
     this.#points = [
