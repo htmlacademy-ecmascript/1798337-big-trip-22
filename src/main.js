@@ -12,14 +12,29 @@ import FilterModel from './model/filter-model.js';
 import NewEventButton from './view/new-event-button.js';
 import { render, RenderPosition } from './framework/render.js';
 
+import PointsApiService from './points-api-service.js';
+
+const AUTHORIZATION = 'Basic mityamityamitya';
+const END_POINT = 'https://21.objects.htmlacademy.pro/big-trip';
+
 dayjs.extend(duration);
 
 const siteMainElement = document.querySelector('.trip-events');
 const siteFiltersElement = document.querySelector('.trip-controls__filters');
 
-const pointModel = new PointModel();
-const offersModel = new OffersModel();
-const destinationModel = new DestinationModel();
+const pointModel = new PointModel({
+  pointsApiService: new PointsApiService(END_POINT, AUTHORIZATION)
+});
+
+
+const offersModel = new OffersModel({
+  pointsApiService: new PointsApiService(END_POINT, AUTHORIZATION)
+});
+
+const destinationModel = new DestinationModel({
+  pointsApiService: new PointsApiService(END_POINT, AUTHORIZATION)
+});
+
 const filterModel = new FilterModel();
 
 
@@ -37,6 +52,10 @@ const newEventButtonComponent = new NewEventButton({
   onClick: handleNewEventButtonClick
 });
 
+destinationModel.init().then(() => offersModel.init()).then(() => pointModel.init()).finally(() => {
+  render(newEventButtonComponent, siteFiltersElement, RenderPosition.AFTEREND);
+});
+
 function handleNewEventFormClose() {
   newEventButtonComponent.element.disabled = false;
 }
@@ -46,6 +65,5 @@ function handleNewEventButtonClick() {
   newEventButtonComponent.element.disabled = true;
 }
 
-render(newEventButtonComponent, siteFiltersElement, RenderPosition.AFTEREND);
 
 tripPresenter.init();
