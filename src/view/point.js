@@ -41,6 +41,7 @@ function createSchedule(dateFrom, dateTo) {
 
 function createOffers({offers, point}) {
   const pointOffersType = offers.find((offer) => offer.type === point.type).offers;
+
   const pointOffersChoose = pointOffersType.length ? (pointOffersType.filter((offer) => point.offers.includes(offer.id))) : '';
   if (pointOffersChoose.length !== 0) {
     return (`<h4 class="visually-hidden">Offers:</h4>
