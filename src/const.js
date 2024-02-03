@@ -1,5 +1,5 @@
 const ITINERARY = ['taxi', 'bus', 'train', 'ship', 'drive', 'flight', 'check-in', 'sightseeing', 'restaurant'];
-const WAYPOINTS = ['Voronezh', 'Tambov', 'Sahalin', 'Karelia', 'Murmansk', 'Arhiz', 'Sochi', 'Rostov', 'Kazan',];
+
 
 const SortType = {
   DAY: 'day',
@@ -44,4 +44,14 @@ const Mode = {
   CREATE_NEW: 'CREATE_NEW',
 };
 
-export { ITINERARY, WAYPOINTS, FilterType, NoEventsMessage, SortType, UserAction, UpdateType, DefaultType, Mode, SortColumns };
+const DefaultPointMock = {
+  'basePrice': 0,
+  'dateFrom': '',
+  'dateTo': '',
+  'destination': '',
+  'isFavorite': false,
+  'offers': [],
+  'type': DefaultType,
+};
+
+export { ITINERARY, FilterType, NoEventsMessage, SortType, UserAction, UpdateType, DefaultType, Mode, SortColumns, DefaultPointMock };

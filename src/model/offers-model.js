@@ -1,11 +1,9 @@
 import Observable from '../framework/observable.js';
-// import { offersMock } from '../mock/offers-mock';
 import { UpdateType } from '../const.js';
 
 export default class OffersModel extends Observable {
 
   #pointsApiService = null;
-  // #offers = offersMock;
   #offers = [];
 
   constructor({ pointsApiService }) {

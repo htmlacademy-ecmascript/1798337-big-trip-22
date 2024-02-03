@@ -1,7 +1,7 @@
 import { DATE_FORMAT, humanizeTaskDueDate, TIME_FORMAT } from '../utils';
-import dayjs from 'dayjs';
+// import dayjs from 'dayjs';
 import AbstractView from '../framework/view/abstract-view';
-
+import { getDuration} from '../utils';
 function createEventData(dateFrom) {
   const convertedDataStartDay = humanizeTaskDueDate(dateFrom, DATE_FORMAT);
   return `<time class="event__date" datetime="">${convertedDataStartDay}</time>`;
@@ -26,8 +26,8 @@ function createPrice(basePrice) {
 function createSchedule(dateFrom, dateTo) {
   const convertedDateFrom = humanizeTaskDueDate(dateFrom, TIME_FORMAT);
   const convertedDateTo = humanizeTaskDueDate(dateTo, TIME_FORMAT);
-  const durationDate = dayjs.duration(dayjs(dateTo).diff(dayjs(dateFrom)));
-  const convertedDurationData = `${durationDate.days() > 1 ? `${durationDate.days()}D` : ''} ${durationDate.hours()}H ${durationDate.minutes()}M`;
+  // const durationDate = dayjs.duration(dayjs(dateTo).diff(dayjs(dateFrom)));
+  // const convertedDurationData = `${durationDate.days() > 1 ? `${durationDate.days()}D` : ''} ${durationDate.hours()}H ${durationDate.minutes()}M`;
 
   return `<div class="event__schedule">
     <p class="event__time">
@@ -35,10 +35,11 @@ function createSchedule(dateFrom, dateTo) {
       &mdash;
       <time class="event__end-time" datetime="${dateTo}">${convertedDateTo}</time>
     </p>
-    <p class="event__duration">${convertedDurationData}</p>
+    <p class="event__duration">${getDuration(dateFrom, dateTo)}</p>
   </div>`;
 }
 
+{/* <p class="event__duration">${convertedDurationData}</p> */}
 function createOffers({offers, point}) {
   const pointOffersType = offers.find((offer) => offer.type === point.type).offers;
 

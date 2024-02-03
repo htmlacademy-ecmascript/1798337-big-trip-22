@@ -43,12 +43,24 @@ export default class TripPresenter {
     this.#filterModel.addObserver(this.#handleModelEvent);
 
     this.#newEventPresenter = new NewEventPresenter({
-      destinations: this.#destinationModel.destinations,
-      offers: this.#offersModel.offers,
+      // destinations: this.#destinationModel.destinations,
+      // offers: this.#offersModel.offers,
+      // pointModel: this.#pointModel,
+      offersModel: this.#offersModel,
+      destinationModel: this.#destinationModel,
       eventsListComponent: this.#tripEventsListComponent,
       onDataChange: this.#handleViewAction,
       onDestroy: onNewEventDestroy,
     });
+
+    // const pointPresenter = new PointPresenter({
+    //   tripEventsListComponent: this.#tripEventsListComponent,
+    //   waypointModel: this.#pointModel,
+    //   offersModel: this.#offersModel,
+    //   destinationModel: this.#destinationModel,
+    //   onPointChange: this.#handleViewAction,
+    //   onModeChange: this.#handleModeChange,
+    // });
   }
 
   get points() {
@@ -70,13 +82,13 @@ export default class TripPresenter {
     return filteredPoints.sort(sortPointByDate);
   }
 
-  get offers() {
-    return this.#offersModel.offers;
-  }
+  // get offers() {
+  //   return this.#offersModel.offers;
+  // }
 
-  get destinations() {
-    return this.#destinationModel.destinations;
-  }
+  // get destinations() {
+  //   return this.#destinationModel.destinations;
+  // }
 
   init() {
 
@@ -238,6 +250,7 @@ export default class TripPresenter {
   }
 
   #handleModeChange = () => {
+    this.#newEventPresenter.destroy();
     this.#pointPresentersId.forEach((presenter) => presenter.resetView());
   };
 
