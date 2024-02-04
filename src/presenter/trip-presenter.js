@@ -1,4 +1,5 @@
 import {render, remove, RenderPosition} from '../framework/render.js';
+import UiBlocker from '../framework/ui-blocker/ui-blocker.js';
 import { sortPointByPrice, sortPointsByTime, sortPointByDate, filter, generateSorting} from '../utils.js';
 import Sorting from '../view/sorting.js';
 import TripEventsList from '../view/trip-events-list.js';
@@ -9,6 +10,11 @@ import FilterPresenter from './filter-presenter.js';
 import NewEventPresenter from './new-event-presenter.js';
 import TripInfo from '../view/trip-info.js';
 import Loading from '../view/loading.js';
+
+const TimeLimit = {
+  LOWER_LIMIT: 350,
+  UPPER_LIMIT: 1000,
+};
 
 export default class TripPresenter {
 
@@ -30,6 +36,11 @@ export default class TripPresenter {
   #loadingComponent = new Loading();
   #isLoading = true;
 
+  #uiBlocker = new UiBlocker({
+    lowerLimit: TimeLimit.LOWER_LIMIT,
+    upperLimit: TimeLimit.UPPER_LIMIT
+  });
+
   constructor(mainContainer, headerContainer, pointModel, offersModel, destinationModel, filterModel, onNewEventDestroy) {
     this.#mainContainer = mainContainer;
     this.#headerContainer = headerContainer;
@@ -43,24 +54,12 @@ export default class TripPresenter {
     this.#filterModel.addObserver(this.#handleModelEvent);
 
     this.#newEventPresenter = new NewEventPresenter({
-      // destinations: this.#destinationModel.destinations,
-      // offers: this.#offersModel.offers,
-      // pointModel: this.#pointModel,
       offersModel: this.#offersModel,
       destinationModel: this.#destinationModel,
       eventsListComponent: this.#tripEventsListComponent,
       onDataChange: this.#handleViewAction,
       onDestroy: onNewEventDestroy,
     });
-
-    // const pointPresenter = new PointPresenter({
-    //   tripEventsListComponent: this.#tripEventsListComponent,
-    //   waypointModel: this.#pointModel,
-    //   offersModel: this.#offersModel,
-    //   destinationModel: this.#destinationModel,
-    //   onPointChange: this.#handleViewAction,
-    //   onModeChange: this.#handleModeChange,
-    // });
   }
 
   get points() {
@@ -81,14 +80,6 @@ export default class TripPresenter {
 
     return filteredPoints.sort(sortPointByDate);
   }
-
-  // get offers() {
-  //   return this.#offersModel.offers;
-  // }
-
-  // get destinations() {
-  //   return this.#destinationModel.destinations;
-  // }
 
   init() {
 
@@ -145,18 +136,37 @@ export default class TripPresenter {
   }
 
 
-  #handleViewAction = (actionType, updateType, update) => {
+  #handleViewAction = async (actionType, updateType, update) => {
+
+    this.#uiBlocker.block();
+
     switch (actionType) {
       case UserAction.UPDATE_POINT:
-        this.#pointModel.updatePoint(updateType, update);
+        this.#pointPresentersId.get(update.id).setSaving();
+        try {
+          await this.#pointModel.updatePoint(updateType, update);
+        } catch(err) {
+          this.pointPresentersId.get(update.id).setAborting();
+        }
         break;
       case UserAction.ADD_POINT:
-        this.#pointModel.addPoint(updateType, update);
+        this.#newEventPresenter.setSaving();
+        try {
+          await this.#pointModel.addPoint(updateType, update);
+        } catch(err) {
+          this.#newEventPresenter.setAborting();
+        }
         break;
       case UserAction.DELETE_POINT:
-        this.#pointModel.deletePoint(updateType, update);
+        this.#pointPresentersId.get(update.id).setDeleting();
+        try {
+          await this.#pointModel.deletePoint(updateType, update);
+        } catch(err) {
+          this.#pointPresentersId.get(update.id).setAborting();
+        }
         break;
     }
+    this.#uiBlocker.unblock();
   };
 
   #handleModelEvent = (updateType, data) => {

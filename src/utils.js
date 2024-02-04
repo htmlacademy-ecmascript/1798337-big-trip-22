@@ -1,14 +1,9 @@
 import dayjs from 'dayjs';
 import { FilterType, SortColumns} from './const';
 
-// YEAR: 'DD/MM/YY HH:mm',
-// FULL_DATE: 'YYYY-MM-DD',
-
 const DATE_FORMAT = 'D MMM';
 const FULL_DATE_FORMAT = 'DD/MM/YY HH:mm';
 const TIME_FORMAT = 'HH:mm';
-// const HOURS_COUNT = 24;
-// const MINUTES_COUNT = 60;
 
 function getRandomArrayElement(items) {
   return items[Math.floor(Math.random() * items.length)];
@@ -88,24 +83,7 @@ function generateSorting(sortType) {
   }));
 }
 
-// function formatNames(items) {
-//   items = structuredClone(items);
-//   if (items.length > 3) {
-//     items.splice(1, items.length - 2, '...');
-//   }
-//   return items.join(' — ');
-// }
-
 const getDuration = (dateFrom, dateTo) => {
-  // const duration = dayjs.duration(dayjs(dateFrom).diff(dayjs(dateTo)));
-  // const totalDays = duration.asDays();
-  // const days = Math.floor(totalDays);
-  // let hours = Math.floor((totalDays - days) * HOURS_COUNT);
-  // let minutes = Math.floor(duration.asMinutes() - days * HOURS_COUNT * MINUTES_COUNT - hours * MINUTES_COUNT);
-  // if (minutes === 60) {
-  //   hours++;
-  //   minutes = 0;
-  // }
 
   const formatDurationToTwoSymbol = (durationElement) => {
     const isTwoCharacters = String(durationElement).length < 2;
@@ -120,22 +98,12 @@ const getDuration = (dateFrom, dateTo) => {
   const durationOfStay = calculateDurationOfStay(dateTo, dateFrom);
   const daysDutation = Math.trunc(durationOfStay.asDays());
 
-  // console.log(durationOfStay.days());
-
-  // const durationOfStayFormat = `${durationOfStay.days() > 0 ?
-  //   `${formatDuratioToTwoCharacters(daysDutation)}D` : ''}
-  //   ${durationOfStay.hours() > 0 ?
-  //   `${formatDuratioToTwoCharacters(durationOfStay.hours())}H` : ''}
-  //    ${formatDuratioToTwoCharacters(durationOfStay.minutes())}M`;
-
   const durationOfStayFormat =
    `${durationOfStay.days() > 0 ? `${formatDurationToTwoSymbol(daysDutation)}D ${formatDurationToTwoSymbol(durationOfStay.hours())}H ${formatDurationToTwoSymbol(durationOfStay.minutes())}M`
      : `${durationOfStay.hours() > 0 ? `${formatDurationToTwoSymbol(durationOfStay.hours())}H` : ''}
      ${formatDurationToTwoSymbol(durationOfStay.minutes())}M`}`;
 
   return durationOfStayFormat;
-
-  // return `${days.toString().padStart(2, '0')}D ${hours.toString().padStart(2, '0')}H ${minutes.toString().padStart(2, '0')}M`;
 };
 
 

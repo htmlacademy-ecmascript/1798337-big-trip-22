@@ -59,7 +59,7 @@ function createPrice(point, isDisabled) {
         <span class="visually-hidden">Price</span>
           &euro;
       </label>
-     <input class="event__input  event__input--price" id="event-price-${id}" type="number" min="0" max="100000" oninput="if(value.charAt(0) === '0' || value.charAt(0) === '-' || value.includes('.')) value = ''" name="event-price" value="${basePrice}" required ${isDisabled ? 'disabled' : ''}>
+     <input class="event__input  event__input--price" id="event-price-${id}" type="number" min="1" max="100000" oninput="if(value.charAt(0) === '0' || value.charAt(0) === '-' || value.includes('.')) value = ''" name="event-price" value="${basePrice}" required ${isDisabled ? 'disabled' : ''}>
   </div>`);
 }
 
@@ -104,7 +104,7 @@ function createTypePoint (point, pointDestination, destinations, isDisabled) {
       <label class="event__label  event__type-output" for="event-destination-${id}">
         ${type}
       </label>
-      <input class="event__input  event__input--destination" id="event-destination-${id}" type="text" name="event-destination" value="${pointDestination?.name || ''} " list="destination-list-${id}" required ${isDisabled ? 'disabled' : ''}>
+      <input class="event__input  event__input--destination" id="event-destination-${id}" type="text" name="event-destination" value="${pointDestination ? pointDestination.name : ''} " list="destination-list-${id}" ${isDisabled ? 'disabled' : ''} required>
         <datalist id="destination-list-${id}">
       ${destinations.length ? (destinations.map((destination) =>`<option value="${destination.name}"></option>`)) : ''}
 
@@ -112,7 +112,8 @@ function createTypePoint (point, pointDestination, destinations, isDisabled) {
     </div>`);
 }
 
-function createFormEdit (point, destinations, offers, isNewEvent, isSaving, isDeleting, isDisabled) {
+function createFormEdit (point, destinations, offers, isNewEvent) {
+  const {isDisabled, isSaving, isDeleting } = point;
   const pointDestination = destinations.find((destination) => destination.id === point.destination);
 
   return (
@@ -244,7 +245,6 @@ export default class FormEdit extends AbstractStatefulView {
   };
 
   #priceInputHandler = (evt) => {
-    // evt.preventDefault();
     this._setState({basePrice: evt.target.value});
   };
 
@@ -271,7 +271,11 @@ export default class FormEdit extends AbstractStatefulView {
   };
 
   #destinationChangeHandler = (evt) => {
-    // evt.preventDefault();
+
+    if (evt.target.value === '') {
+      return;
+    }
+
     const name = evt.target.value;
     const destinationNames = [];
     this.#destinations.forEach((element) => {
@@ -305,6 +309,7 @@ export default class FormEdit extends AbstractStatefulView {
   static parseStateToPoint(state) {
 
     const point = {...state};
+
     delete point.isDisabled;
     delete point.isSaving;
     delete point.isDeleting;
@@ -312,8 +317,3 @@ export default class FormEdit extends AbstractStatefulView {
     return point;
   }
 }
-
-// ${isDisabled ? 'disabled' : ''}
-// ${isSaving ? 'saving...' : 'save'}
-// ${isDeleting ? 'deleting...' : 'delete'}
-

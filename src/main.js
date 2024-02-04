@@ -52,10 +52,6 @@ const newEventButtonComponent = new NewEventButton({
   onClick: handleNewEventButtonClick
 });
 
-// destinationModel.init().then(() => offersModel.init()).then(() => pointModel.init()).finally(() => {
-//   render(newEventButtonComponent, siteFiltersElement, RenderPosition.AFTEREND);
-// });
-
 Promise.all([destinationModel.init(), offersModel.init()])
   .then(() => pointModel.init())
   .finally(() => {

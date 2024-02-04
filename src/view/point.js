@@ -1,5 +1,4 @@
 import { DATE_FORMAT, humanizeTaskDueDate, TIME_FORMAT } from '../utils';
-// import dayjs from 'dayjs';
 import AbstractView from '../framework/view/abstract-view';
 import { getDuration} from '../utils';
 function createEventData(dateFrom) {
@@ -26,8 +25,6 @@ function createPrice(basePrice) {
 function createSchedule(dateFrom, dateTo) {
   const convertedDateFrom = humanizeTaskDueDate(dateFrom, TIME_FORMAT);
   const convertedDateTo = humanizeTaskDueDate(dateTo, TIME_FORMAT);
-  // const durationDate = dayjs.duration(dayjs(dateTo).diff(dayjs(dateFrom)));
-  // const convertedDurationData = `${durationDate.days() > 1 ? `${durationDate.days()}D` : ''} ${durationDate.hours()}H ${durationDate.minutes()}M`;
 
   return `<div class="event__schedule">
     <p class="event__time">
