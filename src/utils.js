@@ -55,10 +55,10 @@ function sortPointsByTime(pointA, pointB) {
 }
 
 function sortPointByDate(pointA, pointB) {
-  if (pointA.dateFrom > pointB.dateFrom) {
+  if (pointA.dateFrom < pointB.dateFrom) {
     return 1;
   }
-  if (pointA.dateFrom < pointB.dateFrom) {
+  if (pointA.dateFrom > pointB.dateFrom) {
     return -1;
   }
   return 0;
