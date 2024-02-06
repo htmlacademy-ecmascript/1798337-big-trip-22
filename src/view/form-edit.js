@@ -43,7 +43,7 @@ function createOffers(point, offers, isDisabled) {
                   &plus;&euro;&nbsp;
                   <span class="event__offer-price">${offerElement.price}</span>
                 </label>
-              </div>`)}
+              </div>`).join('')}
           </div>
       </section>`);
   }
@@ -104,7 +104,7 @@ function createTypePoint (point, pointDestination, destinations, isDisabled) {
       <label class="event__label  event__type-output" for="event-destination-${id}">
         ${type}
       </label>
-      <input class="event__input  event__input--destination" id="event-destination-${id}" type="text" name="event-destination" value="${pointDestination ? pointDestination.name : ''} " list="destination-list-${id}" ${isDisabled ? 'disabled' : ''} required>
+      <input class="event__input  event__input--destination" id="event-destination-${id}" type="text" name="event-destination" value="${pointDestination ? pointDestination.name : ''}" list="destination-list-${id}" ${isDisabled ? 'disabled' : ''} required>
         <datalist id="destination-list-${id}">
       ${destinations.length ? (destinations.map((destination) =>`<option value="${destination.name}"></option>`)) : ''}
 
