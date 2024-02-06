@@ -28,10 +28,10 @@ export default class OffersModel extends Observable {
   async init() {
     try {
       this.#offers = await this.#pointsApiService.offers;
+      this._notify(UpdateType.INIT);
     } catch (err) {
       this.#offers = [];
+      this._notify(UpdateType.ERROR);
     }
-
-    this._notify(UpdateType.INIT);
   }
 }

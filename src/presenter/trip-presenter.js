@@ -33,21 +33,24 @@ export default class TripPresenter {
   #filterType = FilterType.EVERYTHING;
   #newEventPresenter;
   #sortingState = generateSorting(this.#currentSortType);
-  #loadingComponent = new Loading();
+  #loadingComponent;
   #isLoading = true;
+  #isError = false;
+  #newEventButtonComponent;
 
   #uiBlocker = new UiBlocker({
     lowerLimit: TimeLimit.LOWER_LIMIT,
     upperLimit: TimeLimit.UPPER_LIMIT
   });
 
-  constructor(mainContainer, headerContainer, pointModel, offersModel, destinationModel, filterModel, onNewEventDestroy) {
+  constructor(mainContainer, headerContainer, pointModel, offersModel, destinationModel, filterModel, onNewEventDestroy, newEventButtonComponent) {
     this.#mainContainer = mainContainer;
     this.#headerContainer = headerContainer;
     this.#pointModel = pointModel;
     this.#offersModel = offersModel;
     this.#destinationModel = destinationModel;
     this.#filterModel = filterModel;
+    this.#newEventButtonComponent = newEventButtonComponent;
     this.#tripEventsListComponent = new TripEventsList();
 
     this.#pointModel.addObserver(this.#handleModelEvent);
@@ -105,9 +108,10 @@ export default class TripPresenter {
     this.#renderTripInfo();
 
     if (this.#isLoading) {
-      this.#renderLoading();
+      this.#renderLoading({ isError: false });
       return;
     }
+
 
     if (this.points.length === 0) {
       this.#renderNoEvents();
@@ -172,29 +176,34 @@ export default class TripPresenter {
   #handleModelEvent = (updateType, data) => {
     switch (updateType) {
       case UpdateType.PATCH:
-        // - обновить часть списка (например, когда поменялось описание)
         this.#pointPresentersId.get(data.id).init(data);
         break;
 
       case UpdateType.MINOR:
         this.#clearPointList({ resetSortType: true });
         this.#renderPointList();
-        // - обновить список (например, когда задача ушла в архив)
         break;
       case UpdateType.MAJOR:
         this.#clearPointList({resetSortType: true});
         this.#renderPointList();
-        // - обновить всю доску (например, при переключении фильтра)
         break;
       case UpdateType.INIT:
         this.#isLoading = false;
         remove(this.#loadingComponent);
         this.#renderPointList();
         break;
+      case UpdateType.ERROR:
+        this.#isLoading = false;
+        this.#isError = true;
+        remove(this.#loadingComponent);
+        this.#renderPointList();
+        this.#newEventButtonComponent.element.disabled = true;
+        break;
     }
   };
 
-  #renderLoading() {
+  #renderLoading(isError) {
+    this.#loadingComponent = new Loading(isError);
     render(this.#loadingComponent, this.#mainContainer, RenderPosition.AFTERBEGIN);
   }
 
@@ -235,7 +244,9 @@ export default class TripPresenter {
     this.#pointPresentersId.forEach((presenter) => presenter.destroy());
     this.#pointPresentersId.clear();
 
-    remove(this.#sortComponent);
+    if (this.#sortComponent) {
+      remove(this.#sortComponent);
+    }
 
     if (this.#noEventComponent) {
       remove(this.#noEventComponent);
@@ -247,17 +258,32 @@ export default class TripPresenter {
   }
 
   #renderPointList() {
+
+    if (this.#isLoading) {
+      this.#renderLoading({ isError: false });
+      return;
+    }
+
+    if (this.#isError) {
+      this.#renderLoading({ isError: true});
+      return;
+    }
+
     const pointCount = this.points.length;
     const points = this.points.slice(0, pointCount);
+
     if (pointCount === 0) {
       this.#renderNoEvents();
       return;
     }
+
     this.#renderSort();
     for (let i = 0; i < pointCount; i++) {
       this.#renderPoint(points[i]);
     }
+
   }
+
 
   #handleModeChange = () => {
     this.#newEventPresenter.destroy();

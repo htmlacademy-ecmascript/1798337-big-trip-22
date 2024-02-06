@@ -37,6 +37,9 @@ const destinationModel = new DestinationModel({
 
 const filterModel = new FilterModel();
 
+const newEventButtonComponent = new NewEventButton({
+  onClick: handleNewEventButtonClick
+});
 
 const tripPresenter = new TripPresenter (
   siteMainElement,
@@ -46,11 +49,9 @@ const tripPresenter = new TripPresenter (
   destinationModel,
   filterModel,
   handleNewEventFormClose,
+  newEventButtonComponent,
 );
 
-const newEventButtonComponent = new NewEventButton({
-  onClick: handleNewEventButtonClick
-});
 
 Promise.all([destinationModel.init(), offersModel.init()])
   .then(() => pointModel.init())

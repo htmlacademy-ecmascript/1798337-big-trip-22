@@ -294,6 +294,7 @@ export default class FormEdit extends AbstractStatefulView {
 
   #pointDeleteClickHandler = (evt) => {
     evt.preventDefault();
+    evt.target.setAttribute('disabled', true);
     this.#handleDeleteClick(FormEdit.parseStateToPoint(this._state));
   };
 
