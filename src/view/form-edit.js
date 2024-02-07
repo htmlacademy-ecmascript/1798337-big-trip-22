@@ -1,4 +1,4 @@
-import { ITINERARY, DateFormat} from '../const.js';
+import { ITINERARIES, DateFormat} from '../const.js';
 import { humanizeTaskDueDate} from '../utils';
 import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
 import flatpickr from 'flatpickr';
@@ -91,7 +91,7 @@ function createTypePoint (point, pointDestination, destinations, isDisabled) {
         <fieldset class="event__type-group" ${isDisabled ? 'disabled' : ''}>
           <legend class="visually-hidden">Event type</legend>
 
-          ${ITINERARY.map((itineraryPoint) =>
+          ${ITINERARIES.map((itineraryPoint) =>
       `<div class="event__type-item">
         <input id="event-type-${itineraryPoint}-${id}" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${itineraryPoint}" ${itineraryPoint.toLowerCase() === type.toLowerCase() ? 'checked' : ''} ${isDisabled ? 'disabled' : ''}>
         <label class="event__type-label  event__type-label--${itineraryPoint}" for="event-type-${itineraryPoint}-${id}">${itineraryPoint.charAt(0).toUpperCase() + itineraryPoint.slice(1)}</label>
