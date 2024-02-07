@@ -1,9 +1,5 @@
 import dayjs from 'dayjs';
-import { FilterType, SortColumns} from './const';
-
-const DATE_FORMAT = 'D MMM';
-const FULL_DATE_FORMAT = 'DD/MM/YY H:mm';
-const TIME_FORMAT = 'HH:m';
+import { FilterType, SortColumns} from './const.js';
 
 function getRandomArrayElement(items) {
   return items[Math.floor(Math.random() * items.length)];
@@ -44,11 +40,11 @@ function sortPointsByTime(pointA, pointB) {
 
   const getPointTimeBySort = (startTime, endTime) => dayjs.duration(dayjs(endTime).diff(dayjs(startTime)));
 
-  if (getPointTimeBySort(pointA.dateFrom, pointA.dateTo) > getPointTimeBySort(pointB.dateFrom, pointB.dateTo)) {
+  if (getPointTimeBySort(pointA.dateFrom, pointA.dateTo) < getPointTimeBySort(pointB.dateFrom, pointB.dateTo)) {
     return 1;
   }
 
-  if (getPointTimeBySort(pointA.dateFrom, pointA.dateTo) < getPointTimeBySort(pointB.dateFrom, pointB.dateTo)) {
+  if (getPointTimeBySort(pointA.dateFrom, pointA.dateTo) > getPointTimeBySort(pointB.dateFrom, pointB.dateTo)) {
     return -1;
   }
   return 0;
@@ -83,4 +79,28 @@ function generateSorting(sortType) {
   }));
 }
 
-export { getRandomArrayElement, humanizeTaskDueDate, DATE_FORMAT, TIME_FORMAT, FULL_DATE_FORMAT, getRandomInt, isEscapeKey, filter, sortPointsByTime, sortPointByDate, sortPointByPrice, generateSorting};
+const getDuration = (dateFrom, dateTo) => {
+
+  const formatDurationToTwoSymbol = (durationElement) => {
+    const isTwoCharacters = String(durationElement).length < 2;
+    if (isTwoCharacters) {
+      return `0${durationElement}`;
+    } else {
+      return durationElement;
+    }
+  };
+
+  const calculateDurationOfStay = () => dayjs.duration(dayjs(dateTo).diff(dayjs(dateFrom)));
+  const durationOfStay = calculateDurationOfStay(dateTo, dateFrom);
+  const daysDutation = Math.trunc(durationOfStay.asDays());
+
+  const durationOfStayFormat =
+   `${durationOfStay.days() > 0 ? `${formatDurationToTwoSymbol(daysDutation)}D ${formatDurationToTwoSymbol(durationOfStay.hours())}H ${formatDurationToTwoSymbol(durationOfStay.minutes())}M`
+     : `${durationOfStay.hours() > 0 ? `${formatDurationToTwoSymbol(durationOfStay.hours())}H` : ''}
+     ${formatDurationToTwoSymbol(durationOfStay.minutes())}M`}`;
+
+  return durationOfStayFormat;
+};
+
+
+export { getRandomArrayElement, humanizeTaskDueDate, getRandomInt, isEscapeKey, filter, sortPointsByTime, sortPointByDate, sortPointByPrice, generateSorting, getDuration};

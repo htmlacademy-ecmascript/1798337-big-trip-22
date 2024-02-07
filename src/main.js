@@ -1,17 +1,12 @@
+import dayjs from 'dayjs';
+import duration from 'dayjs/plugin/duration';
 import TripPresenter from './presenter/trip-presenter.js';
 import PointModel from './model/point-model.js';
 import OffersModel from './model/offers-model.js';
 import DestinationModel from './model/destination-model.js';
-
-
-import dayjs from 'dayjs';
-import duration from 'dayjs/plugin/duration';
-
 import FilterModel from './model/filter-model.js';
-
 import NewEventButton from './view/new-event-button.js';
 import { render, RenderPosition } from './framework/render.js';
-
 import PointsApiService from './points-api-service.js';
 
 const AUTHORIZATION = 'Basic mityamityamitya';
@@ -37,6 +32,9 @@ const destinationModel = new DestinationModel({
 
 const filterModel = new FilterModel();
 
+const newEventButtonComponent = new NewEventButton({
+  onClick: handleNewEventButtonClick
+});
 
 const tripPresenter = new TripPresenter (
   siteMainElement,
@@ -46,15 +44,14 @@ const tripPresenter = new TripPresenter (
   destinationModel,
   filterModel,
   handleNewEventFormClose,
+  newEventButtonComponent,
 );
 
-const newEventButtonComponent = new NewEventButton({
-  onClick: handleNewEventButtonClick
-});
-
-destinationModel.init().then(() => offersModel.init()).then(() => pointModel.init()).finally(() => {
-  render(newEventButtonComponent, siteFiltersElement, RenderPosition.AFTEREND);
-});
+Promise.all([destinationModel.init(), offersModel.init()])
+  .then(() => pointModel.init())
+  .finally(() => {
+    render(newEventButtonComponent, siteFiltersElement, RenderPosition.AFTEREND);
+  });
 
 function handleNewEventFormClose() {
   newEventButtonComponent.element.disabled = false;
@@ -64,6 +61,5 @@ function handleNewEventButtonClick() {
   tripPresenter.createNewPoint();
   newEventButtonComponent.element.disabled = true;
 }
-
 
 tripPresenter.init();

@@ -1,11 +1,9 @@
 import Observable from '../framework/observable.js';
-// import { offersMock } from '../mock/offers-mock';
 import { UpdateType } from '../const.js';
 
 export default class OffersModel extends Observable {
 
   #pointsApiService = null;
-  // #offers = offersMock;
   #offers = [];
 
   constructor({ pointsApiService }) {
@@ -32,8 +30,7 @@ export default class OffersModel extends Observable {
       this.#offers = await this.#pointsApiService.offers;
     } catch (err) {
       this.#offers = [];
+      this._notify(UpdateType.ERROR);
     }
-
-    this._notify(UpdateType.INIT);
   }
 }
