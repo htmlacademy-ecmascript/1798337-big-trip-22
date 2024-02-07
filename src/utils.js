@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import { FilterType, sortColumns} from './const.js';
+import { FilterType, SORT_COLUMNS} from './const.js';
 
 function humanizeTaskDueDate(dueDate, format) {
   return dueDate ? dayjs(dueDate).format(format) : '';
@@ -64,7 +64,7 @@ function sortPointByPrice(pointA, pointB) {
 
 
 function generateSorting(sortType) {
-  return sortColumns.map((value) => ({
+  return SORT_COLUMNS.map((value) => ({
     value,
     isSelected: value === sortType,
     isDisabled: value === 'event' || value === 'offers',

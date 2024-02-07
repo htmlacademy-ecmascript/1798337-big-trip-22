@@ -7,7 +7,7 @@ const SortType = {
   PRICE: 'price',
 };
 
-const sortColumns = ['day', 'event', 'time', 'price', 'offers'];
+const SORT_COLUMNS = ['day', 'event', 'time', 'price', 'offers'];
 
 const FilterType = {
   EVERYTHING: 'everything',
@@ -60,4 +60,4 @@ const DateFormat = {
   TIME_FORMAT : 'HH:mm',
 };
 
-export { ITINERARIES, FilterType, NoEventsMessage, SortType, UserAction, UpdateType, Mode, sortColumns, DEFAULT_POINT_MOCK, DateFormat };
+export { ITINERARIES, FilterType, NoEventsMessage, SortType, UserAction, UpdateType, Mode, SORT_COLUMNS, DEFAULT_POINT_MOCK, DateFormat };
