@@ -1,13 +1,5 @@
 import dayjs from 'dayjs';
-import { FilterType, SortColumns} from './const.js';
-
-function getRandomArrayElement(items) {
-  return items[Math.floor(Math.random() * items.length)];
-}
-
-function getRandomInt(max) {
-  return Math.floor(Math.random() * max);
-}
+import { FilterType, sortColumns} from './const.js';
 
 function humanizeTaskDueDate(dueDate, format) {
   return dueDate ? dayjs(dueDate).format(format) : '';
@@ -72,7 +64,7 @@ function sortPointByPrice(pointA, pointB) {
 
 
 function generateSorting(sortType) {
-  return SortColumns.map((value) => ({
+  return sortColumns.map((value) => ({
     value,
     isSelected: value === sortType,
     isDisabled: value === 'event' || value === 'offers',
@@ -103,4 +95,4 @@ const getDuration = (dateFrom, dateTo) => {
 };
 
 
-export { getRandomArrayElement, humanizeTaskDueDate, getRandomInt, isEscapeKey, filter, sortPointsByTime, sortPointByDate, sortPointByPrice, generateSorting, getDuration};
+export { humanizeTaskDueDate, isEscapeKey, filter, sortPointsByTime, sortPointByDate, sortPointByPrice, generateSorting, getDuration};

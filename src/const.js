@@ -1,4 +1,4 @@
-const ITINERARY = ['taxi', 'bus', 'train', 'ship', 'drive', 'flight', 'check-in', 'sightseeing', 'restaurant'];
+const ITINERARIES = ['taxi', 'bus', 'train', 'ship', 'drive', 'flight', 'check-in', 'sightseeing', 'restaurant'];
 
 
 const SortType = {
@@ -7,7 +7,7 @@ const SortType = {
   PRICE: 'price',
 };
 
-const SortColumns = ['day', 'event', 'time', 'price', 'offers'];
+const sortColumns = ['day', 'event', 'time', 'price', 'offers'];
 
 const FilterType = {
   EVERYTHING: 'everything',
@@ -60,4 +60,4 @@ const DateFormat = {
   TIME_FORMAT : 'HH:mm',
 };
 
-export { ITINERARY, FilterType, NoEventsMessage, SortType, UserAction, UpdateType, Mode, SortColumns, DEFAULT_POINT_MOCK, DateFormat };
+export { ITINERARIES, FilterType, NoEventsMessage, SortType, UserAction, UpdateType, Mode, sortColumns, DEFAULT_POINT_MOCK, DateFormat };
