@@ -141,8 +141,6 @@ export default class PointPresenter {
       UpdateType.MINOR,
       point,
     );
-
-    document.removeEventListener('keydown', this.#escKeyDownButton);
   };
 
   #handleDeleteClick = (point) => {
