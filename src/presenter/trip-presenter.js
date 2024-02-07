@@ -66,9 +66,9 @@ export default class TripPresenter {
   }
 
   get points() {
-    const filterType = this.#filterModel.filter;
+    this.#filterType = this.#filterModel.filter;
     const points = this.#pointModel.points;
-    const filteredPoints = filter[filterType](points);
+    const filteredPoints = filter[this.#filterType](points);
 
     switch (this.#currentSortType) {
       case SortType.DAY:
@@ -139,68 +139,6 @@ export default class TripPresenter {
     render(this.#noEventComponent, this.#mainContainer);
   }
 
-
-  #handleViewAction = async (actionType, updateType, update) => {
-
-    this.#uiBlocker.block();
-
-    switch (actionType) {
-      case UserAction.UPDATE_POINT:
-        this.#pointPresentersId.get(update.id).setSaving();
-        try {
-          await this.#pointModel.updatePoint(updateType, update);
-        } catch(err) {
-          this.#pointPresentersId.get(update.id).setAborting();
-        }
-        break;
-      case UserAction.ADD_POINT:
-        this.#newEventPresenter.setSaving();
-        try {
-          await this.#pointModel.addPoint(updateType, update);
-        } catch(err) {
-          this.#newEventPresenter.setAborting();
-        }
-        break;
-      case UserAction.DELETE_POINT:
-        this.#pointPresentersId.get(update.id).setDeleting();
-        try {
-          await this.#pointModel.deletePoint(updateType, update);
-        } catch(err) {
-          this.#pointPresentersId.get(update.id).setAborting();
-        }
-        break;
-    }
-    this.#uiBlocker.unblock();
-  };
-
-  #handleModelEvent = (updateType, data) => {
-    switch (updateType) {
-      case UpdateType.PATCH:
-        this.#pointPresentersId.get(data.id).init(data);
-        break;
-
-      case UpdateType.MINOR:
-        this.#clearPointList({ resetSortType: true });
-        this.#renderPointList();
-        break;
-      case UpdateType.MAJOR:
-        this.#clearPointList({resetSortType: true});
-        this.#renderPointList();
-        break;
-      case UpdateType.INIT:
-        this.#isLoading = false;
-        remove(this.#loadingComponent);
-        this.#renderPointList();
-        break;
-      case UpdateType.ERROR:
-        this.#isLoading = false;
-        this.#isError = true;
-        remove(this.#loadingComponent);
-        this.#renderPointList();
-        this.#newEventButtonComponent.element.disabled = true;
-        break;
-    }
-  };
 
   #renderLoading(isError) {
     this.#loadingComponent = new Loading(isError);
@@ -281,8 +219,69 @@ export default class TripPresenter {
     for (let i = 0; i < pointCount; i++) {
       this.#renderPoint(points[i]);
     }
-
   }
+
+  #handleViewAction = async (actionType, updateType, update) => {
+
+    this.#uiBlocker.block();
+
+    switch (actionType) {
+      case UserAction.UPDATE_POINT:
+        this.#pointPresentersId.get(update.id).setSaving();
+        try {
+          await this.#pointModel.updatePoint(updateType, update);
+        } catch(err) {
+          this.#pointPresentersId.get(update.id).setAborting();
+        }
+        break;
+      case UserAction.ADD_POINT:
+        this.#newEventPresenter.setSaving();
+        try {
+          await this.#pointModel.addPoint(updateType, update);
+        } catch(err) {
+          this.#newEventPresenter.setAborting();
+        }
+        break;
+      case UserAction.DELETE_POINT:
+        this.#pointPresentersId.get(update.id).setDeleting();
+        try {
+          await this.#pointModel.deletePoint(updateType, update);
+        } catch(err) {
+          this.#pointPresentersId.get(update.id).setAborting();
+        }
+        break;
+    }
+    this.#uiBlocker.unblock();
+  };
+
+  #handleModelEvent = (updateType, data) => {
+    switch (updateType) {
+      case UpdateType.PATCH:
+        this.#pointPresentersId.get(data.id).init(data);
+        break;
+
+      case UpdateType.MINOR:
+        this.#clearPointList({ resetSortType: true });
+        this.#renderPointList();
+        break;
+      case UpdateType.MAJOR:
+        this.#clearPointList({resetSortType: true});
+        this.#renderPointList();
+        break;
+      case UpdateType.INIT:
+        this.#isLoading = false;
+        remove(this.#loadingComponent);
+        this.#renderPointList();
+        break;
+      case UpdateType.ERROR:
+        this.#isLoading = false;
+        this.#isError = true;
+        remove(this.#loadingComponent);
+        this.#renderPointList();
+        this.#newEventButtonComponent.element.disabled = true;
+        break;
+    }
+  };
 
 
   #handleModeChange = () => {

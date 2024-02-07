@@ -1,17 +1,12 @@
+import dayjs from 'dayjs';
+import duration from 'dayjs/plugin/duration';
 import TripPresenter from './presenter/trip-presenter.js';
 import PointModel from './model/point-model.js';
 import OffersModel from './model/offers-model.js';
 import DestinationModel from './model/destination-model.js';
-
-
-import dayjs from 'dayjs';
-import duration from 'dayjs/plugin/duration';
-
 import FilterModel from './model/filter-model.js';
-
 import NewEventButton from './view/new-event-button.js';
 import { render, RenderPosition } from './framework/render.js';
-
 import PointsApiService from './points-api-service.js';
 
 const AUTHORIZATION = 'Basic mityamityamitya';
@@ -52,7 +47,6 @@ const tripPresenter = new TripPresenter (
   newEventButtonComponent,
 );
 
-
 Promise.all([destinationModel.init(), offersModel.init()])
   .then(() => pointModel.init())
   .finally(() => {
@@ -67,6 +61,5 @@ function handleNewEventButtonClick() {
   tripPresenter.createNewPoint();
   newEventButtonComponent.element.disabled = true;
 }
-
 
 tripPresenter.init();
