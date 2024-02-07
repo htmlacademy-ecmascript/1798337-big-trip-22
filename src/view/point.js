@@ -1,8 +1,8 @@
-import { DATE_FORMAT, humanizeTaskDueDate, TIME_FORMAT } from '../utils';
-import AbstractView from '../framework/view/abstract-view';
-import { getDuration} from '../utils';
+import { humanizeTaskDueDate, getDuration } from '../utils.js';
+import AbstractView from '../framework/view/abstract-view.js';
+import { DateFormat } from '../const.js';
 function createEventData(dateFrom) {
-  const convertedDataStartDay = humanizeTaskDueDate(dateFrom, DATE_FORMAT);
+  const convertedDataStartDay = humanizeTaskDueDate(dateFrom, DateFormat.DATE_FORMAT);
   return `<time class="event__date" datetime="">${convertedDataStartDay}</time>`;
 }
 
@@ -23,8 +23,8 @@ function createPrice(basePrice) {
 }
 
 function createSchedule(dateFrom, dateTo) {
-  const convertedDateFrom = humanizeTaskDueDate(dateFrom, TIME_FORMAT);
-  const convertedDateTo = humanizeTaskDueDate(dateTo, TIME_FORMAT);
+  const convertedDateFrom = humanizeTaskDueDate(dateFrom, DateFormat.TIME_FORMAT);
+  const convertedDateTo = humanizeTaskDueDate(dateTo, DateFormat.TIME_FORMAT);
 
   return `<div class="event__schedule">
     <p class="event__time">
@@ -36,7 +36,6 @@ function createSchedule(dateFrom, dateTo) {
   </div>`;
 }
 
-{/* <p class="event__duration">${convertedDurationData}</p> */}
 function createOffers({offers, point}) {
   const pointOffersType = offers.find((offer) => offer.type === point.type).offers;
 

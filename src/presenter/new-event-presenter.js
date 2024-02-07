@@ -1,5 +1,5 @@
 import { remove, render, RenderPosition } from '../framework/render.js';
-import { UserAction, UpdateType, DefaultPointMock} from '../const.js';
+import { UserAction, UpdateType, DEFAULT_POINT_MOCK} from '../const.js';
 import FormEdit from '../view/form-edit.js';
 
 export default class NewEventPresenter {
@@ -30,7 +30,7 @@ export default class NewEventPresenter {
     }
 
     this.#formComponent = new FormEdit({
-      point: DefaultPointMock,
+      point: DEFAULT_POINT_MOCK,
       destinations: this.#destinations,
       offers: this.#offers,
       onFormEditSubmit: this.#handleFormSubmit,

@@ -1,5 +1,5 @@
-import { ITINERARY} from '../const.js';
-import { humanizeTaskDueDate, FULL_DATE_FORMAT} from '../utils';
+import { ITINERARY, DateFormat} from '../const.js';
+import { humanizeTaskDueDate} from '../utils';
 import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
 import flatpickr from 'flatpickr';
 
@@ -69,10 +69,10 @@ function createTiming(point, isDisabled) {
   return (
     `<div class="event__field-group  event__field-group--time">
       <label class="visually-hidden" for="event-start-time-${id}">From</label>
-      <input class="event__input  event__input--time" id="event-start-time-${id}" type="text" name="event-start-time" value="${humanizeTaskDueDate(dateFrom, FULL_DATE_FORMAT)}" reqiured ${isDisabled ? 'disabled' : ''}>
+      <input class="event__input  event__input--time" id="event-start-time-${id}" type="text" name="event-start-time" value="${humanizeTaskDueDate(dateFrom, DateFormat.FULL_DATE_FORMAT)}" reqiured ${isDisabled ? 'disabled' : ''}>
         &mdash;
       <label class="visually-hidden" for="event-end-time-${id}">To</label>
-      <input class="event__input  event__input--time" id="event-end-time-${id}" type="text" name="event-end-time" value="${humanizeTaskDueDate(dateTo, FULL_DATE_FORMAT)}" reqiured ${isDisabled ? 'disabled' : ''}>
+      <input class="event__input  event__input--time" id="event-end-time-${id}" type="text" name="event-end-time" value="${humanizeTaskDueDate(dateTo, DateFormat.FULL_DATE_FORMAT)}" reqiured ${isDisabled ? 'disabled' : ''}>
     </div>`);
 }
 
@@ -230,7 +230,7 @@ export default class FormEdit extends AbstractStatefulView {
     this.#datepickerStart = flatpickr(
       this.element.querySelector('[name="event-end-time"]'),
       {
-        dateFormat: 'd/m/y h:i',
+        dateFormat: 'd/m/y H:i',
         enableTime: true,
         ['time_24hr']: true,
         minDate: this._state.dateFrom,

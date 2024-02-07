@@ -36,7 +36,7 @@ const UpdateType = {
   INIT: 'init',
 };
 
-const DefaultType = 'flight';
+const DEFAULT_TYPE = 'flight';
 
 const Mode = {
   DEFAULT: 'DEFAULT',
@@ -44,14 +44,20 @@ const Mode = {
   CREATE_NEW: 'CREATE_NEW',
 };
 
-const DefaultPointMock = {
+const DEFAULT_POINT_MOCK = {
   'basePrice': 0,
   'dateFrom': '',
   'dateTo': '',
   'destination': '',
   'isFavorite': false,
   'offers': [],
-  'type': DefaultType,
+  'type': DEFAULT_TYPE,
 };
 
-export { ITINERARY, FilterType, NoEventsMessage, SortType, UserAction, UpdateType, DefaultType, Mode, SortColumns, DefaultPointMock };
+const DateFormat = {
+  DATE_FORMAT : 'D MMM',
+  FULL_DATE_FORMAT : 'DD/MM/YY HH:mm',
+  TIME_FORMAT : 'HH:mm',
+};
+
+export { ITINERARY, FilterType, NoEventsMessage, SortType, UserAction, UpdateType, Mode, SortColumns, DEFAULT_POINT_MOCK, DateFormat };

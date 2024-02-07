@@ -150,7 +150,7 @@ export default class TripPresenter {
         try {
           await this.#pointModel.updatePoint(updateType, update);
         } catch(err) {
-          this.pointPresentersId.get(update.id).setAborting();
+          this.#pointPresentersId.get(update.id).setAborting();
         }
         break;
       case UserAction.ADD_POINT:

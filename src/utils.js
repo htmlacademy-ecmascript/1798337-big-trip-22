@@ -1,9 +1,5 @@
 import dayjs from 'dayjs';
-import { FilterType, SortColumns} from './const';
-
-const DATE_FORMAT = 'D MMM';
-const FULL_DATE_FORMAT = 'DD/MM/YY HH:mm';
-const TIME_FORMAT = 'HH:mm';
+import { FilterType, SortColumns} from './const.js';
 
 function getRandomArrayElement(items) {
   return items[Math.floor(Math.random() * items.length)];
@@ -44,21 +40,21 @@ function sortPointsByTime(pointA, pointB) {
 
   const getPointTimeBySort = (startTime, endTime) => dayjs.duration(dayjs(endTime).diff(dayjs(startTime)));
 
-  if (getPointTimeBySort(pointA.dateFrom, pointA.dateTo) > getPointTimeBySort(pointB.dateFrom, pointB.dateTo)) {
+  if (getPointTimeBySort(pointA.dateFrom, pointA.dateTo) < getPointTimeBySort(pointB.dateFrom, pointB.dateTo)) {
     return 1;
   }
 
-  if (getPointTimeBySort(pointA.dateFrom, pointA.dateTo) < getPointTimeBySort(pointB.dateFrom, pointB.dateTo)) {
+  if (getPointTimeBySort(pointA.dateFrom, pointA.dateTo) > getPointTimeBySort(pointB.dateFrom, pointB.dateTo)) {
     return -1;
   }
   return 0;
 }
 
 function sortPointByDate(pointA, pointB) {
-  if (pointA.dateFrom < pointB.dateFrom) {
+  if (pointA.dateFrom > pointB.dateFrom) {
     return 1;
   }
-  if (pointA.dateFrom > pointB.dateFrom) {
+  if (pointA.dateFrom < pointB.dateFrom) {
     return -1;
   }
   return 0;
@@ -107,4 +103,4 @@ const getDuration = (dateFrom, dateTo) => {
 };
 
 
-export { getRandomArrayElement, humanizeTaskDueDate, DATE_FORMAT, TIME_FORMAT, FULL_DATE_FORMAT, getRandomInt, isEscapeKey, filter, sortPointsByTime, sortPointByDate, sortPointByPrice, generateSorting, getDuration};
+export { getRandomArrayElement, humanizeTaskDueDate, getRandomInt, isEscapeKey, filter, sortPointsByTime, sortPointByDate, sortPointByPrice, generateSorting, getDuration};
