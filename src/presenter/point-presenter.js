@@ -90,6 +90,8 @@ export default class PointPresenter {
         isSaving: true,
       });
     }
+
+    document.removeEventListener('keydown', this.#escKeyDownButtonClickHandler);
   }
 
   setDeleting() {
@@ -99,6 +101,7 @@ export default class PointPresenter {
         isDeleting: true,
       });
     }
+    document.removeEventListener('keydown', this.#escKeyDownButtonClickHandler);
   }
 
   setAborting() {
