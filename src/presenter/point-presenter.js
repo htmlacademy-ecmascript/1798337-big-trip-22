@@ -127,12 +127,12 @@ export default class PointPresenter {
   #replaceFormToPoint() {
     replace(this.#pointComponent, this.#formEditComponent);
     this.#mode = Mode.DEFAULT;
-    document.removeEventListener('keydown', this.#escKeyDownButton);
+    document.removeEventListener('keydown', this.#escKeyDownButtonClickHandler);
   }
 
   #EditButtonClickHandler = () => {
     this.#replacePointToForm();
-    document.addEventListener('keydown', this.#escKeyDownButton);
+    document.addEventListener('keydown', this.#escKeyDownButtonClickHandler);
   };
 
   #FormEditSubmitHandler = (point) => {
@@ -151,12 +151,12 @@ export default class PointPresenter {
     );
   };
 
-  #escKeyDownButton = (evt) => {
+  #escKeyDownButtonClickHandler = (evt) => {
     if (isEscapeKey(evt)) {
       evt.preventDefault();
       this.#formEditComponent.reset({point: this.#point, offers: this.#offersType, destinations: this.#destination});
       this.#replaceFormToPoint();
-      document.removeEventListener('keydown', this.#escKeyDownButton);
+      document.removeEventListener('keydown', this.#escKeyDownButtonClickHandler);
     }
   };
 

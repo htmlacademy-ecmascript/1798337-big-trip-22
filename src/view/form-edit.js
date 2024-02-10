@@ -193,7 +193,7 @@ export default class FormEdit extends AbstractStatefulView {
     this.#setDatepickerEnd();
 
     this.element.querySelector('.event--edit')?.addEventListener('submit', this.#submitButtonHandler);
-    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#exitsWithoutSaving);
+    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#exitsWithoutSavingRollupClickButton);
     this.element.querySelector('.event__save-btn').addEventListener('submit', this.#submitButtonHandler);
     this.element.querySelector('.event__type-group').addEventListener('change', this.#typeChangeHandler);
     this.element.querySelector('.event__input--price')?.addEventListener('input', this.#priceInputHandler);
@@ -204,7 +204,7 @@ export default class FormEdit extends AbstractStatefulView {
     this.element.querySelector('.event__reset-btn').addEventListener('click', this.#pointDeleteClickHandler);
   };
 
-  #exitsWithoutSaving = (evt) => {
+  #exitsWithoutSavingRollupClickButton = (evt) => {
     evt.preventDefault();
     if (evt.isTrusted) {
       document.dispatchEvent(new KeyboardEvent('keydown', {
