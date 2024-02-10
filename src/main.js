@@ -10,7 +10,8 @@ import { render, RenderPosition } from './framework/render.js';
 import PointsApiService from './points-api-service.js';
 
 const AUTHORIZATION = 'Basic mityamityamitya';
-const END_POINT = 'https://21.objects.htmlacademy.pro/big-trip';
+const END_POINT = 'https://22.objects.htmlacademy.pro/big-trip';
+
 
 dayjs.extend(duration);
 

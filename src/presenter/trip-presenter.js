@@ -147,9 +147,9 @@ export default class TripPresenter {
 
 
   #renderPointsList() {
-    for (const point of this.points) {
+    this.points.forEach((point) => {
       this.#renderPoint(point);
-    }
+    });
   }
 
   #renderPoint(point) {
