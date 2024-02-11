@@ -102,7 +102,7 @@ export default class TripPresenter {
     this.#newEventPresenter.init();
   }
 
-  getFirstPointUpdate(isFirstPointOpen) {
+  getFirstPointUpdate(isFirstPointOpen = false) {
     if (this.#noEventComponent) {
       remove(this.#noEventComponent);
     }

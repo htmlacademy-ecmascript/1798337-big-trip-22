@@ -81,6 +81,8 @@ export default class PointPresenter {
   destroy() {
     remove(this.#pointComponent);
     remove(this.#formEditComponent);
+
+    document.removeEventListener('keydown', this.#escKeyDownButtonClickHandler);
   }
 
   setSaving() {

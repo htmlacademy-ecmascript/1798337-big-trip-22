@@ -55,7 +55,7 @@ Promise.all([destinationModel.init(), offersModel.init()])
   });
 
 function handleNewEventFormClose() {
-  tripPresenter.getFirstPointUpdate({ isFirstPointOpen: false });
+  tripPresenter.getFirstPointUpdate(true);
   newEventButtonComponent.element.disabled = false;
 }
 
