@@ -41,15 +41,15 @@ export default class PointPresenter {
       point: this.#point,
       destinations: this.#destinations,
       offers: [...this.#offers],
-      onEditButtonClick: this.#EditButtonClickHandler,
-      onFavoriteButtonClick: this.#FavoriteButtonClickHandler,
+      onEditButtonClick: this.#editButtonClickHandler,
+      onFavoriteButtonClick: this.#favoriteButtonClickHandler,
     });
 
     this.#formEditComponent = new FormEdit({
       point: this.#point,
       destinations: this.#destinationModel.destinations,
       offers: [...this.#offersModel.offers],
-      onFormEditSubmit: this.#FormEditSubmitHandler,
+      onFormEditSubmit: this.#formEditSubmitHandler,
       onDeleteClick: this.#handleDeleteClick,
     });
 
@@ -81,6 +81,8 @@ export default class PointPresenter {
   destroy() {
     remove(this.#pointComponent);
     remove(this.#formEditComponent);
+
+    document.removeEventListener('keydown', this.#escKeyDownButtonClickHandler);
   }
 
   setSaving() {
@@ -127,15 +129,15 @@ export default class PointPresenter {
   #replaceFormToPoint() {
     replace(this.#pointComponent, this.#formEditComponent);
     this.#mode = Mode.DEFAULT;
-    document.removeEventListener('keydown', this.#escKeyDownButton);
+    document.removeEventListener('keydown', this.#escKeyDownButtonClickHandler);
   }
 
-  #EditButtonClickHandler = () => {
+  #editButtonClickHandler = () => {
     this.#replacePointToForm();
-    document.addEventListener('keydown', this.#escKeyDownButton);
+    document.addEventListener('keydown', this.#escKeyDownButtonClickHandler);
   };
 
-  #FormEditSubmitHandler = (point) => {
+  #formEditSubmitHandler = (point) => {
     this.#handlerPointChange(
       UserAction.UPDATE_POINT,
       UpdateType.MINOR,
@@ -151,16 +153,16 @@ export default class PointPresenter {
     );
   };
 
-  #escKeyDownButton = (evt) => {
+  #escKeyDownButtonClickHandler = (evt) => {
     if (isEscapeKey(evt)) {
       evt.preventDefault();
       this.#formEditComponent.reset({point: this.#point, offers: this.#offersType, destinations: this.#destination});
       this.#replaceFormToPoint();
-      document.removeEventListener('keydown', this.#escKeyDownButton);
+      document.removeEventListener('keydown', this.#escKeyDownButtonClickHandler);
     }
   };
 
-  #FavoriteButtonClickHandler = () => {
+  #favoriteButtonClickHandler = () => {
     this.#handlerPointChange(
       UserAction.UPDATE_POINT,
       UpdateType.PATCH,

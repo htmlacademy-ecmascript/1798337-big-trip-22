@@ -6,10 +6,10 @@ import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
 
 function createDestination(pointDestination) {
-  if (pointDestination) {
+  if (pointDestination && (pointDestination.description !== '' || pointDestination.pictures.length !== 0)) {
     const {description, pictures,} = pointDestination;
     return (
-      `<section class="event__section  event__section--destination">
+      `<section class="event__section event__section--destination">
       ${description ? (
         `<h3 class="event__section-title  event__section-title--destination">Destination</h3>
         <p class="event__destination-description">${description}</p>`) : ''}
@@ -127,9 +127,9 @@ function createFormEdit (point, destinations, offers, isNewEvent) {
 
           <button class="event__save-btn  btn  btn--blue" type="submit" ${isDisabled ? 'disabled' : ''}>${isSaving ? 'Saving...' : 'Save'}</button>
 
-          <button class="event__reset-btn" type="reset" ${isDisabled ? 'disabled' : ''}>${isNewEvent ? 'Cancel' : `${isDeleting ? 'Deleting...' : 'Delete'}`}</button>
+          <button class="event__reset-btn" type="reset" >${isNewEvent ? 'Cancel' : `${isDeleting ? 'Deleting...' : 'Delete'}`}</button>
 
-          <button class="event__rollup-btn" type="button" ${isDisabled ? 'disabled' : ''}>
+          <button class="event__rollup-btn" type="button">
             <span class="visually-hidden">Open event</span>
           </button>
         </header>
@@ -179,11 +179,9 @@ export default class FormEdit extends AbstractStatefulView {
     super.removeElement();
 
     if (this.#datepickerStart) {
-      this.#datepickerStart.destroy();
       this.#datepickerStart = null;
     }
     if (this.#datepickerEnd) {
-      this.#datepickerEnd.destroy();
       this.#datepickerEnd = null;
     }
   }
@@ -193,7 +191,7 @@ export default class FormEdit extends AbstractStatefulView {
     this.#setDatepickerEnd();
 
     this.element.querySelector('.event--edit')?.addEventListener('submit', this.#submitButtonHandler);
-    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#exitsWithoutSaving);
+    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#exitsWithoutSavingRollupClickButton);
     this.element.querySelector('.event__save-btn').addEventListener('submit', this.#submitButtonHandler);
     this.element.querySelector('.event__type-group').addEventListener('change', this.#typeChangeHandler);
     this.element.querySelector('.event__input--price')?.addEventListener('input', this.#priceInputHandler);
@@ -204,13 +202,11 @@ export default class FormEdit extends AbstractStatefulView {
     this.element.querySelector('.event__reset-btn').addEventListener('click', this.#pointDeleteClickHandler);
   };
 
-  #exitsWithoutSaving = (evt) => {
+  #exitsWithoutSavingRollupClickButton = (evt) => {
     evt.preventDefault();
-    if (evt.isTrusted) {
-      document.dispatchEvent(new KeyboardEvent('keydown', {
-        key: 'Escape',
-      }));
-    }
+    document.dispatchEvent(new KeyboardEvent('keydown', {
+      key: 'Escape',
+    }));
   };
 
   #setDatepickerStart() {

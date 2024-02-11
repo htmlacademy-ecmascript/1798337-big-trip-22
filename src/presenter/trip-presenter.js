@@ -102,6 +102,18 @@ export default class TripPresenter {
     this.#newEventPresenter.init();
   }
 
+  getFirstPointUpdate(isFirstPointOpen = false) {
+    if (this.#noEventComponent) {
+      remove(this.#noEventComponent);
+    }
+    if (!this.#isError && isFirstPointOpen) {
+      const pointCount = this.points.length;
+      if (pointCount === 0) {
+        this.#renderNoEvents();
+      }
+    }
+  }
+
 
   #renderApp() {
     this.#renderFilter();
@@ -147,9 +159,9 @@ export default class TripPresenter {
 
 
   #renderPointsList() {
-    for (const point of this.points) {
+    this.points.forEach((point) => {
       this.#renderPoint(point);
-    }
+    });
   }
 
   #renderPoint(point) {

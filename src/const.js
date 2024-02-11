@@ -11,9 +11,9 @@ const SORT_COLUMNS = ['day', 'event', 'time', 'price', 'offers'];
 
 const FilterType = {
   EVERYTHING: 'everything',
-  PAST: 'past',
-  PRESENT: 'present',
   FUTURE: 'future',
+  PRESENT: 'present',
+  PAST: 'past',
 };
 
 const NoEventsMessage = {
@@ -55,7 +55,7 @@ const DEFAULT_POINT_MOCK = {
 };
 
 const DateFormat = {
-  DATE_FORMAT : 'D MMM',
+  DATE_FORMAT : 'MMM D',
   FULL_DATE_FORMAT : 'DD/MM/YY HH:mm',
   TIME_FORMAT : 'HH:mm',
 };

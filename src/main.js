@@ -10,25 +10,19 @@ import { render, RenderPosition } from './framework/render.js';
 import PointsApiService from './points-api-service.js';
 
 const AUTHORIZATION = 'Basic mityamityamitya';
-const END_POINT = 'https://21.objects.htmlacademy.pro/big-trip';
+const END_POINT = 'https://22.objects.htmlacademy.pro/big-trip';
+
 
 dayjs.extend(duration);
 
 const siteMainElement = document.querySelector('.trip-events');
 const siteFiltersElement = document.querySelector('.trip-controls__filters');
 
-const pointModel = new PointModel({
-  pointsApiService: new PointsApiService(END_POINT, AUTHORIZATION)
-});
+const pointsApiService = {pointsApiService: new PointsApiService(END_POINT, AUTHORIZATION)};
 
-
-const offersModel = new OffersModel({
-  pointsApiService: new PointsApiService(END_POINT, AUTHORIZATION)
-});
-
-const destinationModel = new DestinationModel({
-  pointsApiService: new PointsApiService(END_POINT, AUTHORIZATION)
-});
+const pointModel = new PointModel(pointsApiService);
+const offersModel = new OffersModel(pointsApiService);
+const destinationModel = new DestinationModel(pointsApiService);
 
 const filterModel = new FilterModel();
 
@@ -54,11 +48,13 @@ Promise.all([destinationModel.init(), offersModel.init()])
   });
 
 function handleNewEventFormClose() {
+  tripPresenter.getFirstPointUpdate(true);
   newEventButtonComponent.element.disabled = false;
 }
 
 function handleNewEventButtonClick() {
   tripPresenter.createNewPoint();
+  tripPresenter.getFirstPointUpdate();
   newEventButtonComponent.element.disabled = true;
 }
 

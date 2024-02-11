@@ -75,11 +75,12 @@ const getDuration = (dateFrom, dateTo) => {
 
   const formatDurationToTwoSymbol = (durationElement) => {
     const isTwoCharacters = String(durationElement).length < 2;
+
     if (isTwoCharacters) {
       return `0${durationElement}`;
-    } else {
-      return durationElement;
     }
+
+    return durationElement;
   };
 
   const calculateDurationOfStay = () => dayjs.duration(dayjs(dateTo).diff(dayjs(dateFrom)));
@@ -88,8 +89,7 @@ const getDuration = (dateFrom, dateTo) => {
 
   const durationOfStayFormat =
    `${durationOfStay.days() > 0 ? `${formatDurationToTwoSymbol(daysDutation)}D ${formatDurationToTwoSymbol(durationOfStay.hours())}H ${formatDurationToTwoSymbol(durationOfStay.minutes())}M`
-     : `${durationOfStay.hours() > 0 ? `${formatDurationToTwoSymbol(durationOfStay.hours())}H` : ''}
-     ${formatDurationToTwoSymbol(durationOfStay.minutes())}M`}`;
+     : `${durationOfStay.hours() > 0 ? `${formatDurationToTwoSymbol(durationOfStay.hours())}H` : ''} ${formatDurationToTwoSymbol(durationOfStay.minutes())}M`}`;
 
   return durationOfStayFormat;
 };
