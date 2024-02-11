@@ -41,15 +41,15 @@ export default class PointPresenter {
       point: this.#point,
       destinations: this.#destinations,
       offers: [...this.#offers],
-      onEditButtonClick: this.#EditButtonClickHandler,
-      onFavoriteButtonClick: this.#FavoriteButtonClickHandler,
+      onEditButtonClick: this.#editButtonClickHandler,
+      onFavoriteButtonClick: this.#favoriteButtonClickHandler,
     });
 
     this.#formEditComponent = new FormEdit({
       point: this.#point,
       destinations: this.#destinationModel.destinations,
       offers: [...this.#offersModel.offers],
-      onFormEditSubmit: this.#FormEditSubmitHandler,
+      onFormEditSubmit: this.#formEditSubmitHandler,
       onDeleteClick: this.#handleDeleteClick,
     });
 
@@ -92,8 +92,6 @@ export default class PointPresenter {
         isSaving: true,
       });
     }
-
-    // document.removeEventListener('keydown', this.#escKeyDownButtonClickHandler);
   }
 
   setDeleting() {
@@ -103,7 +101,6 @@ export default class PointPresenter {
         isDeleting: true,
       });
     }
-    // document.removeEventListener('keydown', this.#escKeyDownButtonClickHandler);
   }
 
   setAborting() {
@@ -135,12 +132,12 @@ export default class PointPresenter {
     document.removeEventListener('keydown', this.#escKeyDownButtonClickHandler);
   }
 
-  #EditButtonClickHandler = () => {
+  #editButtonClickHandler = () => {
     this.#replacePointToForm();
     document.addEventListener('keydown', this.#escKeyDownButtonClickHandler);
   };
 
-  #FormEditSubmitHandler = (point) => {
+  #formEditSubmitHandler = (point) => {
     this.#handlerPointChange(
       UserAction.UPDATE_POINT,
       UpdateType.MINOR,
@@ -165,7 +162,7 @@ export default class PointPresenter {
     }
   };
 
-  #FavoriteButtonClickHandler = () => {
+  #favoriteButtonClickHandler = () => {
     this.#handlerPointChange(
       UserAction.UPDATE_POINT,
       UpdateType.PATCH,
