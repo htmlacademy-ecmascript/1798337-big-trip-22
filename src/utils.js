@@ -89,8 +89,7 @@ const getDuration = (dateFrom, dateTo) => {
 
   const durationOfStayFormat =
    `${durationOfStay.days() > 0 ? `${formatDurationToTwoSymbol(daysDutation)}D ${formatDurationToTwoSymbol(durationOfStay.hours())}H ${formatDurationToTwoSymbol(durationOfStay.minutes())}M`
-     : `${durationOfStay.hours() > 0 ? `${formatDurationToTwoSymbol(durationOfStay.hours())}H` : ''}
-     ${formatDurationToTwoSymbol(durationOfStay.minutes())}M`}`;
+     : `${durationOfStay.hours() > 0 ? `${formatDurationToTwoSymbol(durationOfStay.hours())}H` : ''} ${formatDurationToTwoSymbol(durationOfStay.minutes())}M`}`;
 
   return durationOfStayFormat;
 };

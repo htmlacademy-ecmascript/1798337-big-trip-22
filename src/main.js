@@ -55,11 +55,13 @@ Promise.all([destinationModel.init(), offersModel.init()])
   });
 
 function handleNewEventFormClose() {
+  tripPresenter.getFirstPointUpdate({ isFirstPointOpen: false });
   newEventButtonComponent.element.disabled = false;
 }
 
 function handleNewEventButtonClick() {
   tripPresenter.createNewPoint();
+  tripPresenter.getFirstPointUpdate();
   newEventButtonComponent.element.disabled = true;
 }
 

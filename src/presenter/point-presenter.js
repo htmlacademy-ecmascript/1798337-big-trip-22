@@ -91,7 +91,7 @@ export default class PointPresenter {
       });
     }
 
-    document.removeEventListener('keydown', this.#escKeyDownButtonClickHandler);
+    // document.removeEventListener('keydown', this.#escKeyDownButtonClickHandler);
   }
 
   setDeleting() {
@@ -101,7 +101,7 @@ export default class PointPresenter {
         isDeleting: true,
       });
     }
-    document.removeEventListener('keydown', this.#escKeyDownButtonClickHandler);
+    // document.removeEventListener('keydown', this.#escKeyDownButtonClickHandler);
   }
 
   setAborting() {

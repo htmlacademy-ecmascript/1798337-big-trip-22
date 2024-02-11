@@ -59,6 +59,8 @@ export default class NewEventPresenter {
       isDisabled: true,
       isSaving: true,
     });
+
+    // document.removeEventListener('keydown', this.#escKeyDownHandler);
   }
 
   setAborting() {

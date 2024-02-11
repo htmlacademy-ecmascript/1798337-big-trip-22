@@ -55,7 +55,7 @@ const DEFAULT_POINT_MOCK = {
 };
 
 const DateFormat = {
-  DATE_FORMAT : 'D MMM',
+  DATE_FORMAT : 'MMM D',
   FULL_DATE_FORMAT : 'DD/MM/YY HH:mm',
   TIME_FORMAT : 'HH:mm',
 };
